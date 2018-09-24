@@ -1,0 +1,40 @@
+.Time {
+    display: block;
+    font-size: x-large;
+    color: #c00;
+    text-align: center
+}
+
+.btnLogin {
+	border-radius: 15px;
+	background: #a1d8f0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#badff3),
+		to(#7acbed));
+	-ms-filter:
+		"progid:DXImageTransform.Microsoft.gradient(startColorStr='#badff3', EndColorStr='#7acbed')";
+	border: 1px solid #7db0cc !important;
+	cursor: pointer;
+	padding: 11px 16px;
+	font: bold 11px/14px Verdana, Tahomma, Geneva;
+	text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0px;
+	color: #fff;
+	-moz-box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px,
+		rgba(0, 0, 0, 0.1) 0 1px 1px;
+	-webkit-box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px,
+		rgba(0, 0, 0, 0.1) 0 1px 1px;
+	box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px, rgba(0, 0, 0, 0.1)
+		0 1px 1px;
+	margin-left: 12px;
+/*	float: left;*/
+	padding: 7px 21px;
+        
+}
+
+.box {
+    text-align: center;
+/*    width: 100%*/
+/*    background: #fefefe;
+    border-top: 1px solid #dde0e8;
+    border-bottom: 1px solid #dde0e8;
+    padding: 10px 20px;*/
+}
