@@ -11,6 +11,7 @@
 <!--        <link href="<c:url value="/resources/css/home.css" />" rel="stylesheet">-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
+/*            move to css file!!!*/
             .redColor {
                 color: red;
             }
