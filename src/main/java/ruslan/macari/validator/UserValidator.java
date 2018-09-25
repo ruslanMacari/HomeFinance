@@ -25,7 +25,8 @@ public class UserValidator implements Validator {
  
         // Check the fields of User.
         // (See more in property file: messages/validator.property)
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.applicantForm.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.user.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.user.password");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.applicantForm.email");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "position", "NotEmpty.applicantForm.position");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "gender", "NotEmpty.applicantForm.gender");
