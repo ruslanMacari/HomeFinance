@@ -8,33 +8,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-<!--        <link href="<c:url value="/resources/css/home.css" />" rel="stylesheet">-->
+        <link href="<c:url value="/resources/css/home.css" />" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <style>
-/*            move to css file!!!*/
-            .redColor {
-                color: red;
-            }
-            html {height: 100%;}
-            body {display: flex; justify-content: center; align-items: center; height: 100%;}
-            .main {}
-            .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-            .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-            .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-            .tg .tg-4eph{background-color:#f9f9f9}
-            .form .input-group {display:block; margin-bottom: 5px}
-            .form .input-group label {margin-right: 0; width: 75px; display: inline-block; color: #3333ff}
-            .form .submit {margin-top: 10px}
-            .fieldset {border: none}
-        </style>
-        <title>Insert title here</title>
+        <title>Java Home Finance</title>
     </head>
-
+    
     <body>
-
         <div class="main">
+            <a href="<c:url value='/createUser' />" class="createUser">Create User</a>
             <form:form method="POST" commandName="user" action="check-user" class="form">
-
                 <fieldset class="fieldset">
                     <div class="input-group">
                         <c:choose>
