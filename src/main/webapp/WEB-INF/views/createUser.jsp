@@ -5,9 +5,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/home.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Java Home Finance(Create User)</title>
+        <title>${initParam['Title']} (Create User)</title>
     </head>
     <body>
         <div class="main">
@@ -18,12 +18,12 @@
                     <div class="input-group">
                         <form:label path="name">Name:</form:label>
                         <form:input path="name" />
-                        <form:errors path="name" class="error-message" />
+                        <div><form:errors path="name" class="redColor" /></div>
                     </div>        
                     <div class="input-group">
                         <form:label path="password">Password:</form:label>
                         <form:password path="password"/>
-                        <form:errors path="password" class="error-message" />
+                        <div><form:errors path="password" class="redColor" /></div>
                     </div> 
                 </fieldset>
 

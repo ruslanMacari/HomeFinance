@@ -10,9 +10,8 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator {
     
-//    // common-validator library.
-//    private EmailValidator emailValidator =   EmailValidator.getInstance();
- 
+    private User user;
+    
     // The classes is supported to Validate
     @Override
     public boolean supports(Class<?> clazz) {
@@ -21,25 +20,35 @@ public class UserValidator implements Validator {
  
     @Override
     public void validate(Object target, Errors errors) {
-        User applicantInfo = (User) target;
- 
-        // Check the fields of User.
-        // (See more in property file: messages/validator.property)
+        setUser(target);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.user.name");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.user.password");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.applicantForm.email");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "position", "NotEmpty.applicantForm.position");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "gender", "NotEmpty.applicantForm.gender");
-        
-//        if(!emailValidator.isValid(applicantInfo.getEmail())) {
-//            // Error in email field.
-//            errors.rejectValue("email", "Pattern.applicantForm.email");
-//        }
-//        
-//        if(applicantInfo.getSkills()== null || applicantInfo.getSkills().length==0 ) {
-//            errors.rejectValue("skills", "Select.applicantForm.skills");
-//        }
-      
+        validateNameLength(errors);
+        validatePasswordLength(errors);
+    }
+
+    private void setUser(Object target) {
+        user = (User) target;
+    }
+
+    private void validateNameLength(Errors errors) {
+       if(errors.getFieldErrorCount("name") > 0) {
+           return;
+       }
+       int nameLen = user.getName().length();
+       if (nameLen < 3) {
+            errors.rejectValue("name", "MinSize.user.name");
+        }
+    }
+
+    private void validatePasswordLength(Errors errors) {
+        if (errors.getFieldErrorCount("password") > 0) {
+            return;
+        }
+        int passLen = user.getPassword().length();
+        if (passLen < 4) {
+            errors.rejectValue("password", "MinSize.user.password");
+        }
     }
  
 }

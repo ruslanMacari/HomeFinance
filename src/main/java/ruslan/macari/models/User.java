@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -22,8 +23,9 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-    }
+    }   
 
+    @Size(min = 3, max = 10, message = "Size must be minim 3")
     @Column(name="name")
     private String name;
 

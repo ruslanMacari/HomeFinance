@@ -74,5 +74,4 @@
             <property name="basenames" value="messages/messages_en_US"/>
         </bean>
 
-
 </beans>
