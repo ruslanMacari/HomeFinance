@@ -1,9 +1,12 @@
 package ruslan.macari.dao;
 
 import java.util.List;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -22,17 +25,17 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public void addUser(User p) {
+	public void addUser(User u) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.persist(p);
-		logger.info("User saved successfully, User Details="+p);
+		session.persist(u);
+		logger.info("User saved successfully, User Details="+u);
 	}
 
 	@Override
-	public void updateUser(User p) {
+	public void updateUser(User u) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.update(p);
-		logger.info("User updated successfully, User Details="+p);
+		session.update(u);
+		logger.info("User updated successfully, User Details="+u);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -40,8 +43,8 @@ public class UserDAOImpl implements UserDAO {
 	public List<User> listUsers() {
 		Session session = this.sessionFactory.getCurrentSession();
 		List<User> personsList = session.createQuery("from User").list();
-		for(User p : personsList){
-			logger.info("User List::"+p);
+		for(User u : personsList){
+			logger.info("User List::"+u);
 		}
 		return personsList;
 	}
@@ -49,9 +52,9 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public User getUserById(int id) {
 		Session session = this.sessionFactory.getCurrentSession();		
-		User p = (User) session.load(User.class, new Integer(id));
-		logger.info("User loaded successfully, User details="+p);
-		return p;
+		User u = (User) session.load(User.class, new Integer(id));
+		logger.info("User loaded successfully, User details="+u);
+		return u;
 	}
 
 	@Override
@@ -63,5 +66,22 @@ public class UserDAOImpl implements UserDAO {
 		}
 		logger.info("User deleted successfully, person details="+p);
 	}
+
+    @Override
+    public User getUserByName(String name) {
+        Session session = this.sessionFactory.getCurrentSession();
+        String sql = "select * from users where name=:name";
+        NativeQuery query = session.createNativeQuery(sql).addEntity(User.class);
+        query.setParameter("name", name);
+        List<User> list = query.getResultList();
+        if (list.isEmpty()) {
+            return null;
+        }
+//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        CriteriaQuery<User> query1 = criteriaBuilder.createQuery(User.class);
+//        Root<User> root = query1.from(User.class);
+//        query1.select(root.get("name"));
+        return list.get(0);
+    }
 
 }

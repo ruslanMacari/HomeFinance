@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -14,41 +11,41 @@
     </head>
     
     <body>
-        <div class="main">
-            <a href="<c:url value='/createUser' />" class="createUser">Create User</a>
-            <form:form method="POST" commandName="user" action="check-user" class="form">
-                <fieldset class="fieldset">
-                    <div class="input-group">
-                        <c:choose>
-                            <c:when test="${nameEmpty}">
-                                <form:label path="name" cssClass="redColor">Name is mondatory!</form:label>
-                            </c:when>    
-                            <c:otherwise>
-                                <form:label path="name">Name:</form:label>
-                            </c:otherwise>
-                        </c:choose>
-                        <form:input path="name" />
-                    </div>        
-                    <div class="input-group">
-                        <c:choose>
-                            <c:when test="${passwordEmpty}">
-                                <form:label path="password" cssClass="redColor">Password is mondatory!</form:label>
-                            </c:when>    
-                            <c:otherwise>
+        <div>
+            <h1>Authorization</h1>
+            <c:choose>
+                <c:when test="${empty listUsers}">
+                    <h2>No Users Found, Please Create New User</h2>
+                </c:when>
+                <c:otherwise>
+                    <form:form method="POST" commandName="user" action="check-login" class="form">
+                        <div class="fieldset">
+                            <div class="input-group">
+                                <label for="Names">Name:</label>
+                                <form:select path="name">
+                                    <c:forEach items="${listUsers}" var="user">
+                                        <form:option value="${user.name}"/>
+                                    </c:forEach>
+                                </form:select>
+                            </div>
+                            <div class="input-group">
                                 <form:label path="password">Password:</form:label>
-                            </c:otherwise>
-                        </c:choose>
-                        <form:password path="password"/>
-                    </div> 
-                </fieldset>
-
-                <footer> 
-                    <input type="submit" class="submit" value="Login" tabindex="4"> 
-                </footer>
-
-            </form:form>
-            <h3>Users List</h3>
+                                <form:password path="password"/>
+                                <div><form:errors path="password" class="redColor" /></div>
+                            </div>    
+                            <input type="hidden" name="id" value="${user.id}"/>
+                        </div>
+                        <footer> 
+                            <input type="submit" class="submit" value="Login" tabindex="4"> 
+                        </footer>
+                    </form:form>
+                </c:otherwise>
+            </c:choose>
+                    <div class="createUserRef">
+                <a href="<c:url value='/createUser' />" class="createUser">Create New User</a>
+            </div>
             <c:if test="${!empty listUsers}">
+                <h3>Users List</h3>
                 <table class="tg">
                     <tr>
                         <th width="80">User ID</th>

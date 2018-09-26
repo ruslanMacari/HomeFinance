@@ -52,3 +52,4 @@ body {display: flex; justify-content: center; align-items: center; height: 100%;
 .fieldset {border: none}
 .createUser {margin-bottom: 20px; display: inline-block}
 .footerButton {text-align: right}
+.createUserRef {margin-top: 50px}

@@ -5,16 +5,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/styles.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Create User)</title>
     </head>
     <body>
         <div class="main">
-            <h2>Create New User</h2>
+            <h1>Create New User</h1>
             <form:form method="POST" commandName="user" action="check-user" class="form" 
                        modelAttribute="user">
-                <fieldset class="fieldset">
+                <div class="fieldset">
                     <div class="input-group">
                         <form:label path="name">Name:</form:label>
                         <form:input path="name" />
@@ -25,8 +25,7 @@
                         <form:password path="password"/>
                         <div><form:errors path="password" class="redColor" /></div>
                     </div> 
-                </fieldset>
-
+                </div>
                 <footer class="footerButton"> 
                     <input type="submit" class="submit" value="Create" tabindex="4"> 
                 </footer>

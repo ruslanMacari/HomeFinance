@@ -38,8 +38,8 @@
 	</bean>
 
 	<!-- Hibernate 4 SessionFactory Bean definition -->
-	<bean id="hibernate4AnnotatedSessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="hibernate5AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
 			<list>
@@ -56,7 +56,7 @@
 	</bean>
 	
 	<bean id="userDAO" class="ruslan.macari.dao.UserDAOImpl">
-		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
 	<bean id="userService" class="ruslan.macari.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"></property>
@@ -65,12 +65,12 @@
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
         
         <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-<!--            <property name="useCodeAsDefaultMessage" value="true"/>-->
+            <property name="useCodeAsDefaultMessage" value="true"/>
             <property name="basenames" value="messages/messages_en_US"/>
         </bean>
 

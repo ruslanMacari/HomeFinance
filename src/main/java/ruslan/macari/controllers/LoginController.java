@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,14 +31,17 @@ public class LoginController {
     
     @Autowired(required = true)
     @Qualifier(value = "userService")
-    public void setUserService(UserService ps) {
-        this.userService = ps;
+    public void setUserService(UserService us) {
+        this.userService = us;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView main(HttpSession session, Model model) {
+    public String main(HttpSession session, Model model) {
         model.addAttribute("listUsers", userService.listUsers());
-        return new ModelAndView("login", "user", new User());
+        model.addAttribute("user", new User());
+        //new ModelAndView("login", "user", new User());
+        //return new ModelAndView("login", "user", new User());
+        return "login";
     }
     
     @RequestMapping(value = "/createUser", method = RequestMethod.GET)
@@ -48,23 +49,26 @@ public class LoginController {
         return new ModelAndView("createUser", "user", new User());
     }
 
-    @RequestMapping(value = "/check-user", method = RequestMethod.POST)//@Validated
+    @RequestMapping(value = "/check-user", method = RequestMethod.POST)
     public String checkUser(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "createUser";
         }
         userService.addUser(user);
         model.addAttribute("listUsers", userService.listUsers());
-        //return new ModelAndView("login", "user", user);
         return "login";
     }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView failed(ModelAndView modelAndView) {
-        return modelAndView;
+    
+    @RequestMapping(value = "/check-login", method = RequestMethod.POST)
+    public String checkLogin(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "login";
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("listUsers", userService.listUsers());
+        return "main";
     }
 
-    // Set a form validator
    @InitBinder
    protected void initBinder(WebDataBinder dataBinder) {
        // Form target
