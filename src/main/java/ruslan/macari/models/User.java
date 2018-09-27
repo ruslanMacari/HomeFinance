@@ -25,7 +25,7 @@ public class User {
         this.id = id;
     }   
 
-    @Size(min = 3, max = 10, message = "Size must be minim 3")
+    //@Size(min = 3, max = 10, message = "Size must be minim 3")
     @Column(name="name")
     private String name;
 

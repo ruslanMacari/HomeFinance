@@ -12,7 +12,7 @@
     <body>
         <div class="main">
             <h1>Create New User</h1>
-            <form:form method="POST" commandName="user" action="check-user" class="form" 
+            <form:form method="POST" commandName="user" action="login" class="form" 
                        modelAttribute="user">
                 <div class="fieldset">
                     <div class="input-group">

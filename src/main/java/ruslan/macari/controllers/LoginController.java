@@ -53,31 +53,26 @@ public class LoginController {
         return new ModelAndView("createUser", "user", new User());
     }
 
-    @RequestMapping(value = "/check-user", method = RequestMethod.POST)
-    public String checkUser(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "createUser";
         }
         userService.addUser(user);
-        List listUsers = userService.listUsers();
-        User firstUser = (User)listUsers.get(0);
-        UserLogin userLogin = new UserLogin();
-        userLogin.setId(firstUser.getId());
-        model.addAttribute("user", new UserLogin());//userLogin);
-        model.addAttribute("listUsers", listUsers);
+        model.addAttribute("user", new UserLogin());
+        model.addAttribute("listUsers", userService.listUsers());
         return "login";
     }
     
-    @RequestMapping(value = "/check-login", method = RequestMethod.POST)
-    public String checkLogin(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model) {
+    @RequestMapping(value = "/home", method = RequestMethod.POST)
+    public String home(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("listUsers", userService.listUsers());
-            //model.addAttribute("user", new UserLogin());
             return "login";
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.getUserById(user.getId()));
         model.addAttribute("listUsers", userService.listUsers());
-        return "main";
+        return "home";
     }
 
    @InitBinder

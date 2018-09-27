@@ -12,9 +12,9 @@ import ruslan.macari.service.UserService;
 @Component
 public class UserValidator implements Validator {
     
-    private User user;
+    protected User user;
     
-    private UserService userService;
+    protected UserService userService;
     
     @Autowired(required = true)
     @Qualifier(value = "userService")

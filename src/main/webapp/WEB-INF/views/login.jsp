@@ -18,7 +18,7 @@
                     <h2>No Users Found, Please Create New User</h2>
                 </c:when>
                 <c:otherwise>
-                    <form:form method="POST" commandName="user" action="check-login" class="form">
+                    <form:form method="POST" commandName="user" action="home" class="form">
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
@@ -33,7 +33,6 @@
                                 <form:password path="password"/>
                                 <div><form:errors path="password" class="redColor" /></div>
                             </div>    
-<!--                            <input type="hidden" name="id" value="${user.id}"/>-->
                         </div>
                         <footer> 
                             <input type="submit" class="submit" value="Login" tabindex="4"> 
