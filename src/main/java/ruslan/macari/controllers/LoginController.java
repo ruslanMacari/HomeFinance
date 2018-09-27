@@ -1,5 +1,6 @@
 package ruslan.macari.controllers;
 
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.models.User;
+import ruslan.macari.models.UserLogin;
 import ruslan.macari.service.UserService;
+import ruslan.macari.validator.UserLoginValidator;
 import ruslan.macari.validator.UserValidator;
 
 @Controller
@@ -29,6 +32,9 @@ public class LoginController {
     @Autowired
     private UserValidator userValidator;
     
+    @Autowired
+    private UserLoginValidator userLoginValidator;
+    
     @Autowired(required = true)
     @Qualifier(value = "userService")
     public void setUserService(UserService us) {
@@ -38,9 +44,7 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(HttpSession session, Model model) {
         model.addAttribute("listUsers", userService.listUsers());
-        model.addAttribute("user", new User());
-        //new ModelAndView("login", "user", new User());
-        //return new ModelAndView("login", "user", new User());
+        model.addAttribute("user", new UserLogin());
         return "login";
     }
     
@@ -55,13 +59,20 @@ public class LoginController {
             return "createUser";
         }
         userService.addUser(user);
-        model.addAttribute("listUsers", userService.listUsers());
+        List listUsers = userService.listUsers();
+        User firstUser = (User)listUsers.get(0);
+        UserLogin userLogin = new UserLogin();
+        userLogin.setId(firstUser.getId());
+        model.addAttribute("user", new UserLogin());//userLogin);
+        model.addAttribute("listUsers", listUsers);
         return "login";
     }
     
     @RequestMapping(value = "/check-login", method = RequestMethod.POST)
-    public String checkLogin(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
+    public String checkLogin(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("listUsers", userService.listUsers());
+            //model.addAttribute("user", new UserLogin());
             return "login";
         }
         model.addAttribute("user", user);
@@ -71,16 +82,22 @@ public class LoginController {
 
    @InitBinder
    protected void initBinder(WebDataBinder dataBinder) {
-       // Form target
        Object target = dataBinder.getTarget();
        if (target == null) {
            return;
        }
        System.out.println("Target=" + target);
- 
-       if (target.getClass() == User.class) {
-           dataBinder.setValidator(userValidator);
-       }
+       setValidator(dataBinder, target);
+       
    }
+
+    private void setValidator(WebDataBinder dataBinder, Object target) {
+       Class targetClass = target.getClass();
+       if (targetClass == User.class) {
+           dataBinder.setValidator(userValidator);
+       } else if (targetClass == UserLogin.class) {
+           dataBinder.setValidator(userLoginValidator);
+       }
+    }
     
 }

@@ -22,9 +22,9 @@
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
-                                <form:select path="name">
+                                <form:select path="id">
                                     <c:forEach items="${listUsers}" var="user">
-                                        <form:option value="${user.name}"/>
+                                        <form:option value="${user.id}" label="${user.name}"/>
                                     </c:forEach>
                                 </form:select>
                             </div>
@@ -33,7 +33,7 @@
                                 <form:password path="password"/>
                                 <div><form:errors path="password" class="redColor" /></div>
                             </div>    
-                            <input type="hidden" name="id" value="${user.id}"/>
+<!--                            <input type="hidden" name="id" value="${user.id}"/>-->
                         </div>
                         <footer> 
                             <input type="submit" class="submit" value="Login" tabindex="4"> 
