@@ -1,6 +1,7 @@
 package ruslan.macari.controllers;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -65,12 +66,14 @@ public class LoginController {
     }
     
     @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public String home(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model) {
+    public String home(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model,
+            HttpSession session) {
         if (result.hasErrors()) {
             model.addAttribute("listUsers", userService.listUsers());
             return "login";
         }
-        model.addAttribute("user", userService.getUserById(user.getId()));
+        session.setAttribute("user", userService.getUserById(user.getId()));
+        //model.addAttribute("user", userService.getUserById(user.getId()));
         model.addAttribute("listUsers", userService.listUsers());
         return "home";
     }

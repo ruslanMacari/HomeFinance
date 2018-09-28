@@ -10,6 +10,6 @@
         <title>${initParam['Title']} (Home)</title>
     </head>
     <body>
-        <h1>Hello ${user.name}!</h1>
+        <h1>Hello ${sessionScope.user.name}!</h1>
     </body>
 </html>

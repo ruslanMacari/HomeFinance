@@ -29,6 +29,4 @@ public class UserLoginValidator extends UserValidator {
             errors.rejectValue("password", "Incorect.user.password");
         }
     }
-
-    
 }
