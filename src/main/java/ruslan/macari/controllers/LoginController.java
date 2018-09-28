@@ -44,6 +44,10 @@ public class LoginController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(HttpSession session, Model model) {
+        Object user = session.getAttribute("user");
+        if (user != null) {
+            return "home";
+        }
         model.addAttribute("listUsers", userService.listUsers());
         model.addAttribute("user", new UserLogin());
         return "login";
