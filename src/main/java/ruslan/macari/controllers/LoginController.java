@@ -78,13 +78,11 @@ public class LoginController {
     public String home(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
-            //initLogin(model);
             model.addAttribute("listUsers", userDAO.listUsers());
             model.addAttribute("listUsersLimited", userDAO.listUsersLimit(5));
             return "login";
         }
         session.setAttribute("user", userDAO.getUserById(user.getId()));
-        //model.addAttribute("user", userService.getUserById(user.getId()));
         model.addAttribute("listUsers", userDAO.listUsers());
         return "home";
     }

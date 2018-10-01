@@ -7,19 +7,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import ruslan.macari.service.UserService;
+import ruslan.macari.dao.UserDAO;
+import ruslan.macari.dao.impl.UserDAOImpl;
  
 @Component
 public class UserValidator implements Validator {
     
     protected User user;
     
-    protected UserService userService;
+    protected UserDAO userDAO;
     
     @Autowired(required = true)
-    @Qualifier(value = "userService")
-    public void setUserService(UserService us) {
-        this.userService = us;
+    @Qualifier(value = "userDAO")
+    public void setUserDAO(UserDAO us) {
+        this.userDAO = us;
     }
     
     @Override
@@ -57,7 +58,7 @@ public class UserValidator implements Validator {
 
     private void checkDuplication(Errors errors) {
         if (errors.getFieldError("name") == null) {
-            User userFound = userService.getUserByName(user.getName());
+            User userFound = userDAO.getUserByName(user.getName());
             if (userFound != null) {
                 errors.rejectValue("name", "Duplicated.user.name");
             }

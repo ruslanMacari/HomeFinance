@@ -55,11 +55,11 @@
 		</property>
 	</bean>
 	
-	<bean id="userService" class="ruslan.macari.service.UserServiceImpl">
+<!--	<bean id="userService" class="ruslan.macari.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"></property>
-	</bean>
+	</bean>-->
         
-        <bean id="userDAO" class="ruslan.macari.dao.UserDAOImpl">
+        <bean id="userDAO" class="ruslan.macari.dao.impl.UserDAOImpl">
 		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
         

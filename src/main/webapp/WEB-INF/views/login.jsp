@@ -43,7 +43,7 @@
                     <div class="createUserRef">
                 <a href="<c:url value='/createUser' />" class="createUser">Create New User</a>
             </div>
-            <c:if test="${!empty listUsers}">
+            <c:if test="${!empty listUsersLimited}">
                 <h3>Users List</h3>
                 <table class="tg">
                     <tr>
@@ -53,7 +53,7 @@
                         <th width="60">Edit</th>
                         <th width="60">Delete</th>
                     </tr>
-                    <c:forEach items="${listUsers}" var="user">
+                    <c:forEach items="${listUsersLimited}" var="user">
                         <tr>
                             <td>${user.id}</td>
                             <td>${user.name}</td>
