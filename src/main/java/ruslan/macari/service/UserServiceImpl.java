@@ -53,4 +53,10 @@ public class UserServiceImpl implements UserService {
         return this.userDAO.getUserByName(name);
     }
 
+    @Override
+    @Transactional
+    public List<User> listUsersLimit(int limit) {
+        return userDAO.listUsersLimit(limit);
+    }
+
 }

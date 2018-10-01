@@ -1,7 +1,6 @@
 package ruslan.macari.service;
 
 import java.util.List;
-
 import ruslan.macari.models.User;
 
 public interface UserService {
@@ -12,5 +11,6 @@ public interface UserService {
 	public User getUserById(int id);
 	public void removeUser(int id);
         public User getUserByName(String name);
+        public List<User> listUsersLimit(int limit);
 	
 }

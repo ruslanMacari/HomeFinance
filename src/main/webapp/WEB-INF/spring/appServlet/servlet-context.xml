@@ -55,12 +55,14 @@
 		</property>
 	</bean>
 	
-	<bean id="userDAO" class="ruslan.macari.dao.UserDAOImpl">
-		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
-	</bean>
 	<bean id="userService" class="ruslan.macari.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"></property>
 	</bean>
+        
+        <bean id="userDAO" class="ruslan.macari.dao.UserDAOImpl">
+		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
+	</bean>
+        
 	<context:component-scan base-package="ruslan.macari" />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>

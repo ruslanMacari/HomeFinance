@@ -7,6 +7,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import ruslan.macari.models.User;
 @Repository
 public class UserDAOImpl implements UserDAO {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 	
@@ -25,46 +26,46 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public void addUser(User u) {
+	public void addUser(User user) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.persist(u);
-		logger.info("User saved successfully, User Details="+u);
+		session.persist(user);
+		LOGGER.info("User saved successfully, User Details="+user);
 	}
 
 	@Override
-	public void updateUser(User u) {
+	public void updateUser(User user) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.update(u);
-		logger.info("User updated successfully, User Details="+u);
+		session.update(user);
+		LOGGER.info("User updated successfully, User Details="+user);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> listUsers() {
 		Session session = this.sessionFactory.getCurrentSession();
-		List<User> personsList = session.createQuery("from User").list();
-		for(User u : personsList){
-			logger.info("User List::"+u);
+                List<User> userList = session.createQuery("select * from User").list();
+		for(User user : userList){
+			LOGGER.info("User List::"+user);
 		}
-		return personsList;
+		return userList;
 	}
 
 	@Override
 	public User getUserById(int id) {
 		Session session = this.sessionFactory.getCurrentSession();		
-		User u = (User) session.load(User.class, new Integer(id));
-		logger.info("User loaded successfully, User details="+u);
-		return u;
+		User user = (User) session.load(User.class, id);
+		LOGGER.info("User loaded successfully, User details="+user);
+		return user;
 	}
 
 	@Override
 	public void removeUser(int id) {
 		Session session = this.sessionFactory.getCurrentSession();
-		User p = (User) session.load(User.class, new Integer(id));
-		if(null != p){
-			session.delete(p);
+		User user = (User) session.load(User.class, id);
+		if(null != user){
+			session.delete(user);
 		}
-		logger.info("User deleted successfully, person details="+p);
+		LOGGER.info("User deleted successfully, user details="+user);
 	}
 
     @Override
@@ -82,6 +83,18 @@ public class UserDAOImpl implements UserDAO {
 //        Root<User> root = query1.from(User.class);
 //        query1.select(root.get("name"));
         return list.get(0);
+    }
+
+    @Override
+    public List<User> listUsersLimit(int limit) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from User");
+        query.setMaxResults(limit);
+        List<User> userList = query.list();
+        for (User user : userList) {
+            LOGGER.info("User List::" + user);
+        }
+        return userList;
     }
 
 }

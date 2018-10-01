@@ -9,6 +9,7 @@ public interface UserDAO {
 	public void addUser(User p);
 	public void updateUser(User p);
 	public List<User> listUsers();
+        public List<User> listUsersLimit(int limit);
 	public User getUserById(int id);
         public User getUserByName(String name);
 	public void removeUser(int id);

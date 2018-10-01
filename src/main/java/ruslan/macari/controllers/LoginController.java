@@ -48,7 +48,7 @@ public class LoginController {
         if (user != null) {
             return "home";
         }
-        model.addAttribute("listUsers", userService.listUsers());
+        model.addAttribute("listUsers", userService.listUsersLimit(1));
         model.addAttribute("user", new UserLogin());
         return "login";
     }
