@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ruslan.macari.dao.UserDAO;
 import ruslan.macari.models.User;
 import ruslan.macari.models.UserLogin;
-import ruslan.macari.service.UserService;
+import ruslan.macari.dao.impl.UserDAOImpl;
 import ruslan.macari.validator.UserLoginValidator;
 import ruslan.macari.validator.UserValidator;
 
@@ -28,7 +29,7 @@ public class LoginController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
-    private UserService userService;
+    private UserDAO userDAO;
     
     @Autowired
     private UserValidator userValidator;
@@ -37,9 +38,9 @@ public class LoginController {
     private UserLoginValidator userLoginValidator;
     
     @Autowired(required = true)
-    @Qualifier(value = "userService")
-    public void setUserService(UserService us) {
-        this.userService = us;
+    @Qualifier(value = "userDAO")
+    public void setUserDAO(UserDAO us) {
+        this.userDAO = us;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -48,9 +49,14 @@ public class LoginController {
         if (user != null) {
             return "home";
         }
-        model.addAttribute("listUsers", userService.listUsersLimit(1));
-        model.addAttribute("user", new UserLogin());
+        initLogin(model);
         return "login";
+    }
+    
+    private void initLogin(Model model) {
+        model.addAttribute("listUsers", userDAO.listUsers());
+        model.addAttribute("listUsersLimited", userDAO.listUsersLimit(5));
+        model.addAttribute("user", new UserLogin());
     }
     
     @RequestMapping(value = "/createUser", method = RequestMethod.GET)
@@ -63,22 +69,23 @@ public class LoginController {
         if (result.hasErrors()) {
             return "createUser";
         }
-        userService.addUser(user);
-        model.addAttribute("user", new UserLogin());
-        model.addAttribute("listUsers", userService.listUsers());
+        userDAO.addUser(user);
+        initLogin(model);
         return "login";
     }
     
     @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public String home(@Valid @ModelAttribute("user")  UserLogin user, BindingResult result, Model model,
+    public String home(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
-            model.addAttribute("listUsers", userService.listUsers());
+            //initLogin(model);
+            model.addAttribute("listUsers", userDAO.listUsers());
+            model.addAttribute("listUsersLimited", userDAO.listUsersLimit(5));
             return "login";
         }
-        session.setAttribute("user", userService.getUserById(user.getId()));
+        session.setAttribute("user", userDAO.getUserById(user.getId()));
         //model.addAttribute("user", userService.getUserById(user.getId()));
-        model.addAttribute("listUsers", userService.listUsers());
+        model.addAttribute("listUsers", userDAO.listUsers());
         return "home";
     }
 
