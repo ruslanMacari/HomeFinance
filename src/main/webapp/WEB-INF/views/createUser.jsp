@@ -5,14 +5,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/styles.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/centerHorizontal.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/centerVertical.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Create User)</title>
     </head>
     <body>
         <div class="main">
             <h1>Create New User</h1>
-            <form:form method="POST" commandName="user" action="login" class="form" 
+            <form:form method="POST" commandName="user" action="saveUser" class="form" 
                        modelAttribute="user">
                 <div class="fieldset">
                     <div class="input-group">

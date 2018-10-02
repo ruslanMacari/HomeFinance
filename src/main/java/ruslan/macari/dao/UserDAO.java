@@ -6,8 +6,8 @@ import ruslan.macari.models.User;
 
 public interface UserDAO {
 
-	public void addUser(User p);
-	public void updateUser(User p);
+	public void addUser(User u);
+	public void updateUser(User u);
 	public List<User> listUsers();
         public List<User> listUsersLimit(int limit);
 	public User getUserById(int id);

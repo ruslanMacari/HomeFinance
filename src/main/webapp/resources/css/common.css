@@ -32,16 +32,9 @@
 
 .box {
     text-align: center;
-/*    width: 100%*/
-/*    background: #fefefe;
-    border-top: 1px solid #dde0e8;
-    border-bottom: 1px solid #dde0e8;
-    padding: 10px 20px;*/
 }
 
 .redColor {color: red;}
-html {height: 100%;}
-body {display: flex; justify-content: center; align-items: center; height: 100%;}
 .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}

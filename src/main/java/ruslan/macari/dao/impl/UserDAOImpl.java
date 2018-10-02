@@ -7,6 +7,8 @@ import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.dao.UserDAO;
@@ -18,11 +20,13 @@ public class UserDAOImpl implements UserDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 
+        @Autowired
+        @Qualifier(value = "hibernate5AnnotatedSessionFactory")
 	private SessionFactory sessionFactory;
 	
-	public void setSessionFactory(SessionFactory sf){
-		this.sessionFactory = sf;
-	}
+//	public void setSessionFactory(SessionFactory sf){
+//		this.sessionFactory = sf;
+//	}
 
 	@Override
         @Transactional
@@ -83,10 +87,6 @@ public class UserDAOImpl implements UserDAO {
         if (list.isEmpty()) {
             return null;
         }
-//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//        CriteriaQuery<User> query1 = criteriaBuilder.createQuery(User.class);
-//        Root<User> root = query1.from(User.class);
-//        query1.select(root.get("name"));
         return list.get(0);
     }
 

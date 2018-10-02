@@ -5,7 +5,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/common.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/centerHorizontal.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/centerVertical.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Login)</title>
     </head>
@@ -18,7 +20,7 @@
                     <h2>No Users Found, Please Create New User</h2>
                 </c:when>
                 <c:otherwise>
-                    <form:form method="POST" commandName="user" action="home" class="form">
+                    <form:form method="POST" commandName="user" action="checkUser" class="form">
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
@@ -41,8 +43,8 @@
                 </c:otherwise>
             </c:choose>
                     <div class="createUserRef">
-                <a href="<c:url value='/createUser' />" class="createUser">Create New User</a>
-            </div>
+                        <a href="<c:url value='/createUser' />" class="createUser">Create New User</a>
+                    </div>
             <c:if test="${!empty listUsersLimited}">
                 <h3>Users List</h3>
                 <table class="tg">

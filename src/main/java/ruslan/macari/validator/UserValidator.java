@@ -1,27 +1,20 @@
 package ruslan.macari.validator;
  
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import ruslan.macari.models.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import ruslan.macari.dao.UserDAO;
-import ruslan.macari.dao.impl.UserDAOImpl;
  
 @Component
 public class UserValidator implements Validator {
     
     protected User user;
     
-    protected UserDAO userDAO;
-    
     @Autowired(required = true)
-    @Qualifier(value = "userDAO")
-    public void setUserDAO(UserDAO us) {
-        this.userDAO = us;
-    }
+    protected UserDAO userDAO;
     
     @Override
     public boolean supports(Class<?> clazz) {

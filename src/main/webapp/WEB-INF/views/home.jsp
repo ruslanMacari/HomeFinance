@@ -5,11 +5,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="<c:url value="/resources/css/styles.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Home)</title>
     </head>
     <body>
         <h1>Hello ${sessionScope.user.name}!</h1>
+        <div class="createUserRef">
+            <a href="<c:url value='/createCurrency' />" class="createCurrency">Create New Currency</a>
+        </div>
     </body>
 </html>
