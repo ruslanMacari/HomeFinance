@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.dao.UserDAO;
+import ruslan.macari.dao.UserRepository;
 import ruslan.macari.models.User;
 import ruslan.macari.models.UserLogin;
 import ruslan.macari.validator.UserLoginValidator;
@@ -32,6 +33,9 @@ public class LoginController {
     
     @Autowired
     private UserLoginValidator userLoginValidator;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     @RequestMapping(value = "/")
     public String main(HttpSession session, Model model) {
@@ -53,6 +57,8 @@ public class LoginController {
             return "createUser";
         }
         userDAO.addUser(user);
+        System.out.println("userRepository------------------------");
+        System.out.println(userRepository.findByName(user.getName()));
         return "redirect:/login";
     }
 

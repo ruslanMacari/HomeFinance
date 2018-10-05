@@ -5,10 +5,13 @@
         xmlns:context="http://www.springframework.org/schema/context" 
         xmlns:tx="http://www.springframework.org/schema/tx"
         xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
         xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                http://www.springframework.org/schema/data/jpa
+                http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!-- DispatcherServlet Context: defines this servlet's request-processing 
     infrastructure -->
@@ -37,7 +40,7 @@
         <property name="password" value="ruslan" />
     </bean>
 
-    <!-- Hibernate 4 SessionFactory Bean definition -->
+    <!-- Hibernate SessionFactory Bean definition -->
     <bean id="hibernate5AnnotatedSessionFactory"
               class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -59,6 +62,8 @@
 <!--    <bean id="userDAO" class="ruslan.macari.dao.impl.UserDAOImpl">
         <property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
     </bean>-->
+    
+    <jpa:repositories base-package="ruslan.macari.dao" entity-manager-factory-ref="hibernate5AnnotatedSessionFactory"/>
     
     <context:component-scan base-package="ruslan.macari" />
 	
