@@ -1,4 +1,4 @@
-package ruslan.macari.models;
+package ruslan.macari.domain;
 
 import org.springframework.stereotype.Component;
 

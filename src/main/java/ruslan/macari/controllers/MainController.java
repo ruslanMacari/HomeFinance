@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.dao.CurrencyDAO;
 import ruslan.macari.dao.UserDAO;
-import ruslan.macari.models.Currency;
-import ruslan.macari.models.User;
+import ruslan.macari.domain.Currency;
+import ruslan.macari.domain.User;
 
 @Controller
 public class MainController {

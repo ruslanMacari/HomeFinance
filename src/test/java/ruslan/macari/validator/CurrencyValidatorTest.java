@@ -9,7 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import ruslan.macari.models.Currency;
+import ruslan.macari.domain.Currency;
 
 public class CurrencyValidatorTest {
     

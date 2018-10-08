@@ -41,12 +41,12 @@
     </bean>
 
     <!-- Hibernate SessionFactory Bean definition -->
-    <bean id="hibernate5AnnotatedSessionFactory"
+    <bean id="sessionFactory"
               class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan">
             <list>
-                <value>ruslan.macari.models</value>
+                <value>ruslan.macari.domain</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -59,18 +59,14 @@
         </property>
     </bean>
 	
-<!--    <bean id="userDAO" class="ruslan.macari.dao.impl.UserDAOImpl">
-        <property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
-    </bean>-->
-    
-    <jpa:repositories base-package="ruslan.macari.dao" entity-manager-factory-ref="hibernate5AnnotatedSessionFactory"/>
+    <jpa:repositories base-package="ruslan.macari.dao" entity-manager-factory-ref="sessionFactory"/>
     
     <context:component-scan base-package="ruslan.macari" />
 	
     <tx:annotation-driven transaction-manager="transactionManager"/>
 	
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
         
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

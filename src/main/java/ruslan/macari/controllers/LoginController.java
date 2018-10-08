@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.dao.UserDAO;
 import ruslan.macari.dao.UserRepository;
-import ruslan.macari.models.User;
-import ruslan.macari.models.UserLogin;
+import ruslan.macari.domain.User;
+import ruslan.macari.domain.UserLogin;
 import ruslan.macari.validator.UserLoginValidator;
 import ruslan.macari.validator.UserValidator;
 

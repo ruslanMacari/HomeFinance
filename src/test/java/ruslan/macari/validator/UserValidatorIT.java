@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.validation.AbstractBindingResult;
 import org.springframework.validation.Errors;
-import ruslan.macari.models.User;
+import ruslan.macari.domain.User;
 
 /**
  *

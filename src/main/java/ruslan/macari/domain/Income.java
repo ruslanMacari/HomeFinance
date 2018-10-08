@@ -1,4 +1,4 @@
-package ruslan.macari.models;
+package ruslan.macari.domain;
 
 import java.sql.Date;
 import javax.persistence.Entity;

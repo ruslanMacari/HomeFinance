@@ -2,7 +2,7 @@ package ruslan.macari.dao;
 
 import java.util.List;
 
-import ruslan.macari.models.User;
+import ruslan.macari.domain.User;
 
 public interface UserDAO {
 

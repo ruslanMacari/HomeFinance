@@ -1,7 +1,7 @@
 package ruslan.macari.dao;
 
 import java.util.List;
-import ruslan.macari.models.Currency;
+import ruslan.macari.domain.Currency;
 
 public interface CurrencyDAO {
    

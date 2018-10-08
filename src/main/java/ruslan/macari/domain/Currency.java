@@ -1,4 +1,4 @@
-package ruslan.macari.models;
+package ruslan.macari.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

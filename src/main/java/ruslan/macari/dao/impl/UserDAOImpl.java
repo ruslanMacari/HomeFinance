@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.dao.UserDAO;
 
-import ruslan.macari.models.User;
+import ruslan.macari.domain.User;
 
 @Service
 public class UserDAOImpl implements UserDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 
-        @Autowired
-        @Qualifier(value = "hibernate5AnnotatedSessionFactory")
-	private SessionFactory sessionFactory;
+        private SessionFactory sessionFactory;
 	
-//	public void setSessionFactory(SessionFactory sf){
-//		this.sessionFactory = sf;
-//	}
+        @Autowired
+        @Qualifier(value = "sessionFactory")
+	public void setSessionFactory(SessionFactory sf){
+		this.sessionFactory = sf;
+	}
 
 	@Override
         @Transactional

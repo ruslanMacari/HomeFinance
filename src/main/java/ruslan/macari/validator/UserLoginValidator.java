@@ -1,9 +1,9 @@
 package ruslan.macari.validator;
  
-import ruslan.macari.models.User;
+import ruslan.macari.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import ruslan.macari.models.UserLogin;
+import ruslan.macari.domain.UserLogin;
  
 @Component
 public class UserLoginValidator extends UserValidator {

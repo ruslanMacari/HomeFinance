@@ -6,7 +6,7 @@
 package ruslan.macari.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ruslan.macari.models.User;
+import ruslan.macari.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     
