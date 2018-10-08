@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "Currency")
+@Table(name = "currency")
 public class Currency {
     
     @Id
@@ -33,13 +33,45 @@ public class Currency {
         this.name = name;
     }
     
-    
-
     public Currency() {
     }
     
     public Currency(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Currency other = (Currency) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Currency{" + "id=" + id + ", name=" + name + '}';
     }
     
 }

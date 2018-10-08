@@ -2,23 +2,20 @@ package ruslan.macari.domain;
 
 import java.sql.Date;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Income")
+@Table(name = "income")
 public class Income {
     
     @Id
     private Date date;
     
-    @ManyToOne
-    @JoinColumn(name = "currency_id",
-            foreignKey = @ForeignKey(name = "CURRENCY_ID_FK")
-    )
+    @OneToOne
+    @JoinColumn(name = "currency_id")
     private Currency currency;
     
     private int amount;
@@ -55,7 +52,5 @@ public class Income {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-    
-    
     
 }

@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ruslan.macari.dao.CurrencyDAO;
-import ruslan.macari.dao.UserDAO;
+import ruslan.macari.repository.CurrencyDAO;
+import ruslan.macari.repository.UserDAO;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.domain.User;
 

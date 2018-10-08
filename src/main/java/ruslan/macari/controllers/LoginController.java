@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ruslan.macari.dao.UserDAO;
-import ruslan.macari.dao.UserRepository;
+import ruslan.macari.repository.UserDAO;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
+import ruslan.macari.service.UserService;
 import ruslan.macari.validator.UserLoginValidator;
 import ruslan.macari.validator.UserValidator;
 
@@ -26,16 +26,13 @@ public class LoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
     
     @Autowired
     private UserValidator userValidator;
     
     @Autowired
     private UserLoginValidator userLoginValidator;
-    
-    @Autowired
-    private UserRepository userRepository;
     
     @RequestMapping(value = "/")
     public String main(HttpSession session, Model model) {
@@ -56,9 +53,7 @@ public class LoginController {
         if (result.hasErrors()) {
             return "createUser";
         }
-        userDAO.addUser(user);
-        System.out.println("userRepository------------------------");
-        System.out.println(userRepository.findByName(user.getName()));
+        userService.addUser(user);
         return "redirect:/login";
     }
 
@@ -70,8 +65,8 @@ public class LoginController {
     }
     
     private void addListUsers(Model model) {
-        model.addAttribute("listUsers", userDAO.listUsers());
-        model.addAttribute("listUsersLimited", userDAO.listUsersLimit(3));
+        model.addAttribute("listUsers", userService.listUsers());
+        model.addAttribute("listUsersLimited", userService.listUsersLimit(3));
     }
     
     @RequestMapping(value = "/checkUser")
@@ -81,7 +76,7 @@ public class LoginController {
             addListUsers(model);
             return "login";
         }
-        session.setAttribute("user", userDAO.getUserById(user.getId()));
+        session.setAttribute("user", userService.getUserById(user.getId()));
         return "redirect:/home";
     }
     

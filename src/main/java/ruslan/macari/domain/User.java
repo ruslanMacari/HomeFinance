@@ -6,14 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="users")
+@Table(name="user")
 public class User {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -25,11 +23,8 @@ public class User {
         this.id = id;
     }   
 
-    //@Size(min = 3, max = 10, message = "Size must be minim 3")
-    @Column(name="name")
     private String name;
 
-    @Column(name="password")
     private String password;
 
     public String getName() {
@@ -47,4 +42,46 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + this.id;
+        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 17 * hash + (this.password != null ? this.password.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password)) {
+            return false;
+        }
+        return true;
+    }
+
+    public User() {
+    }
+    
 }
