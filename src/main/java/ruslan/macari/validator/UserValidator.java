@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import ruslan.macari.repository.UserDAO;
+import ruslan.macari.service.UserService;
  
 @Component
 public class UserValidator implements Validator {
     
     protected User user;
     
-    @Autowired(required = true)
-    protected UserDAO userDAO;
+    @Autowired
+    protected UserService userService;
     
     @Override
     public boolean supports(Class<?> clazz) {
@@ -51,7 +51,7 @@ public class UserValidator implements Validator {
 
     private void checkDuplication(Errors errors) {
         if (errors.getFieldError("name") == null) {
-            User userFound = userDAO.getUserByName(user.getName());
+            User userFound = userService.getUserByName(user.getName());
             if (userFound != null) {
                 errors.rejectValue("name", "Duplicated.user.name");
             }

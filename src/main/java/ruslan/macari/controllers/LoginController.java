@@ -2,6 +2,9 @@ package ruslan.macari.controllers;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ruslan.macari.repository.UserDAO;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
@@ -33,6 +35,13 @@ public class LoginController {
     
     @Autowired
     private UserLoginValidator userLoginValidator;
+    
+    private Validator validator;
+
+    public LoginController() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
     
     @RequestMapping(value = "/")
     public String main(HttpSession session, Model model) {

@@ -9,7 +9,7 @@
     <version>1.0.0-BUILD-SNAPSHOT</version>
     <properties>
         <java-version>1.8</java-version>
-        <org.springframework-version>4.2.4.RELEASE</org.springframework-version>
+        <org.springframework-version>4.3.7.RELEASE</org.springframework-version>
         <org.aspectj-version>1.7.4</org.aspectj-version>
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <hibernate.version>5.2.6.Final</hibernate.version>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.1.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 		
         <!-- Apache Commons DBCP -->
@@ -127,16 +127,18 @@
         </dependency>
 				
         <!-- Servlet -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -164,7 +166,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.7</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -176,7 +178,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>3.1.0.RELEASE</version>
+            <version>${org.springframework-version}</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>

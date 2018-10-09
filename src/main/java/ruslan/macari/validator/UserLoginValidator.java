@@ -24,7 +24,7 @@ public class UserLoginValidator extends UserValidator {
     }
     
     private void validateLogin(Errors errors) {
-        User userById = userDAO.getUserById(user.getId());
+        User userById = userService.getUserById(user.getId());
         if(!userById.getPassword().equals(user.getPassword())) {
             errors.rejectValue("password", "Incorect.user.password");
         }

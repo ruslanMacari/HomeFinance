@@ -7,16 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ruslan.macari.repository.CurrencyDAO;
-import ruslan.macari.repository.UserDAO;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.domain.User;
+import ruslan.macari.service.CurrencyService;
 
 @Controller
 public class MainController {
     
     @Autowired
-    private CurrencyDAO currencyDAO;
+    private CurrencyService currencyService;
     
     @RequestMapping(value = "/home")
     public String home() {
@@ -26,7 +24,7 @@ public class MainController {
     @RequestMapping(value = "/createCurrency")
     public String createCurrency(Model model) {
         model.addAttribute("currency", new Currency());
-        model.addAttribute("listCurrency", currencyDAO.listCurrency());
+        model.addAttribute("listCurrency", currencyService.listCurrency());
         return "createCurrency";
     }
     
@@ -36,7 +34,7 @@ public class MainController {
         if (result.hasErrors()) {
             return "createCurrency";
         }
-        currencyDAO.addCurrency(currency);
+        currencyService.addCurrency(currency);
         return "redirect:/home";
     }
     

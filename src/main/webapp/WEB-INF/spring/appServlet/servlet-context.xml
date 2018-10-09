@@ -40,7 +40,6 @@
         <property name="password" value="ruslan" />
     </bean>
 
-    <!-- Hibernate SessionFactory Bean definition -->
     <bean id="sessionFactory"
               class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -51,45 +50,44 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
-                </prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
             </props>
         </property>
     </bean>
     
-    <bean id="entityManagerFactory"
-              class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan">
-            <list>
-                <value>ruslan.macari.domain</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
-                </prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-            </props>
-        </property>
-    </bean>
-	
-    <jpa:repositories base-package="ruslan.macari.dao" entity-manager-factory-ref="sessionFactory"/>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <!-- This makes /META-INF/persistence.xml is no longer necessary -->
+      <property name="packagesToScan" value="ruslan.macari.domain" />
+      <!-- JpaVendorAdapter implementation for Hibernate EntityManager.
+           Exposes Hibernate's persistence provider and EntityManager extension interface -->
+      <property name="jpaVendorAdapter">
+         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+      </property>
+      <property name="jpaProperties">
+         <props>
+             <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+             <prop key="hibernate.show_sql">true</prop>
+             <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+         </props>
+      </property>
+   </bean>
+    
+    <jpa:repositories base-package="ruslan.macari.repository" entity-manager-factory-ref="entityManagerFactory"/>
     
     <context:component-scan base-package="ruslan.macari" />
 	
     <tx:annotation-driven transaction-manager="transactionManager"/>
 	
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory" />
+   </bean>
         
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="useCodeAsDefaultMessage" value="true"/>
-        <property name="basenames" value="messages/messages_en_US"/>
+        <property name="basenames" value="messages/messages"/>
     </bean>
 
 </beans>
