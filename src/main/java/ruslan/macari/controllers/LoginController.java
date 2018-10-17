@@ -15,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
@@ -43,8 +44,8 @@ public class LoginController {
         validator = validatorFactory.getValidator();
     }
     
-    @RequestMapping(value = "/")
-    public String main(HttpSession session, Model model) {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String main(HttpSession session) {
         Object user = session.getAttribute("user");
         if (user != null) {
             return "redirect:/home";
