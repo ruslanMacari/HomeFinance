@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
@@ -29,8 +28,12 @@ public class LoginController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
     
     @Autowired
     private UserValidator userValidator;
@@ -59,8 +62,8 @@ public class LoginController {
         return new ModelAndView("createUser", "user", new User());
     }
     
-    @RequestMapping(value = "/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user")  User user, BindingResult result, Model model) {
+    @GetMapping(value = "/saveUser")
+    public String saveUser(@Valid @ModelAttribute("user")  User user, BindingResult result) {
         if (result.hasErrors()) {
             return "createUser";
         }
