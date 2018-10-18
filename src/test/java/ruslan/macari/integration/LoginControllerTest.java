@@ -1,8 +1,5 @@
 package ruslan.macari.integration;
 
-import javax.persistence.EntityManager;
-import javax.servlet.ServletContext;
-import static org.junit.Assert.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.junit.Before;
@@ -11,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -39,14 +35,6 @@ public class LoginControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-    @Test
-    public void testLoginController() {
-        ServletContext servletContext = wac.getServletContext();
-        assertNotNull(servletContext);
-        assertTrue(servletContext instanceof MockServletContext);
-        assertNotNull(wac.getBean("loginController"));
-    }
-    
     @Test
     public void testMainPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/")).andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/login"));

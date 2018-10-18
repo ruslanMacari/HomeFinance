@@ -1,62 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ruslan.macari.controllers;
 
-import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
-import ruslan.macari.domain.UserLogin;
 
-/**
- *
- * @author User
- */
-public class LoginControllerIT {
+public class LoginControllerTest {
     
-    public LoginControllerIT() {
+    private MockHttpSession session;
+    private LoginController loginController;
+    
+    public LoginControllerTest() {
+        session = new MockHttpSession();
+        loginController = new LoginController();
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @Before
-    public void setUp() {
+    @Test
+    public void testMain() {
+        assertEquals(loginController.main(session), "redirect:/login");
+        session.setAttribute("user", new User());
+        assertEquals(loginController.main(session), "redirect:/home");
     }
 
     @Test
-    public void testMain() {
-        System.out.println("main");
-        MockHttpSession session = new MockHttpSession(); 
-        //session.setAttribute("user", new User());
-        LoginController instance = new LoginController();
-        String expResult = "redirect:/home";
-        String result = instance.main(session);
-        assertEquals(expResult, result);
-        //fail("The test case is a prototype.");
+    public void testCreateUser() {
+        ModelAndView modelAndView = loginController.createUser();
+        assertTrue(modelAndView.getViewName().equals("createUser"));
+        ModelMap map = modelAndView.getModelMap();
+        assertTrue(map.containsAttribute("user"));
+        assertEquals(map.get("user"), new User());
     }
-
-//    @Test
-//    public void testCreateUser() {
-//        System.out.println("createUser");
-//        HttpSession session = null;
-//        Model model = null;
-//        LoginController instance = new LoginController();
-//        ModelAndView expResult = null;
-//        ModelAndView result = instance.createUser(session, model);
-//        assertEquals(expResult, result);
-//        fail("The test case is a prototype.");
-//    }
 //
 //    @Test
 //    public void testSaveUser() {

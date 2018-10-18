@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,7 @@ public class LoginController {
         validator = validatorFactory.getValidator();
     }
     
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping(value = "/")
     public String main(HttpSession session) {
         Object user = session.getAttribute("user");
         if (user != null) {
@@ -53,8 +54,8 @@ public class LoginController {
         return "redirect:/login";
     }
     
-    @RequestMapping(value = "/createUser")
-    public ModelAndView createUser(HttpSession session, Model model) {
+    @GetMapping(value = "/createUser")
+    public ModelAndView createUser() {
         return new ModelAndView("createUser", "user", new User());
     }
     
