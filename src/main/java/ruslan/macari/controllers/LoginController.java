@@ -15,7 +15,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
@@ -71,7 +70,7 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = "/login")
+    @GetMapping(value = "/login")
     public String login(Model model) {
         addListUsers(model);
         model.addAttribute("user", new UserLogin());
@@ -83,7 +82,7 @@ public class LoginController {
         model.addAttribute("listUsersLimited", userService.listUsersLimit(3));
     }
     
-    @RequestMapping(value = "/checkUser")
+    @GetMapping(value = "/checkUser")
     public String checkUser(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
