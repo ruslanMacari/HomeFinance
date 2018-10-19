@@ -13,8 +13,12 @@ public class UserValidator implements Validator {
     
     protected User user;
     
-    @Autowired
     protected UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
     
     @Override
     public boolean supports(Class<?> clazz) {
