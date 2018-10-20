@@ -1,9 +1,7 @@
 package ruslan.macari.controllers;
 
-import javax.servlet.http.HttpSession;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.doCallRealMethod;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -22,18 +20,26 @@ public class LoginControllerTest {
     private MockHttpSession session;
     private LoginController loginController;
     private UserService userService;
+    private User user;
+    private BindingResult bindingResult;
     
     public LoginControllerTest() {
+        init();
+    }
+    
+    private void init() {
         session = new MockHttpSession();
         loginController = new LoginController();
         userService = mock(UserService.class);
         loginController.setUserService(userService);
+        user = mock(User.class);
+        bindingResult = mock(BindingResult.class);
     }
     
     @Test
     public void testMain() {
         assertEquals(loginController.main(session), "redirect:/login");
-        session.setAttribute("user", new User());
+        session.setAttribute("user", user);
         assertEquals(loginController.main(session), "redirect:/home");
     }
 
@@ -48,8 +54,6 @@ public class LoginControllerTest {
 
     @Test
     public void testSaveUser() {
-        BindingResult bindingResult = mock(BindingResult.class);
-        User user = mock(User.class);
         when(bindingResult.hasErrors()).thenReturn(true);
         String result = loginController.saveUser(user, bindingResult);
         assertEquals(result, "createUser");
@@ -68,14 +72,13 @@ public class LoginControllerTest {
 
     @Test
     public void testCheckUser() {
-        UserLogin user = mock(UserLogin.class);
-        BindingResult bindingResult = mock(BindingResult.class);
+        UserLogin userLogin = mock(UserLogin.class);
         when(bindingResult.hasErrors()).thenReturn(true);
         Model model = mock(Model.class);
-        String result = loginController.checkUser(user, bindingResult, model, session);
+        String result = loginController.checkUser(userLogin, bindingResult, model, session);
         assertEquals(result, "login");
         when(bindingResult.hasErrors()).thenReturn(false);
-        result = loginController.checkUser(user, bindingResult, model, session);
+        result = loginController.checkUser(userLogin, bindingResult, model, session);
         assertEquals(result, "redirect:/home");
     }
     
