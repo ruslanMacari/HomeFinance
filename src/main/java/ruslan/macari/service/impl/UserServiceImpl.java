@@ -11,8 +11,12 @@ import ruslan.macari.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     
     @Override
     public User addUser(User user) {

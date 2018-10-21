@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
@@ -11,6 +12,9 @@ import ruslan.macari.service.UserService;
 public class UserValidatorTest {
     
     private UserValidator userValidator;
+    private User user;
+    private Errors errors;
+    private UserService userService;
             
     public UserValidatorTest() {
         init();
@@ -18,7 +22,8 @@ public class UserValidatorTest {
     
     private void init() {
         userValidator = new UserValidator();
-        userValidator.setUserService(mock(UserService.class));
+        userService = mock(UserService.class);
+        userValidator.setUserService(userService);
     }
     
     @Test
@@ -29,13 +34,48 @@ public class UserValidatorTest {
     
     @Test
     public void testValidate() {
-        User user = new User();
-        user.setName("p");
-        user.setPassword("p");
-        Errors errors = mock(Errors.class);
-        when(errors.getFieldErrorCount("name")).thenReturn(0);
+        namePasswordEmpty();
+        passwordEmpty();
+        namePasswordMinSize();
+        nameDuplication();
+    }
+    
+    private void namePasswordEmpty() {
+        user = new User();
+        user.setName("");
+        user.setPassword("");
+        errors = new BeanPropertyBindingResult(user, "User");
         userValidator.validate(user, errors);
-        //verify()
+        assertTrue(errors.getErrorCount()==2);
+        assertTrue(errors.getFieldError("name").getCode().equals("NotEmpty.user.name"));
+        assertTrue(errors.getFieldError("password").getCode().equals("NotEmpty.user.password"));
+    }
+
+    private void passwordEmpty() {
+        user.setName("name");
+        errors = new BeanPropertyBindingResult(user, "User");
+        userValidator.validate(user, errors);
+        assertTrue(errors.getErrorCount()==1);
+    }
+
+    private void namePasswordMinSize() {
+        user.setName("na");
+        user.setPassword("pas");
+        errors = new BeanPropertyBindingResult(user, "User");
+        userValidator.validate(user, errors);
+        assertTrue(errors.getErrorCount()==2);
+        assertTrue(errors.getFieldError("name").getCode().equals("MinSize.user.name"));
+        assertTrue(errors.getFieldError("password").getCode().equals("MinSize.user.password"));
+    }
+
+    private void nameDuplication() {
+        user.setName("name");
+        user.setPassword("pass");
+        errors = new BeanPropertyBindingResult(user, "User");
+        when(userService.getUserByName(user.getName())).thenReturn(user);
+        userValidator.validate(user, errors);
+        assertTrue(errors.getErrorCount()==1);
+        assertTrue(errors.getFieldError("name").getCode().equals("Duplicated.user.name"));
     }
     
 }

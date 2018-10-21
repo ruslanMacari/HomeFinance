@@ -15,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
@@ -61,7 +62,7 @@ public class LoginController {
         return new ModelAndView("createUser", "user", new User());
     }
     
-    @GetMapping(value = "/saveUser")
+    @PostMapping(value = "/saveUser")
     public String saveUser(@Valid @ModelAttribute("user")  User user, BindingResult result) {
         if (result.hasErrors()) {
             return "createUser";
@@ -82,7 +83,7 @@ public class LoginController {
         model.addAttribute("listUsersLimited", userService.listUsersLimit(3));
     }
     
-    @GetMapping(value = "/checkUser")
+    @PostMapping(value = "/checkUser")
     public String checkUser(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
