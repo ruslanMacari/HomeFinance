@@ -16,7 +16,7 @@ public class CurrencyServiceImplTest {
 
     @Test
     public void testAddCurrency() {
-        //to do
+        //test
     }
 
     @Test
