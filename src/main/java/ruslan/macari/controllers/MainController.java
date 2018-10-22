@@ -14,8 +14,12 @@ import ruslan.macari.service.CurrencyService;
 @Controller
 public class MainController {
     
-    @Autowired
     private CurrencyService currencyService;
+
+    @Autowired
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
     
     @GetMapping(value = "/home")
     public String home() {
@@ -25,17 +29,16 @@ public class MainController {
     @GetMapping(value = "/createCurrency")
     public String createCurrency(Model model) {
         model.addAttribute("currency", new Currency());
-        model.addAttribute("listCurrency", currencyService.listCurrency());
+        model.addAttribute("listCurrency", currencyService.list());
         return "createCurrency";
     }
     
     @PostMapping(value = "/saveCurrency")
-    public String saveCurrency(@Valid @ModelAttribute("currency") Currency currency, 
-            BindingResult result, Model model) {
+    public String saveCurrency(@Valid @ModelAttribute("currency") Currency currency, BindingResult result) {
         if (result.hasErrors()) {
             return "createCurrency";
         }
-        currencyService.addCurrency(currency);
+        currencyService.add(currency);
         return "redirect:/home";
     }
     

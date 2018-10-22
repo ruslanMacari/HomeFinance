@@ -14,19 +14,24 @@ public class CurrencyServiceImpl implements CurrencyService {
     private CurrencyRepository currencyRepository;
     
     @Override
-    public Currency addCurrency(Currency currency) {
+    public Currency add(Currency currency) {
         Currency savedCurrency = currencyRepository.saveAndFlush(currency);
         return savedCurrency;
     }
 
     @Override
-    public void updateCurrency(Currency currency) {
+    public void update(Currency currency) {
         currencyRepository.saveAndFlush(currency);
     }
 
     @Override
-    public List<Currency> listCurrency() {
+    public List<Currency> list() {
         return currencyRepository.findAll();
+    }
+
+    @Override
+    public Currency getByID(int id) {
+        return currencyRepository.findOne(id);
     }
     
 }

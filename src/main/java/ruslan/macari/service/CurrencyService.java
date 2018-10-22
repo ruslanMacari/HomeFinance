@@ -5,10 +5,12 @@ import ruslan.macari.domain.Currency;
 
 public interface CurrencyService {
     
-    Currency addCurrency(Currency currency);
+    Currency add(Currency currency);
 
-    void updateCurrency(Currency currency);
+    void update(Currency currency);
+    
+    Currency getByID(int id);
 
-    List<Currency> listCurrency();
+    List<Currency> list();
     
 }
