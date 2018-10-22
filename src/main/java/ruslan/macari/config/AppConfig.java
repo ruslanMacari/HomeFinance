@@ -50,6 +50,14 @@ public class AppConfig {
     
     @Value("${" + hbm2ddlAutoKey + "}")
     private String hbm2ddlAuto;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setHbm2ddlAuto(String hbm2ddlAuto) {
+        this.hbm2ddlAuto = hbm2ddlAuto;
+    }
     
     @Bean
     public DataSource dataSource() {

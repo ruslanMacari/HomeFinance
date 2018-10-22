@@ -50,9 +50,7 @@ public class User {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + this.id;
-        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 17 * hash + (this.password != null ? this.password.hashCode() : 0);
+        hash = 97 * hash + this.id;
         return hash;
     }
 
@@ -68,16 +66,7 @@ public class User {
             return false;
         }
         final User other = (User) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password)) {
-            return false;
-        }
-        return true;
+        return this.id == other.id;
     }
 
     public User() {
@@ -85,6 +74,10 @@ public class User {
 
     public User(String name) {
         this.name = name;
+    }
+
+    public User(int id) {
+        this.id = id;
     }
     
 }

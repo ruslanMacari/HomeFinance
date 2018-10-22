@@ -39,12 +39,15 @@ public class Currency {
     public Currency(String name) {
         this.name = name;
     }
+    
+    public Currency(int id) {
+        this.id = id;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        int hash = 7;
+        hash = 29 * hash + this.id;
         return hash;
     }
 
@@ -60,10 +63,7 @@ public class Currency {
             return false;
         }
         final Currency other = (Currency) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return !((this.name == null) ? (other.name != null) : !this.name.equals(other.name));
+        return this.id == other.id;
     }
 
     @Override

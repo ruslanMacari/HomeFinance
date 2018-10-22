@@ -6,14 +6,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ruslan.macari.config.AppConfig;
 import ruslan.macari.domain.Currency;
+import ruslan.macari.config.TestConfig;
 import ruslan.macari.service.CurrencyService;
 
+@DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class CurrencyServiceImplTest {
     
     @Autowired
