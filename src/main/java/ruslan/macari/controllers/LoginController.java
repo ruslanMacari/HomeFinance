@@ -67,7 +67,7 @@ public class LoginController {
         if (result.hasErrors()) {
             return "createUser";
         }
-        userService.addUser(user);
+        userService.add(user);
         return "redirect:/login";
     }
 
@@ -79,8 +79,8 @@ public class LoginController {
     }
     
     private void addListUsers(Model model) {
-        model.addAttribute("listUsers", userService.listUsers());
-        model.addAttribute("listUsersLimited", userService.listUsersLimit(3));
+        model.addAttribute("listUsers", userService.list());
+        model.addAttribute("listUsersLimited", userService.listLimit(3));
     }
     
     @PostMapping(value = "/checkUser")
@@ -90,7 +90,7 @@ public class LoginController {
             addListUsers(model);
             return "login";
         }
-        session.setAttribute("user", userService.getUserById(user.getId()));
+        session.setAttribute("user", userService.getById(user.getId()));
         return "redirect:/home";
     }
     

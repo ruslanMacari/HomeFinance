@@ -37,7 +37,7 @@ public class UserLoginValidatorTest {
         Errors errors = new BeanPropertyBindingResult(user, "User");
         UserLogin ul = new UserLogin();
         ul.setPassword("pass1");
-        when(userService.getUserById(user.getId())).thenReturn(ul);
+        when(userService.getById(user.getId())).thenReturn(ul);
         userLoginValidator.validate(user, errors);
         assertTrue(errors.getErrorCount()==1);
         assertTrue(errors.getFieldError("password").getCode().equals("Incorect.user.password"));

@@ -61,7 +61,7 @@ public class LoginControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         result = loginController.saveUser(user, bindingResult);
         assertEquals(result, "redirect:/login");
-        verify(userService).addUser(user);
+        verify(userService).add(user);
     }
 
     @Test

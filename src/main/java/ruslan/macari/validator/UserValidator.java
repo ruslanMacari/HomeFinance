@@ -55,7 +55,7 @@ public class UserValidator implements Validator {
 
     private void checkDuplication(Errors errors) {
         if (errors.getFieldError("name") == null) {
-            User userFound = userService.getUserByName(user.getName());
+            User userFound = userService.getByName(user.getName());
             if (userFound != null) {
                 errors.rejectValue("name", "Duplicated.user.name");
             }

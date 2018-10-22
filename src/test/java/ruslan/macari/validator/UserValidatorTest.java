@@ -72,7 +72,7 @@ public class UserValidatorTest {
         user.setName("name");
         user.setPassword("pass");
         errors = new BeanPropertyBindingResult(user, "User");
-        when(userService.getUserByName(user.getName())).thenReturn(user);
+        when(userService.getByName(user.getName())).thenReturn(user);
         userValidator.validate(user, errors);
         assertTrue(errors.getErrorCount()==1);
         assertTrue(errors.getFieldError("name").getCode().equals("Duplicated.user.name"));

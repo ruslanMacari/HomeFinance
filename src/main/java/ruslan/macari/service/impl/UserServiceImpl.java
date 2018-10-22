@@ -19,38 +19,38 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public User addUser(User user) {
+    public User add(User user) {
         User savedUser = userRepository.saveAndFlush(user);
         return savedUser;
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         userRepository.saveAndFlush(user);
     }
 
     @Override
-    public List<User> listUsers() {
+    public List<User> list() {
         return userRepository.findAll();
     }
 
     @Override
-    public List<User> listUsersLimit(int limit) {
-        return userRepository.listUsersLimit(new PageRequest(0, limit));
+    public List<User> listLimit(int limit) {
+        return userRepository.listLimit(new PageRequest(0, limit));
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getById(int id) {
         return userRepository.findOne(id);
     }
 
     @Override
-    public User getUserByName(String name) {
+    public User getByName(String name) {
         return userRepository.findByName(name);
     }
 
     @Override
-    public void removeUser(int id) {
+    public void delete(int id) {
         userRepository.delete(id);
     }
    

@@ -10,5 +10,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByName(String name);
     
     @Query(value ="select u from User u")
-    List<User> listUsersLimit(Pageable pageable);
+    List<User> listLimit(Pageable pageable);
 }

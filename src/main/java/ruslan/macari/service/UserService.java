@@ -5,18 +5,18 @@ import ruslan.macari.domain.User;
 
 public interface UserService {
     
-    User addUser(User user);
+    User add(User user);
 
-    void updateUser(User user);
+    void update(User user);
 
-    List<User> listUsers();
+    List<User> list();
 
-    List<User> listUsersLimit(int limit);
+    List<User> listLimit(int limit);
 
-    User getUserById(int id);
+    User getById(int id);
 
-    User getUserByName(String name);
+    User getByName(String name);
 
-    void removeUser(int id);
+    void delete(int id);
 
 }
