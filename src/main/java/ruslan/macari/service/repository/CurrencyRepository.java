@@ -1,4 +1,4 @@
-package ruslan.macari.repository;
+package ruslan.macari.service.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ruslan.macari.domain.Currency;

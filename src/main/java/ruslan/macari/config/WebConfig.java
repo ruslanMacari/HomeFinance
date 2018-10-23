@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
-@ComponentScan(basePackages = {"ruslan.macari.controllers", "ruslan.macari.validator"})
+@ComponentScan(basePackages = {"ruslan.macari.web"})
 public class WebConfig extends WebMvcConfigurerAdapter{
 
    @Bean

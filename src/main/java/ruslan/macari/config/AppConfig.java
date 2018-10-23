@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan("ruslan.macari.service")
 @PropertySource("classpath:app.properties")
-@EnableJpaRepositories("ruslan.macari.repository")
+@EnableJpaRepositories("ruslan.macari.service.repository")
 public class AppConfig {
 
     @Value("${db.driver}")

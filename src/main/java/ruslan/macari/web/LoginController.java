@@ -1,4 +1,4 @@
-package ruslan.macari.controllers;
+package ruslan.macari.web;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -20,8 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
-import ruslan.macari.validator.UserLoginValidator;
-import ruslan.macari.validator.UserValidator;
+import ruslan.macari.web.validator.UserLoginValidator;
+import ruslan.macari.web.validator.UserValidator;
 
 @Controller
 public class LoginController {
@@ -112,6 +112,12 @@ public class LoginController {
        } else if (targetClass == UserLogin.class) {
            dataBinder.setValidator(userLoginValidator);
        }
+    }
+    
+    @GetMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/login";
     }
     
 }

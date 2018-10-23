@@ -1,4 +1,4 @@
-package ruslan.macari.controllers;
+package ruslan.macari.web;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -6,9 +6,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import ruslan.macari.domain.Currency;
+import ruslan.macari.domain.User;
 import ruslan.macari.service.CurrencyService;
 
 public class MainControllerTest {
@@ -28,7 +30,10 @@ public class MainControllerTest {
     
     @Test
     public void testHome() {
-        assertEquals("home", mainController.home());
+        MockHttpSession session = new MockHttpSession();
+        assertEquals("redirect:/login", mainController.home(session));
+        session.setAttribute("user", new User());
+        assertEquals("home", mainController.home(session));
     }
 
     @Test

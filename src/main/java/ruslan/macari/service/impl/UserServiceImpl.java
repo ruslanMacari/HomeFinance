@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ruslan.macari.domain.User;
-import ruslan.macari.repository.UserRepository;
+import ruslan.macari.service.repository.UserRepository;
 import ruslan.macari.service.UserService;
 
 @Service

@@ -10,6 +10,9 @@
         <title>${initParam['Title']} (Home)</title>
     </head>
     <body>
+        <div>
+            <a href="<c:url value='/logout'/>">Log Out</a>
+        </div>
         <h1>Hello ${sessionScope.user.name}!</h1>
         <div class="createUserRef">
             <a href="<c:url value='/createCurrency' />" class="createCurrency">Create New Currency</a>

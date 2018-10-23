@@ -1,4 +1,4 @@
-package ruslan.macari.validator;
+package ruslan.macari.web.validator;
  
 import ruslan.macari.domain.User;
 import org.springframework.stereotype.Component;

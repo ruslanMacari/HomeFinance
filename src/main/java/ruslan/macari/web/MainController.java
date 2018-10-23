@@ -1,5 +1,6 @@
-package ruslan.macari.controllers;
+package ruslan.macari.web;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,11 @@ public class MainController {
     }
     
     @GetMapping(value = "/home")
-    public String home() {
+    public String home(HttpSession session) {
+        Object user = session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
         return "home";
     }
 

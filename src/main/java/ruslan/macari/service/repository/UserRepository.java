@@ -1,4 +1,4 @@
-package ruslan.macari.repository;
+package ruslan.macari.service.repository;
 
 import java.util.List;
 import org.springframework.data.domain.Pageable;

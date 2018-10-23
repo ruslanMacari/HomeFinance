@@ -1,4 +1,4 @@
-package ruslan.macari.controllers;
+package ruslan.macari.web;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -80,6 +80,15 @@ public class LoginControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         result = loginController.checkUser(userLogin, bindingResult, model, session);
         assertEquals(result, "redirect:/home");
+    }
+    
+    @Test
+    public void testLogout() {
+        session = new MockHttpSession();
+        session.setAttribute("user", new User());
+        String result = loginController.logout(session);
+        assertEquals(result, "redirect:/login");
+        assertNull(session.getAttribute("user"));
     }
     
 }

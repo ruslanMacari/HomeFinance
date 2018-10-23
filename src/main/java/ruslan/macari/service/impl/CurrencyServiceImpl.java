@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.repository.CurrencyRepository;
+import ruslan.macari.service.repository.CurrencyRepository;
 import ruslan.macari.service.CurrencyService;
 
 @Service
