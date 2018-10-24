@@ -26,8 +26,6 @@ import ruslan.macari.web.validator.UserValidator;
 @Controller
 public class LoginController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
-
     private UserService userService;
 
     @Autowired
@@ -41,11 +39,7 @@ public class LoginController {
     @Autowired
     private UserLoginValidator userLoginValidator;
     
-    private Validator validator;
-
     public LoginController() {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
     }
     
     @GetMapping(value = "/")
@@ -100,7 +94,6 @@ public class LoginController {
        if (target == null) {
            return;
        }
-       LOGGER.info("Target=" + target);
        setValidator(dataBinder, target);
        
    }
