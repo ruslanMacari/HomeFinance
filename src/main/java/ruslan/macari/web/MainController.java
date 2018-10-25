@@ -9,10 +9,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.CurrencyService;
 
 @Controller
+@RequestMapping("/")
 public class MainController {
     
     private CurrencyService currencyService;
@@ -22,13 +24,13 @@ public class MainController {
         this.currencyService = currencyService;
     }
     
-    @GetMapping(value = "/home")
-    public String home(HttpSession session) {
+    @GetMapping()
+    public String index(HttpSession session) {
         Object user = session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login";
+            return "redirect:/login/authorization";
         }
-        return "home";
+        return "index";
     }
 
     @GetMapping(value = "/createCurrency")
@@ -44,7 +46,7 @@ public class MainController {
             return "createCurrency";
         }
         currencyService.add(currency);
-        return "redirect:/home";
+        return "redirect:/";
     }
     
 }

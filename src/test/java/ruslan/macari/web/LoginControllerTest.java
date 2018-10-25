@@ -36,59 +36,59 @@ public class LoginControllerTest {
         bindingResult = mock(BindingResult.class);
     }
     
-    @Test
-    public void testMain() {
-        assertEquals(loginController.main(session), "redirect:/login");
-        session.setAttribute("user", user);
-        assertEquals(loginController.main(session), "redirect:/home");
-    }
-
-    @Test
-    public void testCreateUser() {
-        ModelAndView modelAndView = loginController.createUser();
-        assertTrue(modelAndView.getViewName().equals("createUser"));
-        ModelMap map = modelAndView.getModelMap();
-        assertTrue(map.containsAttribute("user"));
-        assertEquals(map.get("user"), new User());
-    }
-
-    @Test
-    public void testSaveUser() {
-        when(bindingResult.hasErrors()).thenReturn(true);
-        String result = loginController.saveUser(user, bindingResult);
-        assertEquals(result, "createUser");
-        verifyZeroInteractions(userService);
-        when(bindingResult.hasErrors()).thenReturn(false);
-        result = loginController.saveUser(user, bindingResult);
-        assertEquals(result, "redirect:/login");
-        verify(userService).add(user);
-    }
-
-    @Test
-    public void testLogin() {
-        String result = loginController.login(mock(Model.class));
-        assertEquals(result, "login");
-    }
-
-    @Test
-    public void testCheckUser() {
-        UserLogin userLogin = mock(UserLogin.class);
-        when(bindingResult.hasErrors()).thenReturn(true);
-        Model model = mock(Model.class);
-        String result = loginController.checkUser(userLogin, bindingResult, model, session);
-        assertEquals(result, "login");
-        when(bindingResult.hasErrors()).thenReturn(false);
-        result = loginController.checkUser(userLogin, bindingResult, model, session);
-        assertEquals(result, "redirect:/home");
-    }
-    
-    @Test
-    public void testLogout() {
-        session = new MockHttpSession();
-        session.setAttribute("user", new User());
-        String result = loginController.logout(session);
-        assertEquals(result, "redirect:/login");
-        assertNull(session.getAttribute("user"));
-    }
+//    @Test
+//    public void testMain() {
+//        assertEquals(loginController.main(session), "redirect:/login");
+//        session.setAttribute("user", user);
+//        assertEquals(loginController.main(session), "redirect:/home");
+//    }
+//
+//    @Test
+//    public void testCreateUser() {
+//        ModelAndView modelAndView = loginController.createUser();
+//        assertTrue(modelAndView.getViewName().equals("createUser"));
+//        ModelMap map = modelAndView.getModelMap();
+//        assertTrue(map.containsAttribute("user"));
+//        assertEquals(map.get("user"), new User());
+//    }
+//
+//    @Test
+//    public void testSaveUser() {
+//        when(bindingResult.hasErrors()).thenReturn(true);
+//        String result = loginController.saveUser(user, bindingResult);
+//        assertEquals(result, "createUser");
+//        verifyZeroInteractions(userService);
+//        when(bindingResult.hasErrors()).thenReturn(false);
+//        result = loginController.saveUser(user, bindingResult);
+//        assertEquals(result, "redirect:/login");
+//        verify(userService).add(user);
+//    }
+//
+//    @Test
+//    public void testLogin() {
+//        String result = loginController.login(mock(Model.class));
+//        assertEquals(result, "login");
+//    }
+//
+//    @Test
+//    public void testCheckUser() {
+//        UserLogin userLogin = mock(UserLogin.class);
+//        when(bindingResult.hasErrors()).thenReturn(true);
+//        Model model = mock(Model.class);
+//        String result = loginController.checkUser(userLogin, bindingResult, model, session);
+//        assertEquals(result, "login");
+//        when(bindingResult.hasErrors()).thenReturn(false);
+//        result = loginController.checkUser(userLogin, bindingResult, model, session);
+//        assertEquals(result, "redirect:/home");
+//    }
+//    
+//    @Test
+//    public void testLogout() {
+//        session = new MockHttpSession();
+//        session.setAttribute("user", new User());
+//        String result = loginController.logout(session);
+//        assertEquals(result, "redirect:/login");
+//        assertNull(session.getAttribute("user"));
+//    }
     
 }

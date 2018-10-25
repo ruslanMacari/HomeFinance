@@ -11,7 +11,7 @@
     </head>
     <body>
         <div>
-            <a href="<c:url value='/logout'/>">Log Out</a>
+            <a href="<c:url value='/login/logout'/>">Log Out</a>
         </div>
         <h1>Hello ${sessionScope.user.name}!</h1>
         <div class="createUserRef">
