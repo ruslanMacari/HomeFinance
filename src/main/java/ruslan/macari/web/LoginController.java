@@ -36,15 +36,6 @@ public class LoginController {
     @Autowired
     private UserLoginValidator userLoginValidator;
     
-//    @GetMapping()
-//    public String main(HttpSession session) {
-//        Object user = session.getAttribute("user");
-//        if (user != null) {
-//            return "redirect:/";
-//        }
-//        return "redirect:/login";
-//    }
-    
     @GetMapping("/authorization")
     public String authorization(HttpSession session, Model model) {
         Object user = session.getAttribute("user");
@@ -56,12 +47,12 @@ public class LoginController {
         return "login/authorization";
     }
     
-    @GetMapping(value = "/createUser")
+    @GetMapping("/createUser")
     public ModelAndView createUser() {
         return new ModelAndView("login/createUser", "user", new User());
     }
     
-    @PostMapping(value = "/saveUser")
+    @PostMapping("/saveUser")
     public String saveUser(@Valid @ModelAttribute("user")  User user, BindingResult result) {
         if (result.hasErrors()) {
             return "redirect:/login/createUser";
@@ -75,26 +66,30 @@ public class LoginController {
         model.addAttribute("listUsersLimited", userService.listLimit(3));
     }
     
-    //@PostMapping("/checkUser")
-    @RequestMapping(value = "/checkUser")
-    public String checkUser(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
+    @PostMapping("/authorization")
+    public String authorization(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
-            //addListUsers(model);
-            return "redirect:/login/authorization";
+            addListUsers(model);
+            return "login/authorization";
         }
         session.setAttribute("user", userService.getById(user.getId()));
         return "redirect:/";
     }
     
-   @InitBinder
+    @GetMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/login/authorization";
+    }
+    
+    @InitBinder
    protected void initBinder(WebDataBinder dataBinder) {
        Object target = dataBinder.getTarget();
        if (target == null) {
            return;
        }
        setValidator(dataBinder, target);
-       
    }
 
     private void setValidator(WebDataBinder dataBinder, Object target) {
@@ -104,12 +99,6 @@ public class LoginController {
        } else if (targetClass == UserLogin.class) {
            dataBinder.setValidator(userLoginValidator);
        }
-    }
-    
-    @GetMapping(value = "/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute("user");
-        return "redirect:/login/authorization";
     }
     
 }

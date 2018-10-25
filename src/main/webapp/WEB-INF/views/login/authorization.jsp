@@ -20,7 +20,7 @@
                     <h2>No Users Found, Please Create New User</h2>
                 </c:when>
                 <c:otherwise>
-                    <form:form method="POST" commandName="user" action="/login/checkUser" class="form">
+                    <form:form method="POST" commandName="user" action="authorization" class="form">
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
