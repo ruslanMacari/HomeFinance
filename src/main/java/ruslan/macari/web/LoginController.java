@@ -1,8 +1,11 @@
 package ruslan.macari.web;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +24,16 @@ import ruslan.macari.web.validator.UserValidator;
 
 @Controller
 @RequestMapping("/login")
+@PropertySource("classpath:app.properties")
 public class LoginController {
 
     private UserService userService;
+    
+    @Value("${db.password}")
+    private String password;
+    
+    @Value("${db.username}")
+    private String username;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -35,6 +45,22 @@ public class LoginController {
     
     @Autowired
     private UserLoginValidator userLoginValidator;
+    
+    @PostConstruct
+    public void init() {
+        createAdmin();
+    }
+
+    private void createAdmin() {
+        if (userService.getAdmin() != null) {
+            return;
+        }
+        User admin = new User();
+        admin.setName(username);
+        admin.setPassword(password);
+        admin.setAdmin(true);
+        userService.add(admin);
+    }
     
     @GetMapping("/authorization")
     public String authorization(HttpSession session, Model model) {

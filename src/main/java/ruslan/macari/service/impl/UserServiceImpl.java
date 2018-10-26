@@ -53,5 +53,10 @@ public class UserServiceImpl implements UserService {
     public void delete(int id) {
         userRepository.delete(id);
     }
+
+    @Override
+    public User getAdmin() {
+        return userRepository.findAdmin();
+    }
    
 }

@@ -30,7 +30,6 @@ public class UserServiceImplTest {
         int size = userService.list().size();
         userService.add(new User());
         assertTrue(userService.list().size() == size + 1);
-        
     }
 
     @Test
@@ -89,7 +88,15 @@ public class UserServiceImplTest {
         int size = userService.list().size();
         userService.delete(user.getId());
         assertEquals(size - 1, userService.list().size());
-        
+    }
+    
+    @Test
+    public void testGetAdmin() {
+        assertNull(userService.getAdmin());
+        User user = new User("test");
+        user.setAdmin(true);
+        userService.add(user);
+        assertNotNull(userService.getAdmin());
     }
 
 }

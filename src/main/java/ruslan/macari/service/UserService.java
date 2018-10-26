@@ -18,5 +18,7 @@ public interface UserService {
     User getByName(String name);
 
     void delete(int id);
+    
+    User getAdmin();
 
 }

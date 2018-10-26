@@ -25,6 +25,8 @@ public class User {
     private String name;
 
     private String password;
+    
+    private boolean admin;
 
     public String getName() {
         return name;
@@ -42,6 +44,14 @@ public class User {
         this.password = password;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+    
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", name=" + name + ", password=" + password + '}';
