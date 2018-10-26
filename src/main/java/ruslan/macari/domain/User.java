@@ -90,4 +90,9 @@ public class User {
         this.id = id;
     }
     
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+    
 }

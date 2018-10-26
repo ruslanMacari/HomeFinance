@@ -24,9 +24,9 @@ public class UserLoginValidator extends UserValidator {
     }
     
     private void validateLogin(Errors errors) {
-        User userById = userService.getById(user.getId());
-        if(!userById.getPassword().equals(user.getPassword())) {
-            errors.rejectValue("password", "Incorect.user.password");
+        User foundUser = userService.getByNameAndPassword(user.getName(), user.getPassword());
+        if(foundUser == null) {
+            errors.rejectValue("password", "authorization.error");
         }
     }
 }

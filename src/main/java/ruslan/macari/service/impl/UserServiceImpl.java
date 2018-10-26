@@ -58,5 +58,15 @@ public class UserServiceImpl implements UserService {
     public User getAdmin() {
         return userRepository.findAdmin();
     }
+
+    @Override
+    public User getByNameAndPassword(String name, String password) {
+        return userRepository.findByNameAndPassword(name, password);
+    }
+
+    @Override
+    public List<User> getSimpleUsers() {
+        return userRepository.getSimpleUsers();
+    }
    
 }

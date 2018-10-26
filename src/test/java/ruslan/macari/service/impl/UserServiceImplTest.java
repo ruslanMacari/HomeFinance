@@ -98,5 +98,34 @@ public class UserServiceImplTest {
         userService.add(user);
         assertNotNull(userService.getAdmin());
     }
+    
+    @Test
+    public void testGetByNameAndPassword() {
+        String name = "test GetByNameAndPassword";
+        String password = "password";
+        User user = new User(name, password);
+        userService.add(user);
+        assertNotNull(userService.getByNameAndPassword(name, password));
+    }
+    
+    @Test
+    public void testGetSimpleUsers() {
+        for (User user : userService.list()) {
+            userService.delete(user.getId());
+        }
+        User admin = new User("admin testGetSimpleUsers");
+        admin.setAdmin(true);
+        userService.add(admin);
+        User simpleUser = new User ("user testGetSimpleUsers");
+        userService.add(simpleUser);
+        List<User> simpleUsers = userService.getSimpleUsers();
+        assertEquals(1, simpleUsers.size());
+        for(User user : simpleUsers) {
+            if (user.equals(admin)) {
+                fail("admin user must not be found");
+                break;
+            }
+        }
+    }
 
 }

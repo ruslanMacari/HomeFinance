@@ -33,15 +33,12 @@ public class UserLoginValidatorTest {
     
     @Test
     public void testValidate() {
-        UserLogin user = new UserLogin();
-        user.setPassword("pass");
+        UserLogin user = new UserLogin("name", "pass");
         Errors errors = new BeanPropertyBindingResult(user, "User");
-        UserLogin ul = new UserLogin();
-        ul.setPassword("pass1");
-        when(userService.getById(user.getId())).thenReturn(ul);
+        when(userService.getByNameAndPassword(user.getName(), user.getPassword())).thenReturn(null);
         userLoginValidator.validate(user, errors);
         assertTrue(errors.getErrorCount()==1);
-        assertTrue(errors.getFieldError("password").getCode().equals("Incorect.user.password"));
+        assertTrue(errors.getFieldError("password").getCode().equals("authorization.error"));
     }
     
 }

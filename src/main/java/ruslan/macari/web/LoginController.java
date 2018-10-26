@@ -28,10 +28,10 @@ import ruslan.macari.web.validator.UserValidator;
 public class LoginController {
 
     private UserService userService;
-    
+
     @Value("${db.password}")
     private String password;
-    
+
     @Value("${db.username}")
     private String username;
 
@@ -39,13 +39,13 @@ public class LoginController {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-    
+
     @Autowired
     private UserValidator userValidator;
-    
+
     @Autowired
     private UserLoginValidator userLoginValidator;
-    
+
     @PostConstruct
     public void init() {
         createAdmin();
@@ -61,7 +61,7 @@ public class LoginController {
         admin.setAdmin(true);
         userService.add(admin);
     }
-    
+
     @GetMapping("/authorization")
     public String authorization(HttpSession session, Model model) {
         Object user = session.getAttribute("user");
@@ -72,26 +72,27 @@ public class LoginController {
         model.addAttribute("user", new UserLogin());
         return "login/authorization";
     }
-    
+
     @GetMapping("/createUser")
     public ModelAndView createUser() {
         return new ModelAndView("login/createUser", "user", new User());
     }
-    
+
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user")  User user, BindingResult result) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "redirect:/login/createUser";
+            model.addAttribute("user", user);
+            return "login/createUser";
         }
         userService.add(user);
         return "redirect:/login/authorization";
     }
 
     private void addListUsers(Model model) {
-        model.addAttribute("listUsers", userService.list());
+        model.addAttribute("listUsers", userService.getSimpleUsers());
         model.addAttribute("listUsersLimited", userService.listLimit(3));
     }
-    
+
     @PostMapping("/authorization")
     public String authorization(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
@@ -99,32 +100,32 @@ public class LoginController {
             addListUsers(model);
             return "login/authorization";
         }
-        session.setAttribute("user", userService.getById(user.getId()));
+        session.setAttribute("user", userService.getByNameAndPassword(user.getName(), user.getPassword()));
         return "redirect:/";
     }
-    
+
     @GetMapping(value = "/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:/login/authorization";
     }
-    
+
     @InitBinder
-   protected void initBinder(WebDataBinder dataBinder) {
-       Object target = dataBinder.getTarget();
-       if (target == null) {
-           return;
-       }
-       setValidator(dataBinder, target);
-   }
+    protected void initBinder(WebDataBinder dataBinder) {
+        Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        setValidator(dataBinder, target);
+    }
 
     private void setValidator(WebDataBinder dataBinder, Object target) {
-       Class targetClass = target.getClass();
-       if (targetClass == User.class) {
-           dataBinder.setValidator(userValidator);
-       } else if (targetClass == UserLogin.class) {
-           dataBinder.setValidator(userLoginValidator);
-       }
+        Class targetClass = target.getClass();
+        if (targetClass == User.class) {
+            dataBinder.setValidator(userValidator);
+        } else if (targetClass == UserLogin.class) {
+            dataBinder.setValidator(userLoginValidator);
+        }
     }
-    
+
 }

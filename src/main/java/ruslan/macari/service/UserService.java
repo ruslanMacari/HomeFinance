@@ -20,5 +20,9 @@ public interface UserService {
     void delete(int id);
     
     User getAdmin();
+    
+    User getByNameAndPassword(String name, String password);
+    
+    List<User> getSimpleUsers();
 
 }
