@@ -13,6 +13,11 @@
         <div>
             <a href="<c:url value='/login/logout'/>">Log Out</a>
         </div>
+        <c:if test="${sessionScope.user.admin}">
+            <div>
+                <a href="<c:url value='/users/list'/>">Users</a>
+            </div>    
+        </c:if>
         <h1>Hello ${sessionScope.user.name}!</h1>
         <div class="createUserRef">
             <a href="<c:url value='/createCurrency' />" class="createCurrency">Create New Currency</a>

@@ -1,0 +1,84 @@
+table, th {
+    margin: 10px;
+    padding: 5px;
+    width: 300px;
+}
+
+.main-table {
+    border: 2px solid green;
+    border-collapse: collapse;
+}
+
+.wide {
+    width: 600px;
+}
+
+.main-table th {
+    background-color: green;
+    color: white;
+}
+
+.main-table td {
+    border: 1px solid green;
+}
+
+th {
+    text-align: left;
+}
+
+h1 {
+    margin: 10px;
+}
+
+a {
+    margin: 10px;
+}
+
+label {
+    display: block;
+    text-align: left;
+}
+
+#list {
+    padding-left: 10px;
+    position: relative;
+}
+
+#list ul {
+    padding: 0;
+}
+
+#list li {
+    list-style: none;
+    margin-bottom: 1em;
+}
+
+.hidden {
+    display: none;
+}
+
+.delete {
+    margin: 0;
+    text-align: center;
+}
+
+.delete-button {
+    border: none;
+    background: url('/timesheet-app/resources/delete.png') no-repeat top left;
+    color: transparent;
+    cursor: pointer;
+    padding: 2px 8px;
+}
+
+.task-table {
+    width: 150px;
+    border: 1px solid #dcdcdc;
+}
+
+.errors {
+    color: #000;
+    background-color: #ffEEEE;
+    border: 3px solid #ff0000;
+    padding: 8px;
+    margin: 16px;
+}
