@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import ruslan.macari.domain.CurrentUser;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
@@ -64,8 +65,11 @@ public class LoginController {
 
     @GetMapping("/authorization")
     public String authorization(HttpSession session, Model model) {
-        Object user = session.getAttribute("user");
-        if (user != null) {
+//        Object user = session.getAttribute("user");
+//        if (user != null) {
+//            return "redirect:/";
+//        }
+        if (CurrentUser.exists(session.getId())) {
             return "redirect:/";
         }
         addListUsers(model);
@@ -100,13 +104,16 @@ public class LoginController {
             addListUsers(model);
             return "login/authorization";
         }
-        session.setAttribute("user", userService.getByNameAndPassword(user.getName(), user.getPassword()));
+        User userFound = userService.getByNameAndPassword(user.getName(), user.getPassword());
+        CurrentUser.setUser(session.getId(), userFound);
+        session.setAttribute("user", userFound);
         return "redirect:/";
     }
 
     @GetMapping(value = "/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("user");
+        CurrentUser.remove(session.getId());
         return "redirect:/login/authorization";
     }
 

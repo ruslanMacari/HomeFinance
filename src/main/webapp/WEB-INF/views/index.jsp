@@ -15,7 +15,7 @@
         </div>
         <c:if test="${sessionScope.user.admin}">
             <div>
-                <a href="<c:url value='/users/list'/>">Users</a>
+                <a href="<c:url value='/users'/>">Users</a>
             </div>    
         </c:if>
         <h1>Hello ${sessionScope.user.name}!</h1>

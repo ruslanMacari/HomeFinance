@@ -1,5 +1,7 @@
 package ruslan.macari.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ruslan.macari.domain.User;
 
 @Configuration
 @EnableTransactionManagement
@@ -93,6 +96,11 @@ public class AppConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+    
+    @Bean
+    public Map<String, User> usersMap() {
+        return new HashMap<>();
     }
     
 }
