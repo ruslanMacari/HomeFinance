@@ -1,11 +1,11 @@
-package ruslan.macari.domain;
+package ruslan.macari.web.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import ruslan.macari.domain.User;
 
 @Component
 public class CurrentUser {
@@ -18,11 +18,11 @@ public class CurrentUser {
         CurrentUser.users = users;
     }
     
-    public static User getUser(String sessionId) {
+    public static User get(String sessionId) {
         return users.get(sessionId);
     }
 
-    public static void setUser(String sessionId, User user) {
+    public static void add(String sessionId, User user) {
         users.put(sessionId, user);
     }
     
@@ -40,6 +40,10 @@ public class CurrentUser {
     
     public static boolean exists(String sessionId) {
         return users.get(sessionId) != null;
+    }
+    
+    public static int size() {
+        return users.size();
     }
     
 }

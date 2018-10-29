@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.domain.CurrentUser;
+import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.service.CurrencyService;
 
 @Controller

@@ -3,6 +3,7 @@ package ruslan.macari.config;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -100,7 +101,7 @@ public class AppConfig {
     
     @Bean
     public Map<String, User> usersMap() {
-        return new HashMap<>();
+        return new ConcurrentHashMap<>();
     }
     
 }
