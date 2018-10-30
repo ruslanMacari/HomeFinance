@@ -8,7 +8,7 @@
     <link href="<c:url value="/resources/css/style.css"/>" rel="stylesheet">
 </head>
 <body>
-    <h1>List of users</h1>
+    <h1>List of Users</h1>
     <a href="users?new">Add new user</a>
     <table cellspacing="5" class="main-table">
         <tr>

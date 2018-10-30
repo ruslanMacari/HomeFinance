@@ -64,7 +64,7 @@ label {
 
 .delete-button {
     border: none;
-    background: url('/timesheet-app/resources/delete.png') no-repeat top left;
+    background: url('/HomeFinance/resources/img/delete.png') no-repeat top left;
     color: transparent;
     cursor: pointer;
     padding: 2px 8px;
