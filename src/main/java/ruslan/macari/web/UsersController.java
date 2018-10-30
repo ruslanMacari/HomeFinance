@@ -29,10 +29,8 @@ public class UsersController {
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {
         String id = session.getId();
-        User user = CurrentUser.get(id);
-        if (user == null
-                || !user.isAdmin()) {
-            throw new AccesException(user);
+        if (!CurrentUser.isAdmin(id)) {
+            throw new AccesException(CurrentUser.exists(id), CurrentUser.get(id));
         }
         List<User> users = userService.list();
         model.addAttribute("users", users);

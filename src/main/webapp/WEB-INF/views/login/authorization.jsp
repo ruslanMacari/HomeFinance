@@ -46,27 +46,6 @@
             <div class="createUserRef">
                 <a href="<c:url value='/login/createUser' />" class="createUser">Create New User</a>
             </div>
-            <c:if test="${!empty listUsersLimited}">
-                <h3>Users List</h3>
-                <table class="tg">
-                    <tr>
-                        <th width="80">User ID</th>
-                        <th width="120">User Name</th>
-                        <th width="120">User Password</th>
-                        <th width="60">Edit</th>
-                        <th width="60">Delete</th>
-                    </tr>
-                    <c:forEach items="${listUsersLimited}" var="user">
-                        <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.password}</td>
-                            <td><a href="<c:url value='/edit/${user.id}' />" >Edit</a></td>
-                            <td><a href="<c:url value='/remove/${user.id}' />" >Delete</a></td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </c:if>
         </div>
     </body>
 </html>

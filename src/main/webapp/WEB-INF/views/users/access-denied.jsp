@@ -4,7 +4,7 @@
         <title>Access Denied!</title>
     </head>
     <body>
-        Oops! User ${user.name} is not admin
+        Access denied! User "${user.name}" has no rights to access that resource.
 
         <div><a href="../HomeFinance">Back to main page.</a></div>
     </body>

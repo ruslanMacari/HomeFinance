@@ -68,9 +68,13 @@ public class LoginController {
         if (CurrentUser.exists(session.getId())) {
             return "redirect:/";
         }
-        addListUsers(model);
+        addSimpleUsers(model);
         model.addAttribute("user", new UserLogin());
         return "login/authorization";
+    }
+    
+    private void addSimpleUsers(Model model) {
+        model.addAttribute("listUsers", userService.getSimpleUsers());
     }
 
     @GetMapping("/createUser")
@@ -88,29 +92,32 @@ public class LoginController {
         return "redirect:/login/authorization";
     }
 
-    private void addListUsers(Model model) {
-        model.addAttribute("listUsers", userService.getSimpleUsers());
-        model.addAttribute("listUsersLimited", userService.listLimit(3));
-    }
-
     @PostMapping("/authorization")
     public String authorization(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
-            addListUsers(model);
+            addSimpleUsers(model);
             return "login/authorization";
         }
+        addSessionUser(session, user);
+        return "redirect:/";
+    }
+    
+    private void addSessionUser(HttpSession session, User user) {
         User userFound = userService.getByNameAndPassword(user.getName(), user.getPassword());
         CurrentUser.add(session.getId(), userFound);
         session.setAttribute("user", userFound);
-        return "redirect:/";
     }
 
     @GetMapping(value = "/logout")
     public String logout(HttpSession session) {
+        removeSessionUser(session);
+        return "redirect:/login/authorization";
+    }
+    
+    private void removeSessionUser(HttpSession session) {
         session.removeAttribute("user");
         CurrentUser.remove(session.getId());
-        return "redirect:/login/authorization";
     }
 
     @InitBinder
