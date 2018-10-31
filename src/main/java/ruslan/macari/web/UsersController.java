@@ -30,13 +30,17 @@ public class UsersController {
     
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {
+        handleAccess(session);
+        List<User> users = userService.list();
+        model.addAttribute("users", users);
+        return "users/list";
+    }
+    
+    private void handleAccess(HttpSession session) throws AccesException {
         String id = session.getId();
         if (!CurrentUser.isAdmin(id)) {
             throw new AccesException(id);
         }
-        List<User> users = userService.list();
-        model.addAttribute("users", users);
-        return "users/list";
     }
     
     @ExceptionHandler(AccesException.class)
@@ -47,7 +51,8 @@ public class UsersController {
     }
     
     @GetMapping(value = "/{id}")
-    public String getEmployee(@PathVariable("id") int id, Model model) {
+    public String getEmployee(HttpSession session, @PathVariable("id") int id, Model model) throws AccesException {
+        handleAccess(session);
         User user = userService.getById(id);
         model.addAttribute("user", user);
         return "users/view";
