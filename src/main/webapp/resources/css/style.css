@@ -82,3 +82,8 @@ label {
     padding: 8px;
     margin: 16px;
 }
+
+.space {
+    display: block;
+    margin-top: 40px;
+}

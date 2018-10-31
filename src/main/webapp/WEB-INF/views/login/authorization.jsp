@@ -44,7 +44,7 @@
                 </c:otherwise>
             </c:choose>
             <div class="createUserRef">
-                <a href="<c:url value='/login/createUser' />" class="createUser">Create New User</a>
+                <a href="<c:url value='/authorization/createUser' />" class="createUser">Create New User</a>
             </div>
         </div>
     </body>

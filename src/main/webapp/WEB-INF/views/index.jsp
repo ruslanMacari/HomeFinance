@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<!DOCTYPE html>
+<!DOCTYPE">
 <html>
     <head>
         <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
@@ -11,7 +10,7 @@
     </head>
     <body>
         <div>
-            <a href="<c:url value='/login/logout'/>">Log Out</a>
+            <a href="<c:url value='/authorization/logout'/>">Log Out</a>
         </div>
         <c:if test="${sessionScope.user.admin}">
             <div>

@@ -24,7 +24,7 @@ import ruslan.macari.web.validator.UserLoginValidator;
 import ruslan.macari.web.validator.UserValidator;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping("/authorization")
 @PropertySource("classpath:app.properties")
 public class LoginController {
 
@@ -63,7 +63,7 @@ public class LoginController {
         userService.add(admin);
     }
 
-    @GetMapping("/authorization")
+    @GetMapping()
     public String authorization(HttpSession session, Model model) {
         if (CurrentUser.exists(session.getId())) {
             return "redirect:/";
@@ -89,10 +89,10 @@ public class LoginController {
             return "login/createUser";
         }
         userService.add(user);
-        return "redirect:/login/authorization";
+        return "redirect:/authorization";
     }
 
-    @PostMapping("/authorization")
+    @PostMapping()
     public String authorization(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
@@ -112,7 +112,7 @@ public class LoginController {
     @GetMapping(value = "/logout")
     public String logout(HttpSession session) {
         removeSessionUser(session);
-        return "redirect:/login/authorization";
+        return "redirect:/authorization";
     }
     
     private void removeSessionUser(HttpSession session) {

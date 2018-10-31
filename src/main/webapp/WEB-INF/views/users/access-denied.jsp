@@ -1,4 +1,5 @@
 <%@ page isErrorPage="true" %>
+<!DOCTYPE">
 <html>
     <head>
         <title>Access Denied!</title>

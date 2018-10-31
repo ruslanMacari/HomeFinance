@@ -28,7 +28,7 @@ public class MainController {
     @GetMapping()
     public String index(HttpSession session) {
         if (!CurrentUser.exists(session.getId())) {
-            return "redirect:/login/authorization";
+            return "redirect:/authorization";
         }
         return "index";
     }
