@@ -12,15 +12,20 @@ var selector = new Selector();
 
 // Unlock
 var unlock = selector.getElement("#unlock");
-
-if (unlock !== null) {
-    unlock.addEventListener("click", function () {
+var unlockEvent = function () {
         unlock.className = "hidden";
         selector.getElement("#name").removeAttribute("disabled");
         selector.getElement("#password").removeAttribute("disabled");
         selector.getElement("#save").classList.remove("hidden");
 
-    });
+    };
+
+if (unlock !== null) {
+    unlock.addEventListener("click", unlockEvent);
+}
+
+if (selector.getElement(".error") !== null) {
+    unlockEvent();
 }
 
 // Go back

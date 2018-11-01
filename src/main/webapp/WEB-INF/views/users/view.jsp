@@ -9,16 +9,18 @@
     <body>
         <h2>User info</h2>
         <div id="list">
-            <sf:form method="post">
+            <sf:form method="post" modelAttribute="user">
                 <ul>
                     <li>
-                        <label for="name">Name:</label>
-                        <input name="name" id="name" value="${user.name}" disabled="true"/>
+                        <sf:label path="name">Name:</sf:label>
+                        <sf:input path="name" id="name" value="${user.name}" disabled="true"/>
+                        <div><sf:errors path="name" class="error" /></div>
                     </li>
                     <li>
-                        <label for="password">Password:</label>
-                        <input name="password" id="password"
+                        <sf:label path="password">Password:</sf:label>
+                        <sf:input path="password" id="password"
                                value="${user.password}" disabled="true" />
+                        <div><sf:errors path="password" class="error" /></div>
                     </li>
                     <li>
                         <input type="button" value="Unlock" id="unlock" />
