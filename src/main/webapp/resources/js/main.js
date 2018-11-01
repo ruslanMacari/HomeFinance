@@ -16,6 +16,7 @@ var unlockEvent = function () {
         unlock.className = "hidden";
         selector.getElement("#name").removeAttribute("disabled");
         selector.getElement("#password").removeAttribute("disabled");
+        selector.getElement("#admin").removeAttribute("disabled");
         selector.getElement("#save").classList.remove("hidden");
 
     };

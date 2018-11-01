@@ -28,10 +28,12 @@ public class UserTest {
         int id = 10;
         String name = "test user";
         String pass = "test pass";
+        boolean admin = true;
         user.setId(id);
         user.setName(name);
         user.setPassword(pass);
-        String expected = "User{" + "id=" + id + ", name=" + name + ", password=" + pass + '}';
+        user.setAdmin(admin);
+        String expected = "User{" + "id=" + id + ", name=" + name + ", password=" + pass +", admin=" + admin +'}';
         assertEquals(expected, user.toString());
     }
     

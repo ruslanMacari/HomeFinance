@@ -5,9 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
 @Entity
 @Table(name="user")
@@ -26,10 +23,8 @@ public class User {
         
     }   
     
-    //@Size(min = 3, message = Values.nameMessage)
     private String name;
 
-    //@Size(min = 4, message = passMessage)
     private String password;
     
     private boolean admin;
@@ -60,7 +55,7 @@ public class User {
     
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + '}';
+        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", admin=" + admin + '}';
     }
 
     @Override
@@ -101,15 +96,4 @@ public class User {
         this.password = password;
     }
     
-}
-
-@PropertySource("classpath:messages.properties")
-class Values {
-    @Value("${MinSize.user.name}")
-    private static String name;
-    
-    public static final String nameMessage = name;
-    
-    @Value("${MinSize.user.password}")
-    public static String passMessage;
 }

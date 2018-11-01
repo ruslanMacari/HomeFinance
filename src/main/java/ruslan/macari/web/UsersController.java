@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -34,8 +35,8 @@ public class UsersController {
         this.userService = userService;
     }
     
-//    @Autowired
-//    private UserValidator userValidator;
+    @Autowired
+    private UserValidator userValidator;
     
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {
@@ -79,12 +80,12 @@ public class UsersController {
         return "redirect:/users";
     }
     
-//    @InitBinder
-//    protected void initBinder(WebDataBinder dataBinder) {
-//        if (dataBinder.getTarget() == null) {
-//            return;
-//        }
-//        dataBinder.setValidator(userValidator);
-//    }
+    @InitBinder
+    protected void initBinder(WebDataBinder dataBinder) {
+        if (dataBinder.getTarget() == null) {
+            return;
+        }
+        dataBinder.setValidator(userValidator);
+    }
 
 }

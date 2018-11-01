@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE">
 <html>
     <head>
@@ -12,6 +13,9 @@
             <sf:form method="post" modelAttribute="user">
                 <ul>
                     <li>
+                        <label>ID: ${user.id}</label>
+                    </li>
+                    <li>
                         <sf:label path="name">Name:</sf:label>
                         <sf:input path="name" id="name" value="${user.name}" disabled="true"/>
                         <div><sf:errors path="name" class="error" /></div>
@@ -21,6 +25,15 @@
                         <sf:input path="password" id="password"
                                value="${user.password}" disabled="true" />
                         <div><sf:errors path="password" class="error" /></div>
+                    </li>
+                    <li>
+                        <label for="admin">Is Administrator:</label>
+                        <c:if test="${user.admin}">
+                            <input id="admin" name="admin" value="true" type="checkbox" disabled="true" checked/>
+                        </c:if>
+                        <c:if test="${!user.admin}">
+                            <input id="admin" name="admin" value="true" type="checkbox" disabled="true"/>
+                        </c:if>
                     </li>
                     <li>
                         <input type="button" value="Unlock" id="unlock" />
