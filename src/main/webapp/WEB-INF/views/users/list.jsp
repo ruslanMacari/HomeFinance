@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>List of Users</h1>
-        <a href="users?new">Add new user</a>
+        <a href="users?new">Add New User</a>
         <table cellspacing="5" class="main-table">
             <tr>
                 <th>ID</th>
@@ -41,6 +41,6 @@
                 </tr>
             </c:forEach>
         </table>
-        <a href="/HomeFinance" class="space">Go back</a>
+        <a href="/HomeFinance" class="go-back">Go back</a>
     </body>
 </html>

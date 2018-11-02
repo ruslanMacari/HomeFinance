@@ -5,13 +5,11 @@
 <html>
     <head>
         <link href="<c:url value="/resources/css/common.css" />" rel="stylesheet">
-        <link href="<c:url value="/resources/css/centerHorizontal.css"/>" rel="stylesheet">
-        <link href="<c:url value="/resources/css/centerVertical.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Login)</title>
     </head>
     <body>
-        <div>
+        <div class="center-horizontal">
             <h1>Authorization</h1>
             <c:choose>
                 <c:when test="${empty listUsers}">

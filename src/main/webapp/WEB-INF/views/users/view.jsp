@@ -42,7 +42,7 @@
                 </ul>
             </sf:form>
         </div>
-        <a href="/HomeFinance/users" class="space">Go Back</a>
+        <a href="/HomeFinance/users" class="go-back">Go Back</a>
         <script src="/HomeFinance/resources/js/main.js"></script>
     </body>
 </html>

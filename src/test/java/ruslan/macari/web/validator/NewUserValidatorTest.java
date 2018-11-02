@@ -9,14 +9,14 @@ import org.springframework.validation.Errors;
 import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
 
-public class UserValidatorTest {
+public class NewUserValidatorTest {
     
-    private UserValidator userValidator;
+    private NewUserValidator userValidator;
     private User user;
     private Errors errors;
     private UserService userService;
             
-    public UserValidatorTest() {
+    public NewUserValidatorTest() {
         init();
     }
     

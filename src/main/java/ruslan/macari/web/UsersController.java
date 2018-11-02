@@ -71,13 +71,28 @@ public class UsersController {
     
     @PostMapping(value = "/{id}")
     public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result, 
-            Model model, @PathVariable("id") int id) {
+            Model model, @PathVariable("id") int id, HttpSession session) throws AccesException {
+        handleAccess(session);
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             return "users/view";
         }
         user.setId(id);
         userService.update(user);
+        return "redirect:/users";
+    }
+    
+    @GetMapping(params = "new")
+    public String createUserForm(HttpSession session, Model model) throws AccesException {
+        handleAccess(session);
+        model.addAttribute("user", new User());
+        return "users/new";
+    }
+    
+    @PostMapping()
+    public String addEmployee(HttpSession session, User user) throws AccesException {
+        handleAccess(session);
+        userService.add(user);
         return "redirect:/users";
     }
     

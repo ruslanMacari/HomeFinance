@@ -46,3 +46,15 @@
 .createUser {margin-bottom: 20px; display: inline-block}
 .footerButton {text-align: right}
 .createUserRef {margin-top: 50px}
+
+
+.center-horizontal {
+    margin: auto;
+    width: 300px;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.center-horizontal h1 {
+    text-align: center;
+}
