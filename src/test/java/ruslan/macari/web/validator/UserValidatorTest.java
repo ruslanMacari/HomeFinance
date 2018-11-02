@@ -21,7 +21,7 @@ public class UserValidatorTest {
     }
     
     private void init() {
-        userValidator = new UserValidator();
+        userValidator = new NewUserValidator();
         userService = mock(UserService.class);
         userValidator.setUserService(userService);
     }

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE">
 <html>
     <head>
@@ -27,7 +27,7 @@
                         <div><sf:errors path="password" class="error" /></div>
                     </li>
                     <li>
-                        <label for="admin">Is Administrator:</label>
+                        <label for="admin">Administrator:</label>
                         <c:if test="${user.admin}">
                             <input id="admin" name="admin" value="true" type="checkbox" disabled="true" checked/>
                         </c:if>

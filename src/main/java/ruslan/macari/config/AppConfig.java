@@ -1,6 +1,5 @@
 package ruslan.macari.config;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;

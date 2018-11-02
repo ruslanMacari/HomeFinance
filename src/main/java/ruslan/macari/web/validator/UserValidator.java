@@ -32,7 +32,6 @@ public class UserValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.user.password");
         validateNameLength(errors);
         validatePasswordLength(errors);
-        checkDuplication(errors);
     }
 
     private void setUser(Object target) {
@@ -53,13 +52,4 @@ public class UserValidator implements Validator {
         }
     }
 
-    private void checkDuplication(Errors errors) {
-        if (errors.getFieldError("name") == null) {
-            User userFound = userService.getByName(user.getName());
-            if (userFound != null) {
-                errors.rejectValue("name", "Duplicated.user.name");
-            }
-        }
-    }
-    
 }

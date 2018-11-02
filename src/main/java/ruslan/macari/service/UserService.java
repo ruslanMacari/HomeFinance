@@ -25,4 +25,5 @@ public interface UserService {
     
     List<User> getSimpleUsers();
 
+    User getByNameExceptID(String name, int id);
 }

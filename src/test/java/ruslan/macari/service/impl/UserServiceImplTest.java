@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,23 +20,29 @@ import ruslan.macari.service.UserService;
 public class UserServiceImplTest {
     
     @Autowired
-    UserService userService;
+    private UserService userService;
+    private User user;
     
     public UserServiceImplTest() {
-        
+        user = new User ("test");
+    }
+    
+    @Before
+    public void before() {
+        for (User u : userService.list()) {
+            userService.delete(u.getId());
+        }
+        user.setAdmin(false);
     }
 
     @Test
     public void testAdd() {
-        int size = userService.list().size();
-        userService.add(new User());
-        assertTrue(userService.list().size() == size + 1);
+        userService.add(user);
+        assertTrue(userService.list().size() == 1);
     }
 
     @Test
     public void testUpdate() {
-        User user = new User();
-        user.setName("user");
         userService.add(user);
         String newName = "user new";
         user.setName(newName);
@@ -46,9 +53,8 @@ public class UserServiceImplTest {
 
     @Test
     public void testList() {
-        int size = userService.list().size();
         addThreeUsers();
-        assertEquals(size + 3, userService.list().size());
+        assertEquals(3, userService.list().size());
     }
     
     private void addThreeUsers() {
@@ -69,31 +75,26 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetById() {
-        User user = new User("test");
         userService.add(user);
         assertEquals(user.getName(), userService.getById(user.getId()).getName());
     }
 
     @Test
     public void testGetByName() {
-        User user = new User("test get by name");
         userService.add(user);
         assertEquals(user, userService.getByName(user.getName()));
     }
 
     @Test
     public void testDelete() {
-        User user = new User("Test delete");
         userService.add(user);
-        int size = userService.list().size();
         userService.delete(user.getId());
-        assertEquals(size - 1, userService.list().size());
+        assertEquals(0, userService.list().size());
     }
     
     @Test
     public void testGetAdmin() {
         assertNull(userService.getAdmin());
-        User user = new User("test");
         user.setAdmin(true);
         userService.add(user);
         assertNotNull(userService.getAdmin());
@@ -110,22 +111,29 @@ public class UserServiceImplTest {
     
     @Test
     public void testGetSimpleUsers() {
-        for (User user : userService.list()) {
-            userService.delete(user.getId());
-        }
-        User admin = new User("admin testGetSimpleUsers");
+        User admin = new User("admin");
         admin.setAdmin(true);
         userService.add(admin);
-        User simpleUser = new User ("user testGetSimpleUsers");
-        userService.add(simpleUser);
+        userService.add(user);
         List<User> simpleUsers = userService.getSimpleUsers();
         assertEquals(1, simpleUsers.size());
-        for(User user : simpleUsers) {
-            if (user.equals(admin)) {
+        for(User u : simpleUsers) {
+            if (u.equals(admin)) {
                 fail("admin user must not be found");
                 break;
             }
         }
+    }
+    
+    @Test
+    public void testGetByNameExceptID() {
+        String name = "same user name";
+        User user1 = new User(name);
+        userService.add(user1);
+        User user2 = new User(name);
+        userService.add(user2);
+        User foundUser = userService.getByNameExceptID(name, user1.getId());
+        assertEquals(user2, foundUser);
     }
 
 }

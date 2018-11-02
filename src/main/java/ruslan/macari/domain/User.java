@@ -20,7 +20,6 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-        
     }   
     
     private String name;
@@ -55,7 +54,12 @@ public class User {
     
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", admin=" + admin + '}';
+        return "User{" 
+                + "id=" + id 
+                + ", name=" + name 
+                + ", password=" + password 
+                + ", admin=" + admin 
+                + '}';
     }
 
     @Override

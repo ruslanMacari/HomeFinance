@@ -4,11 +4,12 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,6 @@ import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
 import ruslan.macari.web.exceptions.AccesException;
-import ruslan.macari.web.validator.UserValidator;
 
 @Controller
 @RequestMapping("/users")
@@ -36,7 +36,8 @@ public class UsersController {
     }
     
     @Autowired
-    private UserValidator userValidator;
+    @Qualifier("updateUserValidator")
+    private Validator userValidator;
     
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {

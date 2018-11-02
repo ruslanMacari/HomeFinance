@@ -56,7 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAdmin() {
-        return userRepository.findAdmin();
+        List<User> list = userRepository.findAdmin();
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     @Override
@@ -67,6 +72,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getSimpleUsers() {
         return userRepository.getSimpleUsers();
+    }
+
+    @Override
+    public User getByNameExceptID(String name, int id) {
+        return userRepository.getByNameExceptID(name, id);
     }
    
 }

@@ -12,15 +12,24 @@
         <a href="users?new">Add new user</a>
         <table cellspacing="5" class="main-table">
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Password</th>
+                <th>Administrator</th>
                 <th>Details</th>
                 <th>Delete</th>
             </tr>
             <c:forEach items="#{users}" var="user">
                 <tr>
+                    <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.password}</td>
+                    <c:if test="${user.admin}">
+                        <td>Yes</td>
+                    </c:if>
+                    <c:if test="${!user.admin}">
+                        <td>No</td>
+                    </c:if>
                     <td>
                         <a href="users/${user.id}">Go to page</a>
                     </td>

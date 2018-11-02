@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE>
 <html>
     <head>
@@ -11,7 +10,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Login)</title>
     </head>
-
     <body>
         <div>
             <h1>Authorization</h1>
@@ -20,7 +18,7 @@
                     <h2>No Users Found, Please Create New User</h2>
                 </c:when>
                 <c:otherwise>
-                    <form:form method="POST" commandName="user" action="authorization" class="form">
+                    <sf:form method="POST" commandName="user" action="authorization" class="form">
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
@@ -32,15 +30,15 @@
                                 </datalist>
                             </div>
                             <div class="input-group">
-                                <form:label path="password">Password:</form:label>
-                                <form:password path="password"/>
-                                <div><form:errors path="password" class="redColor" /></div>
+                                <sf:label path="password">Password:</sf:label>
+                                <sf:password path="password"/>
+                                <div><sf:errors path="password" class="redColor" /></div>
                             </div>    
                         </div>
                         <footer> 
                             <input type="submit" class="submit" value="Login" tabindex="4"> 
                         </footer>
-                    </form:form>
+                    </sf:form>
                 </c:otherwise>
             </c:choose>
             <div class="createUserRef">

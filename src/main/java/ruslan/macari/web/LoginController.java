@@ -4,11 +4,13 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -20,8 +22,6 @@ import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
 import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
-import ruslan.macari.web.validator.UserLoginValidator;
-import ruslan.macari.web.validator.UserValidator;
 
 @Controller
 @RequestMapping("/authorization")
@@ -42,10 +42,12 @@ public class LoginController {
     }
 
     @Autowired
-    private UserValidator userValidator;
+    @Qualifier("newUserValidator")
+    private Validator userValidator;
 
     @Autowired
-    private UserLoginValidator userLoginValidator;
+    @Qualifier("userLoginValidator")
+    private Validator userLoginValidator;
 
     @PostConstruct
     public void init() {
