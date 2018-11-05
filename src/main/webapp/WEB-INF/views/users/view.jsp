@@ -1,15 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE">
-<html>
-    <head>
-        <title>User page</title>
-        <link rel="stylesheet" href="/HomeFinance/resources/css/main.css" type="text/css">
-    </head>
-    <body>
-        <h2>User info</h2>
-        <div id="list">
+<!DOCTYPE>
+<jsp:include page='../includes/head.jsp'>
+    <jsp:param name="title" value="User page"/>
+</jsp:include>
+<div class="center-box">
+    <h1>User info</h2>
+        <div id="form">
             <sf:form method="post" modelAttribute="user">
                 <ul>
                     <li>
@@ -23,8 +21,8 @@
                     <li>
                         <sf:label path="password">Password:</sf:label>
                         <sf:input path="password" id="password"
-                               value="${user.password}" disabled="true" />
-                        <div><sf:errors path="password" class="error" /></div>
+                                  value="${user.password}" disabled="true" />
+                        <div><sf:errors path="password" class="validation-error" /></div>
                     </li>
                     <li>
                         <label for="admin">Administrator:</label>
@@ -43,6 +41,5 @@
             </sf:form>
         </div>
         <a href="/HomeFinance/users" class="go-back">Go Back</a>
-        <script type="module" src="/HomeFinance/resources/js/dist/main.js"></script>
-    </body>
-</html>
+</div>
+<jsp:include page='../includes/footer.jsp'/>

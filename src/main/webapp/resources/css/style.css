@@ -26,18 +26,10 @@ th {
     text-align: left;
 }
 
-h1 {
-    margin: 10px;
-}
-
-a {
-    margin: 10px;
-}
-
-label {
+/*label {
     display: block;
     text-align: left;
-}
+}*/
 
 #list {
     padding-left: 10px;
@@ -87,5 +79,3 @@ label {
     display: block;
     margin-top: 40px;
 }
-
-.error {color: red;}

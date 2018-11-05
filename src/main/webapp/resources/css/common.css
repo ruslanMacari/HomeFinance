@@ -1,22 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Handlee', cursive;
+    font-family: Verdana, Tahomma, Geneva;
     color: black;
-/*    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
-    background-image: url(../img/background-boy.jpg);
+    background-image: url(../img/background-mountains.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
     background-size: 100%;
 }
 
+h1 {
+    font-size: 50px;
+}
+
 .center-box {
-/*    background-image: url(../img/watercolour-background.jpg);*/
-/*    background-color: rgba(255, 255, 255, 0.2);*/
     margin: auto;
-    width: 300px;
-/*    border: 1px solid black;*/
+    width: 500px;
     padding: 10px;
     border-radius: 30px;
+}
+
+.form {
+    width: 50%;
+    margin: 0 auto;
 }
 
 .center-box h1 {
@@ -24,29 +33,29 @@ body {
 }
 
 .input-box {
-    width: 100%
+    width: 100%;
 }
 
-.btnSubmit {
+.button-submit {
         width: 100%;
 	border-radius: 15px;
-/*	background: -webkit-gradient(linear, left top, left bottom, from(#badff3),
-		to(#7acbed));*/
-	border: 1px solid #7db0cc !important;
+	border: 2px solid black !important;
 	cursor: pointer;
-	font: bold 11px/14px Verdana, Tahomma, Geneva;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 14px;
 	text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0px;
-	color: #fff;
 	box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px, rgba(0, 0, 0, 0.1)
 		0 1px 1px;
 	margin-top: 20px;
 	padding: 7px 21px;
         transition-duration: 0.4s;
-        background-color: #e3f7f7;
+        background-color: #b7b7b7;
         color: black;
 }
-.btnSubmit:hover {
-    background-color: #0099ff;
+
+.button-submit:hover {
+    background-color: #232326;
     color: white;
 }
 
@@ -54,16 +63,54 @@ body {
     text-align: center;
 }
 
+input[type=checkbox] {
+  vertical-align: middle;
+  float: right;
+}
+
+label .checkbox {
+  display: block;
+  overflow: hidden;
+  width: 120px;
+}
+
+.validation-error {
+    color: #e54b6a;
+    font-size: 70%;
+}
+
+a:link, a:visited {
+    background-color: #b3b3b3;
+    color: #383536;
+    font-weight: bold;
+    padding: 1px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+a:hover, a:active {
+    background-color: gray;
+}
+
+.center-button {
+    margin-top: 50px;
+    width: 100%;
+}
+
+.footerButton {text-align: right}
+
 .redColor {color: red;}
 .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
 .tg .tg-4eph{background-color:#f9f9f9}
-.form .input-group {display:block; margin-bottom: 5px}
+.form .input-group {
+    display:block; 
+    margin-bottom: 10px;
+}
 .form .input-group label {margin-right: 0; width: 75px; display: inline-block;}
 .form .submit {margin-top: 10px}
-.fieldset {border: none}
-.createUser {margin-bottom: 20px; display: inline-block}
-.footerButton {text-align: right}
-.createUserRef {margin-top: 50px}
-
