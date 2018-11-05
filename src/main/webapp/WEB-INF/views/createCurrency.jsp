@@ -4,9 +4,7 @@
 <!DOCTYPE">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
-        <link href="<c:url value="/resources/css/centerHorizontal.css"/>" rel="stylesheet">
-<!--        <link href="<c:url value="/resources/css/centerVertical.css"/>" rel="stylesheet">-->
+        <link href="<c:url value="/resources/css/main.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Currencies)</title>
     </head>
