@@ -1,33 +1,53 @@
-.Time {
-    display: block;
-    font-size: x-large;
-    color: #c00;
-    text-align: center
+body {
+    font-family: 'Handlee', cursive;
+    color: black;
+/*    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+    background-image: url(../img/background-boy.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 100%;
 }
 
-.btnLogin {
+.center-box {
+/*    background-image: url(../img/watercolour-background.jpg);*/
+/*    background-color: rgba(255, 255, 255, 0.2);*/
+    margin: auto;
+    width: 300px;
+/*    border: 1px solid black;*/
+    padding: 10px;
+    border-radius: 30px;
+}
+
+.center-box h1 {
+    text-align: center;
+}
+
+.input-box {
+    width: 100%
+}
+
+.btnSubmit {
+        width: 100%;
 	border-radius: 15px;
-	background: #a1d8f0;
-	background: -webkit-gradient(linear, left top, left bottom, from(#badff3),
-		to(#7acbed));
-	-ms-filter:
-		"progid:DXImageTransform.Microsoft.gradient(startColorStr='#badff3', EndColorStr='#7acbed')";
+/*	background: -webkit-gradient(linear, left top, left bottom, from(#badff3),
+		to(#7acbed));*/
 	border: 1px solid #7db0cc !important;
 	cursor: pointer;
-	padding: 11px 16px;
 	font: bold 11px/14px Verdana, Tahomma, Geneva;
 	text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0px;
 	color: #fff;
-	-moz-box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px,
-		rgba(0, 0, 0, 0.1) 0 1px 1px;
-	-webkit-box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px,
-		rgba(0, 0, 0, 0.1) 0 1px 1px;
 	box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px, rgba(0, 0, 0, 0.1)
 		0 1px 1px;
-	margin-left: 12px;
-/*	float: left;*/
+	margin-top: 20px;
 	padding: 7px 21px;
-        
+        transition-duration: 0.4s;
+        background-color: #e3f7f7;
+        color: black;
+}
+.btnSubmit:hover {
+    background-color: #0099ff;
+    color: white;
 }
 
 .box {
@@ -40,21 +60,10 @@
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
 .tg .tg-4eph{background-color:#f9f9f9}
 .form .input-group {display:block; margin-bottom: 5px}
-.form .input-group label {margin-right: 0; width: 75px; display: inline-block; color: #3333ff}
+.form .input-group label {margin-right: 0; width: 75px; display: inline-block;}
 .form .submit {margin-top: 10px}
 .fieldset {border: none}
 .createUser {margin-bottom: 20px; display: inline-block}
 .footerButton {text-align: right}
 .createUserRef {margin-top: 50px}
 
-
-.center-horizontal {
-    margin: auto;
-    width: 300px;
-    border: 1px solid black;
-    padding: 10px;
-}
-
-.center-horizontal h1 {
-    text-align: center;
-}

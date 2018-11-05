@@ -4,12 +4,12 @@
 <!DOCTYPE>
 <html>
     <head>
-        <link href="<c:url value="/resources/css/common.css" />" rel="stylesheet">
+        <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Login)</title>
     </head>
     <body>
-        <div class="center-horizontal">
+        <div class="center-box">
             <h1>Authorization</h1>
             <c:choose>
                 <c:when test="${empty listUsers}">
@@ -20,7 +20,7 @@
                         <div class="fieldset">
                             <div class="input-group">
                                 <label for="Names">Name:</label>
-                                <input type="text" list="usersList" id="name" name="name" autocomplete="off"/>
+                                <input class="input-box" type="text" list="usersList" id="name" name="name" autocomplete="off"/>
                                 <datalist id="usersList">
                                     <c:forEach items="${listUsers}" var="user">
                                         <option>${user.name}</option>
@@ -29,12 +29,12 @@
                             </div>
                             <div class="input-group">
                                 <sf:label path="password">Password:</sf:label>
-                                <sf:password path="password"/>
+                                <sf:password cssClass="input-box" path="password"/>
                                 <div><sf:errors path="password" class="redColor" /></div>
                             </div>    
                         </div>
                         <footer> 
-                            <input type="submit" class="submit" value="Login" tabindex="4"> 
+                            <input type="submit" class="btnSubmit" value="Login" tabindex="4"> 
                         </footer>
                     </sf:form>
                 </c:otherwise>

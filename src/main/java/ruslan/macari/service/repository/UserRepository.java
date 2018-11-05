@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> listLimit(Pageable pageable);
     
     @Query(value ="select u from User u where u.admin = true")
-    List<User> findAdmin();
+    List<User> findAdmins();
     
     @Query(value ="select u from User u where u.admin = false")
     List<User> getSimpleUsers();

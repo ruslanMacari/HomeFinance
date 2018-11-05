@@ -5,7 +5,7 @@
 <html>
     <head>
         <title>User page</title>
-        <link rel="stylesheet" href="/HomeFinance/resources/css/style.css" type="text/css">
+        <link rel="stylesheet" href="/HomeFinance/resources/css/main.css" type="text/css">
     </head>
     <body>
         <h2>User info</h2>
@@ -43,6 +43,6 @@
             </sf:form>
         </div>
         <a href="/HomeFinance/users" class="go-back">Go Back</a>
-        <script src="/HomeFinance/resources/js/main.js"></script>
+        <script type="module" src="/HomeFinance/resources/js/dist/main.js"></script>
     </body>
 </html>

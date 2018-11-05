@@ -5,7 +5,7 @@
 <html>
     <head>
         <title>${initParam['Title']} (Users)</title>
-        <link href="<c:url value="/resources/css/style.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/main.css"/>" rel="stylesheet">
     </head>
     <body>
         <h1>List of Users</h1>

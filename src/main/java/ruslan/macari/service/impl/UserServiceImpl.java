@@ -56,12 +56,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAdmin() {
-        List<User> list = userRepository.findAdmin();
-        if (list.isEmpty()) {
-            return null;
-        } else {
-            return list.get(0);
-        }
+        List<User> list = userRepository.findAdmins();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     @Override

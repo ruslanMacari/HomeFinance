@@ -4,28 +4,28 @@
 <!DOCTYPE">
 <html>
     <head>
-        <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/main.css"/>" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${initParam['Title']} (Create User)</title>
     </head>
     <body>
-        <div class="center-horizontal">
+        <div class="center-box">
             <h1>Add New User</h1>
             <form:form method="POST" commandName="user" action="saveUser" class="form" 
                        modelAttribute="user">
                 <div class="fieldset">
                     <div class="input-group">
                         <form:label path="name">Name:</form:label>
-                        <form:input path="name" />
+                        <form:input cssClass="input-box" path="name"/>
                         <div><form:errors path="name" class="redColor" /></div>
                     </div>        
                     <div class="input-group">
                         <form:label path="password">Password:</form:label>
-                        <form:password path="password"/>
+                        <form:password cssClass="input-box" path="password"/>
                         <div><form:errors path="password" class="redColor" /></div>
                     </div> 
                 </div>
-                <input type="submit" class="submit" value="Create" tabindex="4"> 
+                <input type="submit" class="btnSubmit" value="Create" tabindex="4"> 
             </form:form>
         </div>
     </body>
