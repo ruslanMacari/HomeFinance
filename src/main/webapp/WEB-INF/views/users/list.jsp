@@ -4,40 +4,44 @@
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Users"/>
 </jsp:include>
-<div class="center-box">
-    <h1>List of Users</h1>
-    <a href="users?new">Add New User</a>
-    <table cellspacing="5" class="main-table">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Password</th>
-            <th>Administrator</th>
-            <th>Details</th>
-            <th>Delete</th>
-        </tr>
-        <c:forEach items="#{users}" var="user">
-            <tr>
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.password}</td>
-                <c:if test="${user.admin}">
-                    <td>Yes</td>
-                </c:if>
-                <c:if test="${!user.admin}">
-                    <td>No</td>
-                </c:if>
-                <td>
-                    <a href="users/${user.id}">Go to page</a>
-                </td>
-                <td>
-                    <sf:form action="users/${user.id}" method="delete" cssClass="delete">
-                        <input type="submit" class="delete-button" value="" />
-                    </sf:form>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
-    <a href="/HomeFinance" class="go-back">Go back</a>
+<div class="box-header">
+    <h1 class="box-header__title">List of Users</h1>
+    <a class="button" href="users?new">Add New User</a>
+    <div class="table">
+        <div class="table__heading">
+            <div class="table__row">
+                <div class="table__head">ID</div>
+                <div class="table__head">Name</div>
+                <div class="table__head">Password</div>
+                <div class="table__head">Administrator</div>
+                <div class="table__head">Details</div>
+                <div class="table__head">Delete</div>
+            </div>
+        </div>
+        <div class="table__body">
+            <c:forEach items="#{users}" var="user">
+                <div class="table__row">
+                    <div class="table__cell">${user.id}</div>
+                    <div class="table__cell">${user.name}</div>
+                    <div class="table__cell">${user.password}</div>
+                    <c:if test="${user.admin}">
+                        <div class="table__cell">Yes</div>
+                    </c:if>
+                    <c:if test="${!user.admin}">
+                        <div class="table__cell">No</div>
+                    </c:if>
+                    <div class="table__cell">
+                        <a class="button" href="users/${user.id}">Go to page</a>
+                    </div>
+                    <div class="table__cell">
+                        <sf:form method="delete" action="users/${user.id}">
+                            <input class="button button_delete" type="submit" value=""/>
+                        </sf:form>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+    <a class="button button_back" href="/HomeFinance">Go back</a>
 </div>
 <jsp:include page='../includes/footer.jsp'/>

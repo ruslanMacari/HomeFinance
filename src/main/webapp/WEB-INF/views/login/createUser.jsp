@@ -4,25 +4,25 @@
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Create User"/>
 </jsp:include>
-<div class="center-box">
-    <h1>Create New User</h1>
+<div class="box-header">
+    <h1 class="box-header__title">Create New User</h1>
     <div class="form">
         <sf:form method="POST" commandName="user" action="saveUser" modelAttribute="user">
-            <div class="input-group">
-                <sf:label path="name">Name:</sf:label>
-                <sf:input class="input-box" path="name"/>
+            <div class="form__input-group">
+                <sf:label class="form__label" path="name">Name:</sf:label>
+                <sf:input class="form__input-box" path="name"/>
                 <div>
-                    <sf:errors path="name" class="validation-error"/>
+                    <sf:errors class="form__error" path="name"/>
                 </div>
             </div>        
-            <div class="input-group">
-                <sf:label path="password">Password:</sf:label>
-                <sf:password class="input-box" path="password"/>
+            <div class="form__input-group">
+                <sf:label class="form__label" path="password">Password:</sf:label>
+                <sf:password class="form__input-box" path="password"/>
                 <div>
-                    <sf:errors class="validation-error" path="password"/>
+                    <sf:errors class="form__error" path="password"/>
                 </div>
             </div> 
-            <input class="button-submit" type="submit" value="Create"> 
+            <input class="form__button-submit" type="submit" value="Create"> 
         </sf:form>
     </div>
 </div>

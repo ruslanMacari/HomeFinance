@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+h1 {
+    font-size: 50px;
+}
+
 body {
     font-family: Verdana, Tahomma, Geneva;
     color: black;
@@ -12,105 +16,3 @@ body {
     background-size: 100%;
 }
 
-h1 {
-    font-size: 50px;
-}
-
-.center-box {
-    margin: auto;
-    width: 500px;
-    padding: 10px;
-    border-radius: 30px;
-}
-
-.form {
-    width: 50%;
-    margin: 0 auto;
-}
-
-.center-box h1 {
-    text-align: center;
-}
-
-.input-box {
-    width: 100%;
-}
-
-.button-submit {
-        width: 100%;
-	border-radius: 15px;
-	border: 2px solid black !important;
-	cursor: pointer;
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 14px;
-	text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0px;
-	box-shadow: inset rgba(255, 255, 255, 0.6) 0 1px 1px, rgba(0, 0, 0, 0.1)
-		0 1px 1px;
-	margin-top: 20px;
-	padding: 7px 21px;
-        transition-duration: 0.4s;
-        background-color: #b7b7b7;
-        color: black;
-}
-
-.button-submit:hover {
-    background-color: #232326;
-    color: white;
-}
-
-.box {
-    text-align: center;
-}
-
-input[type=checkbox] {
-  vertical-align: middle;
-  float: right;
-}
-
-label .checkbox {
-  display: block;
-  overflow: hidden;
-  width: 120px;
-}
-
-.validation-error {
-    color: #e54b6a;
-    font-size: 70%;
-}
-
-a:link, a:visited {
-    background-color: #b3b3b3;
-    color: #383536;
-    font-weight: bold;
-    padding: 1px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 20px;
-    border-style: solid;
-    border-width: 1px;
-}
-
-a:hover, a:active {
-    background-color: gray;
-}
-
-.center-button {
-    margin-top: 50px;
-    width: 100%;
-}
-
-.footerButton {text-align: right}
-
-.redColor {color: red;}
-.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-.tg .tg-4eph{background-color:#f9f9f9}
-.form .input-group {
-    display:block; 
-    margin-bottom: 10px;
-}
-.form .input-group label {margin-right: 0; width: 75px; display: inline-block;}
-.form .submit {margin-top: 10px}

@@ -1,0 +1,37 @@
+.button:link, 
+.button:visited {
+    background-color: #b3b3b3;
+    color: #383536;
+    font-weight: bold;
+    padding: 1px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.button:hover, 
+.button:active {
+    background-color: gray;
+}
+
+.button_wide {
+    margin-top: 50px;
+    width: 100%;
+}
+
+.button_back {
+    display: block;
+    margin-top: 40px;
+}
+
+.button_delete {
+    border: none;
+    background: url('/HomeFinance/resources/img/delete.png') no-repeat top left;
+    color: transparent;
+    cursor: pointer;
+    padding: 2px 8px;
+    
+}

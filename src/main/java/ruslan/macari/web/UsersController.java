@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -55,14 +56,14 @@ public class UsersController {
     }
     
     @ExceptionHandler(AccesException.class)
-    public ModelAndView handleDeleteException(AccesException e) {
+    public ModelAndView handleAccessException(AccesException e) {
         ModelMap model = new ModelMap();
         model.put("user", e.getUser());
         return new ModelAndView("users/access-denied", model);
     }
     
     @GetMapping(value = "/{id}")
-    public String getEmployee(HttpSession session, @PathVariable("id") int id, Model model) throws AccesException {
+    public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccesException {
         handleAccess(session);
         User user = userService.getById(id);
         model.addAttribute("user", user);
@@ -90,9 +91,16 @@ public class UsersController {
     }
     
     @PostMapping()
-    public String addEmployee(HttpSession session, User user) throws AccesException {
+    public String addUser(HttpSession session, User user) throws AccesException {
         handleAccess(session);
         userService.add(user);
+        return "redirect:/users";
+    }
+    
+    @DeleteMapping(value = "/{id}")
+    public String deleteUser(HttpSession session, @PathVariable("id") int id) throws AccesException {
+        handleAccess(session);
+        userService.delete(id);
         return "redirect:/users";
     }
     

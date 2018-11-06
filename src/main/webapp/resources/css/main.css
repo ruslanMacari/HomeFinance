@@ -1,3 +1,6 @@
-@import url("common.css");
-@import url("style.css");
+@import url(common.css);
+@import url(form.css);
+@import url(button.css);
+@import url(box-header.css);
+@import url(table.css);
 

@@ -1,0 +1,10 @@
+.box-header {
+    margin: auto;
+    width: 500px;
+    padding: 10px;
+    border-radius: 30px;
+}
+
+.box-header__title {
+    text-align: center;
+}
