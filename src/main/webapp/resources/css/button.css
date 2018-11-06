@@ -1,5 +1,4 @@
-.button:link, 
-.button:visited {
+.button {
     background-color: #b3b3b3;
     color: #383536;
     font-weight: bold;
@@ -10,10 +9,12 @@
     border-radius: 20px;
     border-style: solid;
     border-width: 1px;
+    border-color: black;
+    cursor: pointer;
+    transition-duration: 0.4s;
 }
 
-.button:hover, 
-.button:active {
+.button:hover {
     background-color: gray;
 }
 
@@ -23,15 +24,9 @@
 }
 
 .button_back {
-    display: block;
     margin-top: 40px;
 }
 
 .button_delete {
-    border: none;
-    background: url('/HomeFinance/resources/img/delete.png') no-repeat top left;
-    color: transparent;
-    cursor: pointer;
-    padding: 2px 8px;
-    
+    color: red;
 }

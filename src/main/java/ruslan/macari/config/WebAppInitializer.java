@@ -2,6 +2,7 @@ package ruslan.macari.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -25,5 +26,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         servletContext.setInitParameter("Title", "Home Finance");
+        registerHiddenFieldFilter(servletContext);
     }
+    
+    private void registerHiddenFieldFilter(ServletContext servletContext) {
+        servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*"); 
+    }
+    
 }

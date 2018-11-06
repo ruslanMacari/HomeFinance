@@ -40,6 +40,10 @@ public class UsersController {
     @Qualifier("updateUserValidator")
     private Validator userValidator;
     
+    @Autowired
+    @Qualifier("newUserValidator")
+    private Validator newUserValidator;
+    
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {
         handleAccess(session);
@@ -86,13 +90,17 @@ public class UsersController {
     @GetMapping(params = "new")
     public String createUserForm(HttpSession session, Model model) throws AccesException {
         handleAccess(session);
-        model.addAttribute("user", new User());
+        model.addAttribute("newUser", new User());
         return "users/new";
     }
     
     @PostMapping()
-    public String addUser(HttpSession session, User user) throws AccesException {
+    public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, Model model, HttpSession session) throws AccesException {
         handleAccess(session);
+        if (result.hasErrors()) {
+            model.addAttribute("newUser", user);
+            return "users/new";
+        }
         userService.add(user);
         return "redirect:/users";
     }
@@ -104,12 +112,24 @@ public class UsersController {
         return "redirect:/users";
     }
     
-    @InitBinder
-    protected void initBinder(WebDataBinder dataBinder) {
+    @InitBinder("user")
+    protected void initUserBinder(WebDataBinder dataBinder) {
+        setValidator(dataBinder, userValidator);
+    }
+    
+    private void setValidator(WebDataBinder dataBinder, Validator validator) {
         if (dataBinder.getTarget() == null) {
             return;
         }
-        dataBinder.setValidator(userValidator);
+        dataBinder.setValidator(validator);
+    }
+    
+    @InitBinder("newUser")
+    protected void initNewUserBinder(WebDataBinder dataBinder) {
+        setValidator(dataBinder, newUserValidator);
+        if (dataBinder.getTarget() == null) {
+            return;
+        }
     }
 
 }

@@ -10,12 +10,12 @@
     <div class="table">
         <div class="table__heading">
             <div class="table__row">
-                <div class="table__head">ID</div>
-                <div class="table__head">Name</div>
-                <div class="table__head">Password</div>
-                <div class="table__head">Administrator</div>
-                <div class="table__head">Details</div>
-                <div class="table__head">Delete</div>
+                <div class="table__cell table__cell_head">ID</div>
+                <div class="table__cell table__cell_head">Name</div>
+                <div class="table__cell table__cell_head">Password</div>
+                <div class="table__cell table__cell_head">Administrator</div>
+                <div class="table__cell table__cell_head">Details</div>
+                <div class="table__cell table__cell_head">Delete</div>
             </div>
         </div>
         <div class="table__body">
@@ -31,11 +31,11 @@
                         <div class="table__cell">No</div>
                     </c:if>
                     <div class="table__cell">
-                        <a class="button" href="users/${user.id}">Go to page</a>
+                        <a class="button" href="users/${user.id}">Details</a>
                     </div>
                     <div class="table__cell">
-                        <sf:form method="delete" action="users/${user.id}">
-                            <input class="button button_delete" type="submit" value=""/>
+                        <sf:form class="form" action="users/${user.id}" method="delete">
+                            <input class="button button_delete" type="submit" value="Delete"/>
                         </sf:form>
                     </div>
                 </div>

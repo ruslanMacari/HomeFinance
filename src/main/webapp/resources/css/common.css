@@ -1,3 +1,7 @@
+:root {
+    --red: #e54b6a;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -14,5 +18,13 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-size: 100%;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.error {
+    color: var(--red);
 }
 

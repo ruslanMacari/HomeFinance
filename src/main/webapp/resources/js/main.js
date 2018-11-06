@@ -25,7 +25,7 @@ if (unlock !== null) {
     unlock.addEventListener("click", unlockEvent);
 }
 
-if (selector.getElement(".error") !== null) {
+if (selector.getElement(".form__error") !== null) {
     unlockEvent();
 }
 

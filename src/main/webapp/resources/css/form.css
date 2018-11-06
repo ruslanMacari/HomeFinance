@@ -1,5 +1,10 @@
 .form {
-    width: 50%;
+    width: 100%;
+    margin: 0;
+}
+
+.form__wrapper {
+    width: 35%;
     margin: 0 auto;
 }
 
@@ -8,16 +13,22 @@
     margin-bottom: 10px;
 }
 .form__label {
+    display: inline-block;
     margin-right: 0; 
     width: 75px; 
-    display: inline-block;
 }
 
-.form__input-box {
+.form__text {
     width: 100%;
 }
 
-.form__button-submit {
+.form__checkbox {
+    display: inline-block;
+    vertical-align: middle;
+    float: right;
+}
+
+.form__submit {
         width: 100%;
 	border-radius: 15px;
 	border: 2px solid black !important;
@@ -35,27 +46,13 @@
         color: black;
 }
 
-.form__button-submit:hover {
+.form__submit:hover {
     background-color: #232326;
     color: white;
 }
 
 .form__error {
-    color: #e54b6a;
+    color: var(--red);
     font-size: 70%;
 }
 
-input[type=checkbox] {
-  vertical-align: middle;
-  float: right;
-}
-
-label .checkbox {
-  display: block;
-  overflow: hidden;
-  width: 120px;
-}
-
-/*.form .submit {
-    margin-top: 10px;
-}*/
