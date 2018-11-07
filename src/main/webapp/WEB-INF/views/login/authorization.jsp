@@ -24,13 +24,7 @@
                                 </c:forEach>
                             </datalist>
                         </div>
-                        <div class="form__input-group">
-                            <sf:label class="form__label" path="password">Password:</sf:label>
-                            <sf:password class="form__text" path="password"/>
-                            <div>
-                                <sf:errors class="form__error" path="password"/>
-                            </div>
-                        </div>
+                        <jsp:include page='../includes/user-password.jsp'/> 
                         <footer> 
                             <input class="form__submit" type="submit" value="Login"> 
                         </footer>

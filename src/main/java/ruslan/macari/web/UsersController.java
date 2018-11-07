@@ -75,11 +75,10 @@ public class UsersController {
     }
     
     @PostMapping(value = "/{id}")
-    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result, 
-            Model model, @PathVariable("id") int id, HttpSession session) throws AccesException {
+    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result,
+            @PathVariable("id") int id, HttpSession session) throws AccesException {
         handleAccess(session);
         if (result.hasErrors()) {
-            model.addAttribute("user", user);
             return "users/view";
         }
         user.setId(id);
@@ -95,10 +94,9 @@ public class UsersController {
     }
     
     @PostMapping()
-    public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, Model model, HttpSession session) throws AccesException {
+    public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, HttpSession session) throws AccesException {
         handleAccess(session);
         if (result.hasErrors()) {
-            model.addAttribute("newUser", user);
             return "users/new";
         }
         userService.add(user);

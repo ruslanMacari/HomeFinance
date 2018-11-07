@@ -84,9 +84,8 @@ public class LoginController {
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
-            model.addAttribute("user", user);
             return "login/createUser";
         }
         userService.add(user);

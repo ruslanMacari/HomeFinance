@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Add User"/>
 </jsp:include>
@@ -8,24 +9,11 @@
     <h1 class="box-header__title">Add New User</h1>
     <div class="form">
         <div class="form__wrapper">
-            <sf:form method="post" action="users" commandName="newUser">
-                <div class="form__input-group">
-                    <label class="form__label" for="name">Name:</label>
-                    <input class="form__text" name="name" id="name" value="${newUser.name}"/>
-                    <div>
-                        <sf:errors class="form__error" path="name"/>
-                    </div>
-                </div>
-                <div class="form__input-group">
-                    <label class="form__label" for="password">Password</label>
-                    <input class="form__text" name="password" id="password" value="${newUser.password}" type="password"/>
-                    <div>
-                        <sf:errors class="form__error" path="password"/>
-                    </div>
-                </div>
+            <sf:form method="post" commandName="newUser" action="users" >
+                <jsp:include page='../includes/user-name-password.jsp'/> 
                 <div class="input-group">
-                    <label class="form__label" for="admin">Administrator:</label>
-                    <input class="form__checkbox" id="admin" name="admin" value="true" type="checkbox"/>
+                    <sf:label class="form__label" path="admin">Administrator:</sf:label>
+                    <sf:checkbox class="form__checkbox" path="admin" value="true"/>
                 </div>
                 <input class="form__submit" type="submit" value="Save" />
             </sf:form>
