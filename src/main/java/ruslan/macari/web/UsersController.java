@@ -127,9 +127,6 @@ public class UsersController {
     @InitBinder("newUser")
     protected void initNewUserBinder(WebDataBinder dataBinder) {
         setValidator(dataBinder, newUserValidator);
-        if (dataBinder.getTarget() == null) {
-            return;
-        }
     }
 
 }

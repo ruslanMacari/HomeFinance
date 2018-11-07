@@ -1,6 +1,7 @@
 package ruslan.macari.web.validator;
  
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ruslan.macari.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -9,6 +10,7 @@ import org.springframework.validation.Validator;
 import ruslan.macari.service.UserService;
  
 @Component
+@Qualifier("userValidator")
 public class UserValidator implements Validator {
     
     protected User user;
@@ -51,5 +53,5 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "MinSize.user.password");
         }
     }
-
+    
 }

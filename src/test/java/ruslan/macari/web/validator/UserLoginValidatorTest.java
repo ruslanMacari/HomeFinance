@@ -1,13 +1,12 @@
 package ruslan.macari.web.validator;
 
-import ruslan.macari.web.validator.UserLoginValidator;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import ruslan.macari.domain.UserLogin;
+import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
 
 public class UserLoginValidatorTest {
@@ -27,13 +26,13 @@ public class UserLoginValidatorTest {
     
     @Test
     public void testSupports() {
-        assertTrue(userLoginValidator.supports(UserLogin.class));
+        assertTrue(userLoginValidator.supports(User.class));
         assertFalse(userLoginValidator.supports(Object.class));
     }
     
     @Test
     public void testValidate() {
-        UserLogin user = new UserLogin("name", "pass");
+        User user = new User("name", "pass");
         Errors errors = new BeanPropertyBindingResult(user, "User");
         when(userService.getByNameAndPassword(user.getName(), user.getPassword())).thenReturn(null);
         userLoginValidator.validate(user, errors);

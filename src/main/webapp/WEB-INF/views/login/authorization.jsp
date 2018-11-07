@@ -14,7 +14,7 @@
                     <h2>No Users Found, Please Create New User</h2>
                 </c:when>
                 <c:otherwise>
-                    <sf:form method="POST" commandName="user" action="authorization">
+                    <sf:form method="POST" commandName="userLogin" action="authorization">
                         <div class="form__input-group">
                             <label class="form__label" for="Names">Name:</label>
                             <input class="form__text" type="text" list="usersList" id="name" name="name" autocomplete="off"/>

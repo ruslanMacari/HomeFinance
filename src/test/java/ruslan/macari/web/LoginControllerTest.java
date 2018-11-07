@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.verify;
 import org.springframework.ui.Model;
-import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
 
 public class LoginControllerTest {

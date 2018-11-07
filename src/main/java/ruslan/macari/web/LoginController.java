@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
-import ruslan.macari.domain.UserLogin;
 import ruslan.macari.service.UserService;
 
 @Controller
@@ -43,7 +42,7 @@ public class LoginController {
 
     @Autowired
     @Qualifier("newUserValidator")
-    private Validator userValidator;
+    private Validator newUserValidator;
 
     @Autowired
     @Qualifier("userLoginValidator")
@@ -71,7 +70,7 @@ public class LoginController {
             return "redirect:/";
         }
         addSimpleUsers(model);
-        model.addAttribute("user", new UserLogin());
+        model.addAttribute("userLogin", new User());
         return "login/authorization";
     }
     
@@ -95,7 +94,7 @@ public class LoginController {
     }
 
     @PostMapping()
-    public String authorization(@Valid @ModelAttribute("user") UserLogin user, BindingResult result, Model model,
+    public String authorization(@Valid @ModelAttribute("userLogin") User user, BindingResult result, Model model,
             HttpSession session) {
         if (result.hasErrors()) {
             addSimpleUsers(model);
@@ -122,22 +121,21 @@ public class LoginController {
         CurrentUser.remove(session.getId());
     }
 
-    @InitBinder
-    protected void initBinder(WebDataBinder dataBinder) {
-        Object target = dataBinder.getTarget();
-        if (target == null) {
+    @InitBinder("userLogin")
+    protected void initUserLoginBinder(WebDataBinder dataBinder) {
+        setValidator(dataBinder, userLoginValidator);
+    }
+    
+    private void setValidator(WebDataBinder dataBinder, Validator validator) {
+        if (dataBinder.getTarget() == null) {
             return;
         }
-        setValidator(dataBinder, target);
+        dataBinder.setValidator(validator);
     }
-
-    private void setValidator(WebDataBinder dataBinder, Object target) {
-        Class targetClass = target.getClass();
-        if (targetClass == User.class) {
-            dataBinder.setValidator(userValidator);
-        } else if (targetClass == UserLogin.class) {
-            dataBinder.setValidator(userLoginValidator);
-        }
+    
+    @InitBinder("user")
+    protected void initUserBinder(WebDataBinder dataBinder) {
+        setValidator(dataBinder, newUserValidator);
     }
 
 }
