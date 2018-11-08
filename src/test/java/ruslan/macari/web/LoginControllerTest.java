@@ -23,18 +23,14 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ruslan.macari.config.TestConfig;
 
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest(CurrentUser.class)
+//@DirtiesContext
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = TestConfig.class)
 public class LoginControllerTest {
     
     private MockHttpSession session;
@@ -43,6 +39,7 @@ public class LoginControllerTest {
     private User user;
     private BindingResult bindingResult;
     private Model model;
+    private CurrentUser currentUser;
     
     public LoginControllerTest() {
         init();
@@ -54,65 +51,60 @@ public class LoginControllerTest {
     
     @Before
     public void setUp() {
-        model = new ExtendedModelMap();
+        model = mock(Model.class);
         session = new MockHttpSession();
         loginController = new LoginController();
         userService = mock(UserService.class);
         loginController.setUserService(userService);
         user = mock(User.class);
         bindingResult = mock(BindingResult.class);
+        currentUser = mock(CurrentUser.class);
+        loginController.setCurrentUser(currentUser);
     }
     
     @After
     public void cleanUp() {
-        CurrentUser.remove("id");
     }
     
     @Test
     public void testAuthorization() {
+        when(currentUser.exists(session.getId())).thenReturn(false);
         assertEquals(loginController.authorization(session, model), "login/authorization");
         session = mock(MockHttpSession.class);
-        when(session.getId()).thenReturn("id");
-//        PowerMockito.mockStatic(CurrentUser.class);
-//        BDDMockito.given(DriverManager.getConnection(...)).willReturn(...);
-//
-//        //when
-//        sut.execute();
-//
-//        //then
-//        PowerMockito.verifyStatic();
-//        DriverManager.getConnection(...);
-
-        CurrentUser.add("id", user);
+        when(currentUser.exists(session.getId())).thenReturn(true);
         assertEquals(loginController.authorization(session, model), "redirect:/");
     }
-//
-//    @Test
-//    public void testCreateUser() {
-//        ModelAndView modelAndView = loginController.createUser();
-//        assertTrue(modelAndView.getViewName().equals("createUser"));
-//        ModelMap map = modelAndView.getModelMap();
-//        assertTrue(map.containsAttribute("user"));
-//        assertEquals(map.get("user"), new User());
-//    }
-//
-//    @Test
-//    public void testSaveUser() {
-//        when(bindingResult.hasErrors()).thenReturn(true);
-//        String result = loginController.saveUser(user, bindingResult);
-//        assertEquals(result, "createUser");
-//        verifyZeroInteractions(userService);
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        result = loginController.saveUser(user, bindingResult);
-//        assertEquals(result, "redirect:/login");
-//        verify(userService).add(user);
-//    }
-//
-//    @Test
-//    public void testLogin() {
-//        String result = loginController.login(mock(Model.class));
-//        assertEquals(result, "login");
-//    }
+
+    @Test
+    public void testCreateUser() {
+        ModelAndView modelAndView = loginController.createUser();
+        assertTrue(modelAndView.getViewName().equals("login/createUser"));
+        ModelMap map = modelAndView.getModelMap();
+        assertTrue(map.containsAttribute("user"));
+        assertEquals(map.get("user"), new User());
+    }
+
+    @Test
+    public void testSaveUser() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        String result = loginController.saveUser(user, bindingResult);
+        assertEquals(result, "login/createUser");
+        verifyZeroInteractions(userService);
+        when(bindingResult.hasErrors()).thenReturn(false);
+        result = loginController.saveUser(user, bindingResult);
+        assertEquals(result, "redirect:/authorization");
+        verify(userService).add(user);
+    }
+
+    @Test
+    public void testLogin() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        String result = loginController.authorization(user, bindingResult, model, session);
+        assertEquals(result, "login/authorization");
+        when(bindingResult.hasErrors()).thenReturn(false);
+        result = loginController.authorization(user, bindingResult, model, session);
+        assertEquals(result, "redirect:/");
+    }
 //
 //    @Test
 //    public void testCheckUser() {

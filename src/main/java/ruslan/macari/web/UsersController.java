@@ -30,7 +30,14 @@ import ruslan.macari.web.exceptions.AccesException;
 public class UsersController {
     
     private UserService userService;
+    
+    private CurrentUser currentUser;
 
+    @Autowired
+    public void setCurrentUser(CurrentUser currentUser) {
+        this.currentUser = currentUser;
+    }
+    
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -54,7 +61,7 @@ public class UsersController {
     
     private void handleAccess(HttpSession session) throws AccesException {
         String id = session.getId();
-        if (!CurrentUser.isAdmin(id)) {
+        if (!currentUser.isAdmin(id)) {
             throw new AccesException(id);
         }
     }

@@ -34,6 +34,13 @@ public class LoginController {
 
     @Value("${db.username}")
     private String username;
+    
+    private CurrentUser currentUser;
+
+    @Autowired
+    public void setCurrentUser(CurrentUser currentUser) {
+        this.currentUser = currentUser;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -66,7 +73,7 @@ public class LoginController {
 
     @GetMapping()
     public String authorization(HttpSession session, Model model) {
-        if (CurrentUser.exists(session.getId())) {
+        if (currentUser.exists(session.getId())) {
             return "redirect:/";
         }
         addSimpleUsers(model);
@@ -105,7 +112,7 @@ public class LoginController {
     
     private void addSessionUser(HttpSession session, User user) {
         User userFound = userService.getByNameAndPassword(user.getName(), user.getPassword());
-        CurrentUser.add(session.getId(), userFound);
+        currentUser.add(session.getId(), userFound);
         session.setAttribute("user", userFound);
     }
 
@@ -117,7 +124,7 @@ public class LoginController {
     
     private void removeSessionUser(HttpSession session) {
         session.removeAttribute("user");
-        CurrentUser.remove(session.getId());
+        currentUser.remove(session.getId());
     }
 
     @InitBinder("userLogin")

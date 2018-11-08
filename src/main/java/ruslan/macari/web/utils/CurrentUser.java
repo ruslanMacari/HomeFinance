@@ -1,49 +1,22 @@
 package ruslan.macari.web.utils;
 
-import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import ruslan.macari.domain.User;
 
-@Component
-public class CurrentUser {
+public interface CurrentUser {
     
-    private static Map<String, User> users = new HashMap();
+    void setUsers(Map<String, User> users);
+    
+    User get(String sessionId);
 
-    @Autowired
-    @Qualifier("usersMap")
-    public static void setUsers(Map<String, User> users) {
-        CurrentUser.users = users;
-    }
+    void add(String sessionId, User user);
     
-    public static User get(String sessionId) {
-        return users.get(sessionId);
-    }
-
-    public static void add(String sessionId, User user) {
-        users.put(sessionId, user);
-    }
+    void remove(String sessionId);
     
-    public static void remove(String sessionId) {
-        users.remove(sessionId);
-    }
+    boolean isAdmin(String sessionId);
     
-    public static boolean isAdmin(String sessionId) {
-        User user = users.get(sessionId);
-        if (user == null) {
-            return false;
-        }
-        return user.isAdmin();
-    }
+    boolean exists(String sessionId);
     
-    public static boolean exists(String sessionId) {
-        return users.get(sessionId) != null;
-    }
-    
-    public static int size() {
-        return users.size();
-    }
+    int size();
     
 }

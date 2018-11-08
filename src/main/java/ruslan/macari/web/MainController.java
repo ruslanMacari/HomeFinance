@@ -19,7 +19,14 @@ import ruslan.macari.service.CurrencyService;
 public class MainController {
     
     private CurrencyService currencyService;
+    
+    private CurrentUser currentUser;
 
+    @Autowired
+    public void setCurrentUser(CurrentUser currentUser) {
+        this.currentUser = currentUser;
+    }
+    
     @Autowired
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
@@ -27,7 +34,7 @@ public class MainController {
     
     @GetMapping()
     public String index(HttpSession session) {
-        if (!CurrentUser.exists(session.getId())) {
+        if (!currentUser.exists(session.getId())) {
             return "redirect:/authorization";
         }
         return "index";
