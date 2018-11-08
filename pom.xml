@@ -27,6 +27,13 @@
         <json-path>2.2.0</json-path>
         <mockito-all>1.9.5</mockito-all>
     </properties>
+    <repositories>
+        <repository>
+            <id>Geomajas</id>
+            <name>Geomajas</name>
+            <url>http://maven.geomajas.org/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <!-- Spring -->
         <dependency>
@@ -164,6 +171,22 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>2.0.0-RC.3</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.powermock.modules.test.powermockito.junit4/powermock-module-test-powermockito-junit4 -->
+<!--        <dependency>
+            <groupId>org.powermock.modules.test.powermockito.junit4</groupId>
+            <artifactId>powermock-module-test-powermockito-junit4</artifactId>
+            <version>1.4.5-SONATYPE</version>
+            <scope>test</scope>
+            <type>jar</type>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>

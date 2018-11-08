@@ -1,4 +1,4 @@
-package ruslan.macari.web.validator;
+package ruslan.macari.web.validator.user;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import ruslan.macari.domain.User;

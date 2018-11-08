@@ -1,13 +1,14 @@
-package ruslan.macari.web.validator;
+package ruslan.macari.web.validator.user;
 
+import ruslan.macari.web.validator.user.UserValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import ruslan.macari.domain.User;
 
 @Component
-@Qualifier("updateUserValidator")
-public class UpdateUserValidator extends UserValidator {
+@Qualifier("newUserValidator")
+public class NewUserValidator extends UserValidator {
 
     @Override
     public void validate(Object target, Errors errors) {
@@ -18,7 +19,7 @@ public class UpdateUserValidator extends UserValidator {
     
     private void checkDuplication(Errors errors) {
         if (errors.getFieldError("name") == null) {
-            User userFound = userService.getByNameExceptID(user.getName(), user.getId());
+            User userFound = userService.getByName(user.getName());
             if (userFound != null) {
                 errors.rejectValue("name", "Duplicated.user.name");
             }
