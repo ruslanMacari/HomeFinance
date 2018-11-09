@@ -1,6 +1,5 @@
 <%@ page isErrorPage="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
@@ -14,6 +13,5 @@
         </div>
         <a class="button" href="/HomeFinance">Back to main page.</a>
     </div>
-    
 </div>
 <jsp:include page='../includes/footer.jsp'/>

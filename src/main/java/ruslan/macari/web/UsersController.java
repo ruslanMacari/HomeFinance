@@ -23,15 +23,19 @@ import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
-import ruslan.macari.web.exceptions.AccesException;
+import ruslan.macari.web.exceptions.AccessException;
+import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
 @RequestMapping("/users")
 public class UsersController {
     
     private UserService userService;
-    
     private CurrentUser currentUser;
+    private User root;
+    
+    @Autowired
+    private User unauthorized;
 
     @Autowired
     public void setCurrentUser(CurrentUser currentUser) {
@@ -44,46 +48,70 @@ public class UsersController {
     }
     
     @Autowired
+    public void setRoot(User root) {
+        this.root = root;
+    }
+    
+    @Autowired
     @Qualifier("updateUserValidator")
-    private Validator userValidator;
+    private Validator updateUserValidator;
     
     @Autowired
     @Qualifier("newUserValidator")
     private Validator newUserValidator;
     
     @GetMapping()
-    public String showUsers(HttpSession session, Model model) throws AccesException {
+    public String showUsers(HttpSession session, Model model) throws AccessException {
         handleAccess(session);
         List<User> users = userService.usersExceptRoot();
         model.addAttribute("users", users);
         return "users/list";
     }
     
-    private void handleAccess(HttpSession session) throws AccesException {
+    private void handleAccess(HttpSession session) throws AccessException {
         String id = session.getId();
         if (!currentUser.isAdmin(id)) {
-            throw new AccesException(id);
+            throw new AccessException(currentUser.exists(id) ? currentUser.get(id) : unauthorized);
         }
     }
     
-    @ExceptionHandler(AccesException.class)
-    public ModelAndView handleAccessException(AccesException e) {
+    @ExceptionHandler(AccessException.class)
+    public ModelAndView accessException(AccessException e) {
         ModelMap model = new ModelMap();
         model.put("user", e.getUser());
         return new ModelAndView("users/access-denied", model);
     }
     
     @GetMapping(value = "/{id}")
-    public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccesException {
+    public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccessException, PageNotFoundException {
         handleAccess(session);
         User user = userService.getById(id);
+        handlePageNotFound(user);
+        rootChange(id);
         model.addAttribute("user", user);
         return "users/view";
     }
     
+    private void handlePageNotFound(User user) throws PageNotFoundException {
+        if (user == null) {
+            throw new PageNotFoundException ();
+        }
+    }
+    
+    private void rootChange(int id) {
+//        if (userService.getById(id)) {
+//            
+//        }
+    }
+    
+    @ExceptionHandler(PageNotFoundException.class)
+    public ModelAndView pageNotFoundException(PageNotFoundException e) {
+        return new ModelAndView("resource-not-found");
+    }
+    
     @PostMapping(value = "/{id}")
     public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result,
-            @PathVariable("id") int id, HttpSession session) throws AccesException {
+            @PathVariable("id") int id, HttpSession session) throws AccessException {
         handleAccess(session);
         if (result.hasErrors()) {
             return "users/view";
@@ -94,14 +122,14 @@ public class UsersController {
     }
     
     @GetMapping(params = "new")
-    public String createUserForm(HttpSession session, Model model) throws AccesException {
+    public String createUserForm(HttpSession session, Model model) throws AccessException {
         handleAccess(session);
         model.addAttribute("newUser", new User());
         return "users/new";
     }
     
     @PostMapping()
-    public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, HttpSession session) throws AccesException {
+    public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, HttpSession session) throws AccessException {
         handleAccess(session);
         if (result.hasErrors()) {
             return "users/new";
@@ -111,7 +139,7 @@ public class UsersController {
     }
     
     @DeleteMapping(value = "/{id}")
-    public String deleteUser(HttpSession session, @PathVariable("id") int id) throws AccesException {
+    public String deleteUser(HttpSession session, @PathVariable("id") int id) throws AccessException {
         handleAccess(session);
         userService.delete(id);
         return "redirect:/users";
@@ -119,7 +147,7 @@ public class UsersController {
     
     @InitBinder("user")
     protected void initUserBinder(WebDataBinder dataBinder) {
-        setValidator(dataBinder, userValidator);
+        setValidator(dataBinder, updateUserValidator);
     }
     
     private void setValidator(WebDataBinder dataBinder, Validator validator) {

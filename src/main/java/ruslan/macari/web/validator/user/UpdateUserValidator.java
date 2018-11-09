@@ -1,6 +1,5 @@
 package ruslan.macari.web.validator.user;
 
-import ruslan.macari.web.validator.user.UserValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

@@ -112,4 +112,8 @@ public class AppConfig {
         return admin;
     }
     
+    @Bean User unauthorized() {
+        return new User("Unauthorized");
+    }
+    
 }
