@@ -135,5 +135,13 @@ public class UserServiceImplTest {
         User foundUser = userService.getByNameExceptID(name, user1.getId());
         assertEquals(user2, foundUser);
     }
+    
+    @Test
+    public void testUsersExceptRoot() {
+        User root = new User("root");
+        userService.add(root);
+        List<User> result = userService.usersExceptRoot();
+        assertEquals(result.size(), 0);
+    }
 
 }

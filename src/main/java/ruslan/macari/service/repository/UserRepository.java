@@ -23,4 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     
     @Query(value ="select u from User u where u.name = :name and u.id <> :id")
     User getByNameExceptID(@Param("name")String name, @Param("id")int id);
+    
+    @Query(value ="select u from User u where u.name <> :rootName")
+    List<User> usersExceptRoot(@Param("rootName")String rootName);
 }

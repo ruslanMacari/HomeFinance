@@ -54,7 +54,7 @@ public class UsersController {
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccesException {
         handleAccess(session);
-        List<User> users = userService.list();
+        List<User> users = userService.usersExceptRoot();
         model.addAttribute("users", users);
         return "users/list";
     }

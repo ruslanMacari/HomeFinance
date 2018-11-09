@@ -15,12 +15,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import ruslan.macari.service.UserService;
 import ruslan.macari.web.utils.CurrentUser;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.springframework.test.annotation.DirtiesContext;
@@ -41,14 +43,6 @@ public class LoginControllerTest {
     private Model model;
     private CurrentUser currentUser;
     
-    public LoginControllerTest() {
-        init();
-    }
-    
-    private void init() {
-        
-    }
-    
     @Before
     public void setUp() {
         model = mock(Model.class);
@@ -60,10 +54,21 @@ public class LoginControllerTest {
         bindingResult = mock(BindingResult.class);
         currentUser = mock(CurrentUser.class);
         loginController.setCurrentUser(currentUser);
+        loginController.setRoot(user);
     }
     
     @After
     public void cleanUp() {
+    }
+    
+    @Test
+    public void testInit() {
+        when(userService.getAdmin()).thenReturn(user);
+        loginController.init();
+        verify(userService, times(0)).add(user);
+        when(userService.getAdmin()).thenReturn(null);
+        loginController.init();
+        verify(userService).add(user);
     }
     
     @Test
@@ -97,13 +102,16 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testLogin() {
+    public void testPostAuthorization() {
         when(bindingResult.hasErrors()).thenReturn(true);
         String result = loginController.authorization(user, bindingResult, model, session);
+        verify(model, times(1)).addAttribute("listUsers", userService.getSimpleUsers());
         assertEquals(result, "login/authorization");
         when(bindingResult.hasErrors()).thenReturn(false);
+        when(userService.getByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
         result = loginController.authorization(user, bindingResult, model, session);
         assertEquals(result, "redirect:/");
+        assertEquals(session.getAttribute("user"), user);
     }
 //
 //    @Test

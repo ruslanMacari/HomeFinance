@@ -24,19 +24,25 @@ import ruslan.macari.service.UserService;
 
 @Controller
 @RequestMapping("/authorization")
-@PropertySource("classpath:app.properties")
 public class LoginController {
 
     private UserService userService;
-
-    @Value("${db.password}")
-    private String password;
-
-    @Value("${db.username}")
-    private String username;
-    
+    private User root;
     private CurrentUser currentUser;
+    
+    @Autowired
+    @Qualifier("newUserValidator")
+    private Validator newUserValidator;
 
+    @Autowired
+    @Qualifier("userLoginValidator")
+    private Validator userLoginValidator;
+    
+    @Autowired
+    public void setRoot(User root) {
+        this.root = root;
+    } 
+    
     @Autowired
     public void setCurrentUser(CurrentUser currentUser) {
         this.currentUser = currentUser;
@@ -47,28 +53,10 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @Autowired
-    @Qualifier("newUserValidator")
-    private Validator newUserValidator;
-
-    @Autowired
-    @Qualifier("userLoginValidator")
-    private Validator userLoginValidator;
-
     @PostConstruct
     public void init() {
-        createAdmin();
-    }
-
-    private void createAdmin() {
-        if (userService.getAdmin() != null) {
-            return;
-        }
-        User admin = new User();
-        admin.setName(username);
-        admin.setPassword(password);
-        admin.setAdmin(true);
-        userService.add(admin);
+        if (userService.getAdmin() != null) return;
+        userService.add(root);
     }
 
     @GetMapping()

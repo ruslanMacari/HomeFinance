@@ -103,4 +103,13 @@ public class AppConfig {
         return new ConcurrentHashMap<>();
     }
     
+    @Bean
+    public User root() {
+        User admin = new User();
+        admin.setName(username);
+        admin.setPassword(password);
+        admin.setAdmin(true);
+        return admin;
+    }
+    
 }

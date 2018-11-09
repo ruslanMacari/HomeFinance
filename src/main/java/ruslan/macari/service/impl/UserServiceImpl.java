@@ -12,10 +12,16 @@ import ruslan.macari.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private User root;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    
+    @Autowired
+    public void setRoot(User root) {
+        this.root = root;
     }
     
     @Override
@@ -73,6 +79,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByNameExceptID(String name, int id) {
         return userRepository.getByNameExceptID(name, id);
+    }
+
+    @Override
+    public List<User> usersExceptRoot() {
+        return userRepository.usersExceptRoot(root.getName());
     }
    
 }
