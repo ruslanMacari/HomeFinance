@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Login"/>
@@ -11,7 +12,7 @@
         <div class="form__wrapper">
             <sf:form method="POST" commandName="userLogin" action="authorization">
                 <div class="form__input-group">
-                    <label class="form__label" for="Names">Name:</label>
+                    <label class="form__label" for="Names"><spring:message code="name"/>:</label>
                     <input class="form__text" type="text" list="usersList" id="name" name="name" autocomplete="off"/>
                     <datalist id="usersList">
                         <c:forEach items="${listUsers}" var="user">
