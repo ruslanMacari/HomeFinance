@@ -26,6 +26,8 @@
                 </footer>
             </sf:form>
             <a class="button button_wide" href="<c:url value='/authorization/createUser'/>"><spring:message code="create-new-user"/></a>
+            <a href="/HomeFinance/?lang=en">English</a>
+            <a href="/HomeFinance/?lang=ru">Русский</a>
         </div>
     </div>
 </div>
