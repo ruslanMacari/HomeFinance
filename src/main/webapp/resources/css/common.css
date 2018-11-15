@@ -28,3 +28,11 @@ body {
     color: var(--red);
 }
 
+.text-align-right {
+    text-align: right;
+}
+
+.icon {
+    width:30px; 
+    height:30px;
+}
