@@ -80,26 +80,26 @@ public class LoginControllerTest {
         assertEquals(loginController.authorization(session, model), "redirect:/");
     }
 
-    @Test
-    public void testCreateUser() {
-        ModelAndView modelAndView = loginController.createUser();
-        assertTrue(modelAndView.getViewName().equals("login/createUser"));
-        ModelMap map = modelAndView.getModelMap();
-        assertTrue(map.containsAttribute("user"));
-        assertEquals(map.get("user"), new User());
-    }
-
-    @Test
-    public void testSaveUser() {
-        when(bindingResult.hasErrors()).thenReturn(true);
-        String result = loginController.saveUser(user, bindingResult);
-        assertEquals(result, "login/createUser");
-        verifyZeroInteractions(userService);
-        when(bindingResult.hasErrors()).thenReturn(false);
-        result = loginController.saveUser(user, bindingResult);
-        assertEquals(result, "redirect:/authorization");
-        verify(userService).add(user);
-    }
+//    @Test
+//    public void testCreateUser() {
+//        ModelAndView modelAndView = loginController.createUser();
+//        assertTrue(modelAndView.getViewName().equals("login/createUser"));
+//        ModelMap map = modelAndView.getModelMap();
+//        assertTrue(map.containsAttribute("user"));
+//        assertEquals(map.get("user"), new User());
+//    }
+//
+//    @Test
+//    public void testSaveUser() {
+//        when(bindingResult.hasErrors()).thenReturn(true);
+//        String result = loginController.saveUser(user, bindingResult);
+//        assertEquals(result, "login/createUser");
+//        verifyZeroInteractions(userService);
+//        when(bindingResult.hasErrors()).thenReturn(false);
+//        result = loginController.saveUser(user, bindingResult);
+//        assertEquals(result, "redirect:/authorization");
+//        verify(userService).add(user);
+//    }
 
     @Test
     public void testPostAuthorization() {

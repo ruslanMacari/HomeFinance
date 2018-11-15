@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
 import ruslan.macari.service.UserService;
@@ -72,14 +74,23 @@ public class LoginController {
     }
 
     @GetMapping("/createUser")
-    public ModelAndView createUser() {
+    public ModelAndView createUser(Model model) {
+        Object o = model.asMap().get("model");
+        if (o != null) {
+            Model modelObject = (Model) o;
+            ModelAndView modelAndView = new ModelAndView("login/createUser");
+            ModelMap map = modelAndView.getModelMap();
+            map.mergeAttributes(modelObject.asMap());
+            return modelAndView;
+        }
         return new ModelAndView("login/createUser", "user", new User());
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirectAttrs, Model model) {
         if (result.hasErrors()) {
-            return "login/createUser";
+            redirectAttrs.addFlashAttribute("model", model);
+            return "redirect:/authorization/createUser";
         }
         userService.add(user);
         return "redirect:/authorization";
