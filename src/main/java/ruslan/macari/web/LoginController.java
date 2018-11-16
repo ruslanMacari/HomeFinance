@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.domain.User;
@@ -64,32 +62,31 @@ public class LoginController {
         if (currentUser.exists(session.getId())) {
             return "redirect:/";
         }
-        addSimpleUsers(model);
-        model.addAttribute("userLogin", new User());
+        Object flashModel = model.asMap().get("model");
+        if (flashModel == null) {
+            model.addAttribute("listUsers", userService.getSimpleUsers());
+            model.addAttribute("userLogin", new User());
+        } else {
+            model.mergeAttributes(((Model) flashModel).asMap());
+        }
         return "login/authorization";
     }
     
-    private void addSimpleUsers(Model model) {
-        model.addAttribute("listUsers", userService.getSimpleUsers());
-    }
-
     @GetMapping("/createUser")
-    public ModelAndView createUser(Model model) {
-        Object o = model.asMap().get("model");
-        if (o != null) {
-            Model modelObject = (Model) o;
-            ModelAndView modelAndView = new ModelAndView("login/createUser");
-            ModelMap map = modelAndView.getModelMap();
-            map.mergeAttributes(modelObject.asMap());
-            return modelAndView;
+    public String createUser(Model model) {
+        Object flashModel = model.asMap().get("model");
+        if (flashModel == null) {
+            model.addAttribute("user", new User());
+        } else {
+            model.mergeAttributes(((Model) flashModel).asMap());
         }
-        return new ModelAndView("login/createUser", "user", new User());
+        return "login/createUser";
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirectAttrs, Model model) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            redirectAttrs.addFlashAttribute("model", model);
+            redirectAttributes.addFlashAttribute("model", model);
             return "redirect:/authorization/createUser";
         }
         userService.add(user);
@@ -98,10 +95,10 @@ public class LoginController {
 
     @PostMapping()
     public String authorization(@Valid @ModelAttribute("userLogin") User user, BindingResult result, Model model,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            addSimpleUsers(model);
-            return "login/authorization";
+            redirectAttributes.addFlashAttribute("model", model);
+            return "redirect:/authorization";
         }
         addSessionUser(session, user);
         return "redirect:/";

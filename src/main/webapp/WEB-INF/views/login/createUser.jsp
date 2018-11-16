@@ -12,7 +12,7 @@
         <div class="form__wrapper">
             <sf:form method="post" commandName="user" action="saveUser">
                 <jsp:include page='../includes/user-name-password.jsp'/> 
-                <input class="form__submit" type="submit" value="Create"> 
+                <input class="form__submit" type="submit" value="<spring:message code="create"/>"> 
             </sf:form>
         </div>
     </div>
