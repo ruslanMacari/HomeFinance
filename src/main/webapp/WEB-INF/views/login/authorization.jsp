@@ -6,27 +6,25 @@
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Login"/>
 </jsp:include>
-<div class="box-header">
-    <h1 class="box-header__title"><spring:message code="authorization"/></h1>
-    <div class="form">
-        <div class="form__wrapper">
-            <sf:form method="POST" commandName="userLogin" action="authorization">
-                <div class="form__input-group">
-                    <label class="form__label" for="Names"><spring:message code="user.name"/>:</label>
-                    <input class="form__text" type="text" list="usersList" id="name" name="name" autocomplete="off"/>
-                    <datalist id="usersList">
-                        <c:forEach items="${listUsers}" var="user">
-                            <option>${user.name}</option>
-                        </c:forEach>
-                    </datalist>
-                </div>
-                <jsp:include page='../includes/user-password.jsp'/> 
-                <footer> 
-                    <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
-                </footer>
-            </sf:form>
-            <a class="button button_wide" href="<c:url value='/authorization/createUser'/>"><spring:message code="create-new-user"/></a>
-        </div>
+<h1 class="box-header__title"><spring:message code="authorization"/></h1>
+<div class="form">
+    <div class="form__wrapper">
+        <sf:form method="POST" commandName="userLogin" action="authorization">
+            <div class="form__input-group">
+                <label class="form__label" for="Names"><spring:message code="user.name"/>:</label>
+                <input class="form__text" type="text" list="usersList" id="name" name="name" autocomplete="off"/>
+                <datalist id="usersList">
+                    <c:forEach items="${listUsers}" var="user">
+                        <option>${user.name}</option>
+                    </c:forEach>
+                </datalist>
+            </div>
+            <jsp:include page='../includes/user-password.jsp'/> 
+            <footer> 
+                <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
+            </footer>
+        </sf:form>
+        <a class="button button_wide" href="<c:url value='/authorization/createUser'/>"><spring:message code="create-new-user"/></a>
     </div>
 </div>
 <jsp:include page='../includes/footer.jsp'/>

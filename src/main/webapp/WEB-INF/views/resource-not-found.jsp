@@ -5,10 +5,8 @@
 <jsp:include page='includes/head.jsp'>
     <jsp:param name="title" value="Resource Not Found!"/>
 </jsp:include>
-<div class="box-header">
-    <div class="box-header__title">
-        <h1 class="box-header__title">Resource Not Found!</h1>
-        <a class="button" href="/HomeFinance">Back to main page.</a>
-    </div>
+<div class="box-header__title">
+    <h1 class="box-header__title">Resource Not Found!</h1>
+    <a class="button" href="/HomeFinance">Back to main page.</a>
 </div>
 <jsp:include page='includes/footer.jsp'/>
