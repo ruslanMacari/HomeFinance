@@ -23,6 +23,7 @@
             <footer> 
                 <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
             </footer>
+            <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
         </sf:form>
         <a class="button button_wide" href="<c:url value='/authorization/createUser'/>"><spring:message code="create-new-user"/></a>
     </div>
