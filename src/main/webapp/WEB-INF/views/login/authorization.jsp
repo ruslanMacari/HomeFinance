@@ -9,7 +9,8 @@
 <h1 class="box-header__title"><spring:message code="authorization"/></h1>
 <div class="form">
     <div class="form__wrapper">
-        <sf:form method="POST" commandName="userLogin" action="authorization">
+        <c:url value="/authorization" var="authorizationUrl" />
+        <sf:form method="POST" commandName="userLogin" action="${authorizationUrl}">
             <div class="form__input-group">
                 <label class="form__label" for="Names"><spring:message code="user.name"/>:</label>
                 <input class="form__text" type="text" list="usersList" id="name" name="name" autocomplete="off"/>
@@ -20,6 +21,12 @@
                 </datalist>
             </div>
             <jsp:include page='../includes/user-password.jsp'/> 
+            <c:if test="${param.error != null}">        
+                Failed to login.
+                <c:if test="${SPRING_SECURITY_LAST_EXCEPTION != null}">
+                    Reason: <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+                </c:if>
+            </c:if>
             <footer> 
                 <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
             </footer>
