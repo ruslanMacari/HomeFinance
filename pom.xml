@@ -11,6 +11,7 @@
         <java.version>1.8</java.version>
         <org.springframework-version>4.3.7.RELEASE</org.springframework-version>
         <spring.data>1.11.11.RELEASE</spring.data>
+        <spring-data-commons>1.13.11.RELEASE</spring-data-commons>
         <spring-orm>4.3.16.RELEASE</spring-orm>
         <org.aspectj-version>1.7.4</org.aspectj-version>
         <org.slf4j-version>1.7.5</org.slf4j-version>
@@ -168,7 +169,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>1.13.11.RELEASE</version>
+            <version>${spring-data-commons}</version>
             <type>jar</type>
         </dependency>
         <dependency>
