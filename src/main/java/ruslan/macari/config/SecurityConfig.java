@@ -16,32 +16,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .withUser("root").password("ruslan").roles("USER");
+                .withUser("root").password("root").roles("admin")
+                .and()
+                .withUser("user").password("user").roles("user");
     }
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/resources/**").permitAll();
+            .authorizeRequests()
+            .antMatchers("/resources/**", "/authorization/createUser", "/access-denied.jsp").permitAll()
+            .antMatchers("/users/**").hasRole("admin");
         http
             .authorizeRequests()
             .anyRequest().authenticated()
             .and()
         .formLogin()
-                .loginPage("/authorization")
-                .loginProcessingUrl("/authorization")
-                //.defaultSuccessUrl("/users")
-                .failureUrl("/authorization?error")
-                .usernameParameter("name")
-                .passwordParameter("password")
-                .permitAll();
+            .loginPage("/authorization")
+            .loginProcessingUrl("/authorization")
+            //.defaultSuccessUrl("/users")
+            .failureUrl("/authorization?error")
+            .usernameParameter("name")
+            .passwordParameter("password")
+            .permitAll();
 
         http.logout()
                 .permitAll()
-                .logoutUrl("/logout")
+                .logoutUrl("/authorization/logout")
                 .logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .and()
+                .exceptionHandling().accessDeniedPage("/access-denied");
 
     }
 

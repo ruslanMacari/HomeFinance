@@ -59,9 +59,9 @@ public class LoginController {
 
     @GetMapping()
     public String authorization(HttpSession session, Model model) {
-        if (currentUser.exists(session.getId())) {
-            return "redirect:/";
-        }
+//        if (currentUser.exists(session.getId())) {
+//            return "redirect:/";
+//        }
         Object flashModel = model.asMap().get("model");
         if (flashModel == null) {
             model.addAttribute("listUsers", userService.getSimpleUsers());

@@ -62,7 +62,7 @@ public class UsersController {
     
     @GetMapping()
     public String showUsers(HttpSession session, Model model) throws AccessException {
-        handleAccess(session);
+        //handleAccess(session);
         List<User> users = userService.usersExceptRoot();
         model.addAttribute("users", users);
         return "users/list";
@@ -84,7 +84,7 @@ public class UsersController {
     
     @GetMapping(value = "/{id}")
     public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccessException, PageNotFoundException {
-        handleAccess(session);
+        //handleAccess(session);
         User user = userService.getById(id);
         handlePageNotFound(user);
         rootChange(id);
@@ -112,7 +112,7 @@ public class UsersController {
     @PostMapping(value = "/{id}")
     public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result,
             @PathVariable("id") int id, HttpSession session) throws AccessException {
-        handleAccess(session);
+        //handleAccess(session);
         if (result.hasErrors()) {
             return "users/view";
         }
@@ -123,14 +123,14 @@ public class UsersController {
     
     @GetMapping(params = "new")
     public String createUserForm(HttpSession session, Model model) throws AccessException {
-        handleAccess(session);
+        //handleAccess(session);
         model.addAttribute("newUser", new User());
         return "users/new";
     }
     
     @PostMapping()
     public String addUser(@Valid @ModelAttribute("newUser") User user, BindingResult result, HttpSession session) throws AccessException {
-        handleAccess(session);
+        //handleAccess(session);
         if (result.hasErrors()) {
             return "users/new";
         }
@@ -140,7 +140,7 @@ public class UsersController {
     
     @DeleteMapping(value = "/{id}")
     public String deleteUser(HttpSession session, @PathVariable("id") int id) throws AccessException {
-        handleAccess(session);
+        //handleAccess(session);
         userService.delete(id);
         return "redirect:/users";
     }
