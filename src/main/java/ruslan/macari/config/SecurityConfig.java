@@ -7,9 +7,10 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebMvcSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -25,29 +26,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/resources/**", "/authorization/createUser", "/access-denied.jsp").permitAll()
-            .antMatchers("/users/**").hasRole("admin");
-        http
-            .authorizeRequests()
-            .anyRequest().authenticated()
-            .and()
-        .formLogin()
-            .loginPage("/authorization")
-            .loginProcessingUrl("/authorization")
-            //.defaultSuccessUrl("/users")
-            .failureUrl("/authorization?error")
-            .usernameParameter("name")
-            .passwordParameter("password")
-            .permitAll();
-
-        http.logout()
+                .antMatchers("/resources/**", "/authorization/createUser", "/access-denied.jsp", "/authorization*").permitAll()
+                .antMatchers("/users/**").hasRole("admin")
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage("/authorization")
+                .loginProcessingUrl("/authorization")
+                .defaultSuccessUrl("/")
+                .failureUrl("/authorization?error")
+                .usernameParameter("name")
+                .passwordParameter("password")
+                .permitAll()
+                .and()
+                .rememberMe()
+                .and()
+            .logout()
                 .permitAll()
                 .logoutUrl("/authorization/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/authorization?logout")
                 .invalidateHttpSession(true)
                 .and()
                 .exceptionHandling().accessDeniedPage("/access-denied");
-
+    
     }
 
     @Bean

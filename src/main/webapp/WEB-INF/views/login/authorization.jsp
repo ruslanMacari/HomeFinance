@@ -27,10 +27,13 @@
                     Reason: <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
                 </c:if>
             </c:if>
+            <div class="input-group">
+                <label class="form__label" for="remember-me">Remember Me</label>
+                <input class="form__checkbox" name="remember-me" type="checkbox" /> 
+            </div>        
             <footer> 
                 <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
             </footer>
-            <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
         </sf:form>
         <a class="button button_wide" href="<c:url value='/authorization/createUser'/>"><spring:message code="create-new-user"/></a>
     </div>
