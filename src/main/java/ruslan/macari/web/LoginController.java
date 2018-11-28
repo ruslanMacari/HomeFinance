@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,7 @@ public class LoginController {
     private UserService userService;
     private User root;
     private CurrentUser currentUser;
+    private PasswordEncoder encoder;
     
     @Autowired
     @Qualifier("newUserValidator")
@@ -49,6 +52,12 @@ public class LoginController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+    
+    @Autowired
+    @Qualifier("passwordEncoder")
+    public void setEncoder(PasswordEncoder encoder) {
+        this.encoder = encoder;
     }
 
     @PostConstruct
@@ -89,6 +98,8 @@ public class LoginController {
             redirectAttributes.addFlashAttribute("model", model);
             return "redirect:/authorization/createUser";
         }
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setEnabled(true);
         userService.add(user);
         return "redirect:/authorization";
     }

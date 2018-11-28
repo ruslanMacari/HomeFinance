@@ -1,5 +1,6 @@
 package ruslan.macari.config;
 
+import ruslan.macari.config.security.SecurityConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -9,7 +10,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
    @Override
    protected Class<?>[] getRootConfigClasses() {
-      return new Class[] {AppConfig.class, SecurityConfig.class};
+      return new Class[] {AppConfig.class};
    }
 
    @Override

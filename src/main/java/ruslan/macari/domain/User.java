@@ -1,6 +1,7 @@
 package ruslan.macari.domain;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class User {
 
     private String name;
@@ -19,7 +20,7 @@ public class User {
     private Set<UserRole> userRole = new HashSet<>(0);
     
     @Id
-    @Column(name = "username", unique = true, nullable = false, length = 45)
+    @Column(name = "name", unique = true, nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -39,7 +40,7 @@ public class User {
 
     @Column(name = "enabled", nullable = false)
 	public boolean isEnabled() {
-		return this.enabled;
+		return enabled;
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -48,7 +49,7 @@ public class User {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	public Set<UserRole> getUserRole() {
-		return this.userRole;
+		return userRole;
 	}
 
 	public void setUserRole(Set<UserRole> userRole) {
@@ -73,6 +74,40 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(name);
+        hash = 37 * hash + Objects.hashCode(password);
+        hash = 37 * hash + (enabled ? 1 : 0);
+        hash = 37 * hash + Objects.hashCode(userRole);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (enabled != other.enabled) {
+            return false;
+        }
+        if (!Objects.equals(name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(password, other.password)) {
+            return false;
+        }
+        return Objects.equals(userRole, other.userRole);
     }
     
 }

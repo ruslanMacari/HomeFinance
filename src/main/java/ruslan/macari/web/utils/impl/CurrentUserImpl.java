@@ -41,7 +41,7 @@ public class CurrentUserImpl implements CurrentUser{
         if (user == null) {
             return false;
         }
-        return user.isAdmin();
+        return false;//user.isAdmin();
     }
     
     @Override

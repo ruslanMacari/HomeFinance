@@ -54,12 +54,12 @@ public class CurrentUserTest {
         assertEquals(0, currentUser.size());
     }
 
-    @Test
-    public void testIsAdmin() {
-        when(user.isAdmin()).thenReturn(true);
-        currentUser.add(id, user);
-        assertTrue(currentUser.isAdmin(id));
-    }
+//    @Test
+//    public void testIsAdmin() {
+//        when(user.isAdmin()).thenReturn(true);
+//        currentUser.add(id, user);
+//        assertTrue(currentUser.isAdmin(id));
+//    }
 
     @Test
     public void testExists() {

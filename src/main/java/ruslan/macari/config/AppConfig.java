@@ -1,6 +1,5 @@
 package ruslan.macari.config;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,17 +8,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import ruslan.macari.config.security.SecurityConfig;
 import ruslan.macari.domain.User;
 
 @Configuration
@@ -27,6 +25,7 @@ import ruslan.macari.domain.User;
 @ComponentScan("ruslan.macari.service")
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("ruslan.macari.service.repository")
+@Import({SecurityConfig.class})
 public class AppConfig {
 
     @Value("${db.driver}")
@@ -112,8 +111,9 @@ public class AppConfig {
     public User root() {
         User admin = new User();
         admin.setName(username);
-        admin.setPassword(password);
-        admin.setAdmin(true);
+        admin.setPassword(new BCryptPasswordEncoder().encode(password));
+        admin.setEnabled(true);
+        //admin.setAdmin(true);
         return admin;
     }
     

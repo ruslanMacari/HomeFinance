@@ -13,10 +13,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "userRoles", uniqueConstraints = @UniqueConstraint(columnNames = { "role", "username" }))
+@Table(name = "userRoles", uniqueConstraints = @UniqueConstraint(columnNames = { "role", "name" }))
 public class UserRole{
 
-	private Integer userRoleId;
+	private Integer id;
 	private User user;
 	private String role;
 
@@ -30,17 +30,17 @@ public class UserRole{
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "user_role_id", unique = true, nullable = false)
-	public Integer getUserRoleId() {
-		return userRoleId;
+	@Column(name = "id", unique = true, nullable = false)
+	public Integer getId() {
+		return id;
 	}
 
-	public void setUserRoleId(Integer userRoleId) {
-		this.userRoleId = userRoleId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user", nullable = false)
+	@JoinColumn(name = "name", nullable = false)
 	public User getUser() {
 		return user;
 	}

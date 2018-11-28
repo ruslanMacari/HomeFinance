@@ -12,16 +12,10 @@ import ruslan.macari.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    private User root;
-
+    
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-    
-    @Autowired
-    public void setRoot(User root) {
-        this.root = root;
     }
     
     @Override
@@ -62,8 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAdmin() {
-        List<User> list = userRepository.findAdmins();
-        return list.isEmpty() ? null : list.get(0);
+//        List<User> list = userRepository.findAdmins();
+//        return list.isEmpty() ? null : list.get(0);
+        return null;
     }
 
     @Override
@@ -73,17 +68,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getSimpleUsers() {
-        return userRepository.getSimpleUsers();
+        //return userRepository.getSimpleUsers();
+        return null;
     }
 
     @Override
     public User getByNameExceptID(String name, int id) {
-        return userRepository.getByNameExceptID(name, id);
+        //return userRepository.getByNameExceptID(name, id);
+        return null;
     }
 
     @Override
     public List<User> usersExceptRoot() {
-        return userRepository.usersExceptRoot(root.getName());
+        return null;//userRepository.usersExceptRoot(root.getName());
     }
    
 }

@@ -116,7 +116,7 @@ public class UsersController {
         if (result.hasErrors()) {
             return "users/view";
         }
-        user.setId(id);
+        //user.setId(id);
         userService.update(user);
         return "redirect:/users";
     }

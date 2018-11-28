@@ -15,14 +15,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value ="select u from User u")
     List<User> listLimit(Pageable pageable);
     
-    @Query(value ="select u from User u where u.admin = true")
-    List<User> findAdmins();
+//    @Query(value ="select u from users u where u.admin = true")
+//    List<User> findAdmins();
+//    
+//    @Query(value ="select u from users u where u.admin = false")
+//    List<User> getSimpleUsers();
     
-    @Query(value ="select u from User u where u.admin = false")
-    List<User> getSimpleUsers();
-    
-    @Query(value ="select u from User u where u.name = :name and u.id <> :id")
-    User getByNameExceptID(@Param("name")String name, @Param("id")int id);
+//    @Query(value ="select u from users u where u.name = :name and u.id <> :id")
+//    User getByNameExceptID(@Param("name")String name, @Param("id")int id);
     
     @Query(value ="select u from User u where u.name <> :rootName")
     List<User> usersExceptRoot(@Param("rootName")String rootName);

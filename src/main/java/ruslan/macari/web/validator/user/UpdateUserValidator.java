@@ -18,10 +18,10 @@ public class UpdateUserValidator extends UserValidator {
     
     private void checkDuplication(Errors errors) {
         if (errors.getFieldError("name") == null) {
-            User userFound = userService.getByNameExceptID(user.getName(), user.getId());
-            if (userFound != null) {
-                errors.rejectValue("name", "Duplicated.user.name");
-            }
+//            User userFound = userService.getByNameExceptID(user.getName(), user.getId());
+//            if (userFound != null) {
+//                errors.rejectValue("name", "Duplicated.user.name");
+//            }
         }
     }
     
