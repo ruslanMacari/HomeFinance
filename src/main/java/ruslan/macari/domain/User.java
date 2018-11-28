@@ -1,33 +1,25 @@
 package ruslan.macari.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="user")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }   
-    
     private String name;
-
     private String password;
+    private boolean enabled;
+    private Set<UserRole> userRole = new HashSet<>(0);
     
-    private boolean admin;
-
+    @Id
+    @Column(name = "username", unique = true, nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -36,6 +28,7 @@ public class User {
         this.name = name;
     }
 
+    @Column(name = "password", nullable = false, length = 60)
     public String getPassword() {
         return password;
     }
@@ -44,44 +37,30 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
+    @Column(name = "enabled", nullable = false)
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	public Set<UserRole> getUserRole() {
+		return this.userRole;
+	}
+
+	public void setUserRole(Set<UserRole> userRole) {
+		this.userRole = userRole;
+	}
     
     @Override
     public String toString() {
         return "User{" 
-                + "id=" + id 
-                + ", name=" + name 
+                + "name=" + name 
                 + ", password=" + password 
-                + ", admin=" + admin 
                 + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + this.id;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        return this.id == other.id;
     }
 
     public User() {
@@ -91,10 +70,6 @@ public class User {
         this.name = name;
     }
 
-    public User(int id) {
-        this.id = id;
-    }
-    
     public User(String name, String password) {
         this.name = name;
         this.password = password;
