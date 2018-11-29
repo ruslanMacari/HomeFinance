@@ -6,12 +6,12 @@
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="Create User"/>
 </jsp:include>
-<h1 class="box-header__title"><spring:message code="create-new-user"/></h1>
+<h1 class="box-header__title"><spring:message code="login.registration"/></h1>
 <div class="form">
     <div class="form__wrapper">
-        <sf:form method="post" commandName="user" action="saveUser">
+        <sf:form method="post" commandName="user" action="registration">
             <jsp:include page='../includes/user-name-password.jsp'/> 
-            <input class="form__submit" type="submit" value="<spring:message code="create"/>"> 
+            <input class="form__submit" type="submit" value="<spring:message code="login.register"/>"> 
         </sf:form>
     </div>
 </div>

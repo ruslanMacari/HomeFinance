@@ -1,7 +1,10 @@
 package ruslan.macari.config.security;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
@@ -13,22 +16,25 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ruslan.macari.domain.User;
 
 @Configuration
 @EnableWebMvcSecurity
+@PropertySource("classpath:app.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
     
+    @Value("${db.password}")
+    private String password;
+    
+    @Value("${db.username}")
+    private String username;
+    
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//            .inMemoryAuthentication()
-//                .withUser("root").password("root").roles("admin")
-//                .and()
-//                .withUser("user").password("user").roles("user");
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
     
@@ -36,27 +42,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/authorization/createUser", "/authorization/saveUser", "/access-denied.jsp", "/authorization*").permitAll()
+                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp").permitAll()
                 .antMatchers("/users/**").hasRole("admin")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
-                .loginPage("/authorization")
-                .loginProcessingUrl("/authorization")
+                .loginPage("/login")
+                //.loginProcessingUrl("/login")
                 .defaultSuccessUrl("/")
-                .failureUrl("/authorization?error")
-                .usernameParameter("name")
-                .passwordParameter("password")
+                .permitAll()
+                //.failureUrl("/login?error")
+//                .usernameParameter("name")
+//                .passwordParameter("password")
                 .permitAll()
                 .and()
                 .rememberMe()
                 .and()
-            .logout()
-                .permitAll()
-                .logoutUrl("/authorization/logout")
-                .logoutSuccessUrl("/authorization?logout")
-                .invalidateHttpSession(true)
-                .and()
+//            .logout()
+//                .permitAll()
+//                //.logoutUrl("/authorization/logout")
+//                .logoutSuccessUrl("/login?logout")
+//                .invalidateHttpSession(true)
+                //.and()
                 .exceptionHandling().accessDeniedPage("/access-denied");
     
     }
@@ -65,5 +72,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
+    }
+    
+    @Bean
+    public Map<String, User> usersMap() {
+        return new ConcurrentHashMap<>();
+    }
+    
+    @Bean
+    public User root() {
+        User root = new User();
+        root.setName(username);
+        root.setPassword(passwordEncoder().encode(password));
+        return root;
+    }
+    
+    @Bean User unauthorized() {
+        return new User("Unauthorized");
     }
 }

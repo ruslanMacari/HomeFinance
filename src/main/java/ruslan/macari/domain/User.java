@@ -65,15 +65,18 @@ public class User {
     }
 
     public User() {
+        enabled = true;
     }
 
     public User(String name) {
         this.name = name;
+        enabled = true;
     }
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+        enabled = true;
     }
 
     @Override

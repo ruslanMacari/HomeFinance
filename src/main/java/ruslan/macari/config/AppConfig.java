@@ -4,20 +4,20 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ruslan.macari.config.security.SecurityConfig;
 import ruslan.macari.domain.User;
 
 @Configuration
@@ -25,7 +25,6 @@ import ruslan.macari.domain.User;
 @ComponentScan("ruslan.macari.service")
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("ruslan.macari.service.repository")
-@Import({SecurityConfig.class})
 public class AppConfig {
 
     @Value("${db.driver}")
@@ -57,7 +56,7 @@ public class AppConfig {
     
     @Value("${" + hbm2ddlAutoKey + "}")
     private String hbm2ddlAuto;
-
+    
     public void setUrl(String url) {
         this.url = url;
     }
@@ -100,25 +99,6 @@ public class AppConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
-    }
-    
-    @Bean
-    public Map<String, User> usersMap() {
-        return new ConcurrentHashMap<>();
-    }
-    
-    @Bean
-    public User root() {
-        User admin = new User();
-        admin.setName(username);
-        admin.setPassword(new BCryptPasswordEncoder().encode(password));
-        admin.setEnabled(true);
-        //admin.setAdmin(true);
-        return admin;
-    }
-    
-    @Bean User unauthorized() {
-        return new User("Unauthorized");
     }
     
 }

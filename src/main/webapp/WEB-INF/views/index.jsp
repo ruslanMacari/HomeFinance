@@ -7,16 +7,12 @@
 </jsp:include>
 <div class="box-header__title">
     <h1>Hello ${sessionScope.user.name}!</h1>
-<!--    <a class="button" href="<c:url value='/authorization/logout'/>">Log Out</a>-->
-    <c:url var="logoutUrl" value="/authorization/logout"/>
-    <form action="${logoutUrl}"
-          method="post">
-        <input class="button" type="submit"
-               value="Log out" />
-        <input type="hidden"
-               name="${_csrf.parameterName}"
-               value="${_csrf.token}"/>
-    </form>
+
+<!--<a class="button" href="${logoutUrl}">Log Out</a>-->
+    <c:url var="logoutUrl" value="/logout"/>
+    <sf:form action="${logoutUrl}" method="post">
+        <input class="button" type="submit" value="Log out" />
+    </sf:form>
     <c:if test="${sessionScope.user.admin}">
         <a class="button" href="<c:url value='/users'/>">Users</a>
     </c:if>
