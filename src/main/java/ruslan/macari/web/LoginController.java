@@ -3,18 +3,14 @@ package ruslan.macari.web;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +21,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.security.Role;
 import ruslan.macari.web.utils.CurrentUser;
@@ -39,7 +34,6 @@ public class LoginController {
 
     private UserService userService;
     private User root;
-    private CurrentUser currentUser;
     private PasswordEncoder encoder;
     
     @Autowired
@@ -56,11 +50,6 @@ public class LoginController {
     } 
     
     @Autowired
-    public void setCurrentUser(CurrentUser currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
@@ -74,30 +63,24 @@ public class LoginController {
     @PostConstruct
     public void init() {
         if (userService.getRoot() != null) return;
-        UserRole roleAdmin = new UserRole(root, Role.ADMIN);
-        Set<UserRole> set = new HashSet();
-        set.add(roleAdmin);
-        root.setUserRole(set);
         userService.add(root);
-        
     }
 
     @GetMapping()
     public String login(HttpSession session, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null
-                && auth.isAuthenticated()
-                && !(auth instanceof AnonymousAuthenticationToken)) {
+        if (isAuthenticated()) {
             return "redirect:/";
         }
-//        Object flashModel = model.asMap().get("model");
-//        if (flashModel == null) {
-            model.addAttribute("listUsers", userService.getSimpleUsers());
-            model.addAttribute("userLogin", new User());
-//        } else {
-//            model.mergeAttributes(((Model) flashModel).asMap());
-//        }
+        model.addAttribute("listUsers", userService.getSimpleUsers());
+        model.addAttribute("userLogin", new User());
         return "auth/login";
+    }
+    
+    private boolean isAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null
+                && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken);
     }
     
     @GetMapping("/registration")
@@ -117,10 +100,15 @@ public class LoginController {
             redirectAttributes.addFlashAttribute("model", model);
             return "redirect:/login/registration";
         }
+        addUser (user);
+        return "redirect:/login";
+    }
+    
+    private void addUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(true);
+        user.setOneRole(Role.USER);
         userService.add(user);
-        return "redirect:/login";
     }
 
     @InitBinder("userLogin")

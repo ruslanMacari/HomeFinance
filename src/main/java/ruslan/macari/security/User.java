@@ -12,14 +12,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     private String name;
     private String password;
     private boolean enabled;
     private Set<UserRole> userRole = new HashSet<>(0);
-    
+
     @Id
     @Column(name = "name", unique = true, nullable = false, length = 45)
     public String getName() {
@@ -40,29 +40,36 @@ public class User {
     }
 
     @Column(name = "enabled", nullable = false)
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
-                cascade = CascadeType.ALL, orphanRemoval = true)
-	public Set<UserRole> getUserRole() {
-		return userRole;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    public Set<UserRole> getUserRole() {
+        return userRole;
+    }
 
-	public void setUserRole(Set<UserRole> userRole) {
-		this.userRole = userRole;
-	}
+    public void setUserRole(Set<UserRole> userRole) {
+        this.userRole = userRole;
+    }
     
+    public void setOneRole(String role) {
+        UserRole roleUser = new UserRole(this, role);
+        Set<UserRole> set = new HashSet();
+        set.add(roleUser);
+        userRole = set;
+    }
+
     @Override
     public String toString() {
-        return "User{" 
-                + "name=" + name 
-                + ", password=" + password 
+        return "User{"
+                + "name=" + name
+                + ", password=" + password
                 + '}';
     }
 
@@ -114,5 +121,5 @@ public class User {
         }
         return Objects.equals(userRole, other.userRole);
     }
-    
+
 }

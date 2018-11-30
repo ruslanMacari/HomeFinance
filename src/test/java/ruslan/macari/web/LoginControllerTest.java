@@ -45,16 +45,16 @@ public class LoginControllerTest {
     
     @Before
     public void setUp() {
-        model = mock(Model.class);
-        session = new MockHttpSession();
-        loginController = new LoginController();
-        userService = mock(UserService.class);
-        loginController.setUserService(userService);
-        user = mock(User.class);
-        bindingResult = mock(BindingResult.class);
-        currentUser = mock(CurrentUser.class);
-        loginController.setCurrentUser(currentUser);
-        loginController.setRoot(user);
+//        model = mock(Model.class);
+//        session = new MockHttpSession();
+//        loginController = new LoginController();
+//        userService = mock(UserService.class);
+//        loginController.setUserService(userService);
+//        user = mock(User.class);
+//        bindingResult = mock(BindingResult.class);
+//        currentUser = mock(CurrentUser.class);
+//        //loginController.setCurrentUser(currentUser);
+//        loginController.setRoot(user);
     }
     
     @After

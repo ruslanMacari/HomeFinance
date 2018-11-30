@@ -4,6 +4,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,12 +20,12 @@ public class UserRole{
 
 	private Integer id;
 	private User user;
-	private Role role;
+	private String role;
 
 	public UserRole() {
 	}
 
-	public UserRole(User user, Role role) {
+	public UserRole(User user, String role) {
 		this.user = user;
 		this.role = role;
 	}
@@ -49,12 +51,12 @@ public class UserRole{
 		this.user = user;
 	}
 
-	@Column(name = "role", nullable = false, length = 45)
-	public Role getRole() {
+        @Column(name = "role", nullable = false, length = 45)
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 

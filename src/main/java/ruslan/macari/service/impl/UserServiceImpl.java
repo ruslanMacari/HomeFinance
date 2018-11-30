@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> usersExceptRoot() {
-        return null;//userRepository.usersExceptRoot(root.getName());
+        return userRepository.usersExceptRoot("root");
     }
    
 }

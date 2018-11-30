@@ -1,12 +1,8 @@
 package ruslan.macari.security;
 
-import org.springframework.security.core.GrantedAuthority;
-
-public enum Role implements GrantedAuthority {
-    USER, ADMIN;
-
-    @Override
-    public String getAuthority() {
-        return name();
-    }
+public final class Role {
+    
+    public final static String USER = "USER";
+    public final static String ADMIN = "ADMIN";
+    
 }
