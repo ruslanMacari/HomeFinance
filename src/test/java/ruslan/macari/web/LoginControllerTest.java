@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -63,10 +63,10 @@ public class LoginControllerTest {
     
     @Test
     public void testInit() {
-        when(userService.getAdmin()).thenReturn(user);
+        when(userService.getRoot()).thenReturn(user);
         loginController.init();
         verify(userService, times(0)).add(user);
-        when(userService.getAdmin()).thenReturn(null);
+        when(userService.getRoot()).thenReturn(null);
         loginController.init();
         verify(userService).add(user);
     }

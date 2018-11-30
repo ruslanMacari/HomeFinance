@@ -1,5 +1,6 @@
 package ruslan.macari.domain;
 
+import ruslan.macari.security.User;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

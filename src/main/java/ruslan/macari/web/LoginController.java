@@ -1,5 +1,7 @@
 package ruslan.macari.web;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ruslan.macari.security.Role;
 import ruslan.macari.web.utils.CurrentUser;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
+import ruslan.macari.security.UserRole;
 import ruslan.macari.service.UserService;
 
 @Controller
@@ -69,8 +73,13 @@ public class LoginController {
 
     @PostConstruct
     public void init() {
-        if (userService.getAdmin() != null) return;
+        if (userService.getRoot() != null) return;
+        UserRole roleAdmin = new UserRole(root, Role.ADMIN);
+        Set<UserRole> set = new HashSet();
+        set.add(roleAdmin);
+        root.setUserRole(set);
         userService.add(root);
+        
     }
 
     @GetMapping()

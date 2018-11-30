@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByName(String name);

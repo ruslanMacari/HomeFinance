@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
 
 public class UserLoginValidatorTest {

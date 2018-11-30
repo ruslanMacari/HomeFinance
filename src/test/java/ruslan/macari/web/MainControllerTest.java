@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.service.CurrencyService;
 
 public class MainControllerTest {

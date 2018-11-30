@@ -1,7 +1,7 @@
 package ruslan.macari.service;
 
 import java.util.List;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 public interface UserService {
     
@@ -19,7 +19,7 @@ public interface UserService {
 
     void delete(int id);
     
-    User getAdmin();
+    User getRoot();
     
     User getByNameAndPassword(String name, String password);
     

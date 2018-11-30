@@ -1,7 +1,7 @@
 package ruslan.macari.web.validator.user;
  
 import org.springframework.beans.factory.annotation.Autowired;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

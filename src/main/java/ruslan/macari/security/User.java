@@ -1,8 +1,9 @@
-package ruslan.macari.domain;
+package ruslan.macari.security;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,7 +48,8 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+                cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<UserRole> getUserRole() {
 		return userRole;
 	}

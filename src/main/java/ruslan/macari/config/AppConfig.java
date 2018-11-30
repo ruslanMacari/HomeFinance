@@ -18,11 +18,11 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("ruslan.macari.service")
+@ComponentScan({"ruslan.macari.service", "ruslan.macari.security"})
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("ruslan.macari.service.repository")
 public class AppConfig {
@@ -81,7 +81,7 @@ public class AppConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setPackagesToScan(pacakgesToScan);
+        entityManagerFactoryBean.setPackagesToScan(pacakgesToScan, "ruslan.macari.security");
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
         return entityManagerFactoryBean;
     }

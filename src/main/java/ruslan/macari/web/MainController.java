@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.service.CurrencyService;
 

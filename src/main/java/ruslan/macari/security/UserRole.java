@@ -1,4 +1,4 @@
-package ruslan.macari.domain;
+package ruslan.macari.security;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -18,12 +18,12 @@ public class UserRole{
 
 	private Integer id;
 	private User user;
-	private String role;
+	private Role role;
 
 	public UserRole() {
 	}
 
-	public UserRole(User user, String role) {
+	public UserRole(User user, Role role) {
 		this.user = user;
 		this.role = role;
 	}
@@ -50,11 +50,11 @@ public class UserRole{
 	}
 
 	@Column(name = "role", nullable = false, length = 45)
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

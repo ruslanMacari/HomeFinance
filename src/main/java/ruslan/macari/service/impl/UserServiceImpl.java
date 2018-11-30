@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.service.repository.UserRepository;
 import ruslan.macari.service.UserService;
 
@@ -55,10 +55,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAdmin() {
-//        List<User> list = userRepository.findAdmins();
-//        return list.isEmpty() ? null : list.get(0);
-        return null;
+    public User getRoot() {
+        return userRepository.findByName("root");
     }
 
     @Override

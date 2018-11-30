@@ -1,7 +1,7 @@
 package ruslan.macari.web.utils;
 
 import java.util.Map;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 public interface CurrentUser {
     

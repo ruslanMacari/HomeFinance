@@ -1,6 +1,6 @@
 package ruslan.macari.web.exceptions;
 
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 public class AccessException extends Exception{
 

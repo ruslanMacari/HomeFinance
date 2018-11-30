@@ -3,7 +3,7 @@ package ruslan.macari.web.validator.user;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 
 @Component
 @Qualifier("updateUserValidator")

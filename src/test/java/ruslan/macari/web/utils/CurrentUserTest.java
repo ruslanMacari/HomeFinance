@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.web.utils.impl.CurrentUserImpl;
 
 public class CurrentUserTest {

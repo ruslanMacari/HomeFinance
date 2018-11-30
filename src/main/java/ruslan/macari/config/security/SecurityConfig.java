@@ -1,5 +1,6 @@
 package ruslan.macari.config.security;
 
+import ruslan.macari.security.User;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ruslan.macari.domain.User;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -43,28 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp").permitAll()
-                .antMatchers("/users/**").hasRole("admin")
+                .antMatchers("/users/**").hasRole(ruslan.macari.security.Role.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
-                //.loginProcessingUrl("/login")
                 .defaultSuccessUrl("/")
                 .permitAll()
-                //.failureUrl("/login?error")
-//                .usernameParameter("name")
-//                .passwordParameter("password")
-                .permitAll()
                 .and()
-                .rememberMe()
+            .rememberMe()
                 .and()
-//            .logout()
-//                .permitAll()
-//                //.logoutUrl("/authorization/logout")
-//                .logoutSuccessUrl("/login?logout")
-//                .invalidateHttpSession(true)
-                //.and()
-                .exceptionHandling().accessDeniedPage("/access-denied");
+            .exceptionHandling().accessDeniedPage("/access-denied");
     
     }
 

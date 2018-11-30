@@ -30,7 +30,9 @@
                     </c:if>
                 </div>
             <div class="input-group">
-                <label class="form__label" for="remember-me">Remember Me</label>
+                <label class="form__label" for="remember-me">
+                    <spring:message code="login.remember-me"/>
+                </label>
                 <input class="form__checkbox" name="remember-me" type="checkbox" /> 
             </div>        
             <footer> 

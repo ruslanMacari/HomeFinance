@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.web.utils.CurrentUser;
-import ruslan.macari.domain.User;
+import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
 import ruslan.macari.web.exceptions.AccessException;
 import ruslan.macari.web.exceptions.PageNotFoundException;
