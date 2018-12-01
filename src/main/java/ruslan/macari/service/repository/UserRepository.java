@@ -18,9 +18,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //    @Query(value ="select u from users u where u.admin = true")
 //    List<User> findAdmins();
 //    
-//    @Query(value ="select u from users u where u.admin = false")
-//    List<User> getSimpleUsers();
-    
+    @Query(value = "select user \n"
+            + "from User user \n"
+            + "where user not in (select uRole.user from UserRole uRole where uRole.role = 'ADMIN')")
+    List<User> getSimpleUsers();
+
 //    @Query(value ="select u from users u where u.name = :name and u.id <> :id")
 //    User getByNameExceptID(@Param("name")String name, @Param("id")int id);
     

@@ -1,11 +1,7 @@
 package ruslan.macari.config;
 
-import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,9 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ruslan.macari.security.User;
 
 @Configuration
 @EnableTransactionManagement
@@ -49,9 +43,6 @@ public class AppConfig {
     @Value("${" + showSqlKey + "}")
     private String showSql;
     
-    @Value("${entitymanager.packages.to.scan}")
-    private String pacakgesToScan;
-    
     private final String hbm2ddlAutoKey = "hibernate.hbm2ddl.auto";
     
     @Value("${" + hbm2ddlAutoKey + "}")
@@ -81,7 +72,7 @@ public class AppConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setPackagesToScan(pacakgesToScan, "ruslan.macari.security");
+        entityManagerFactoryBean.setPackagesToScan("ruslan.macari.domain", "ruslan.macari.security");
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
         return entityManagerFactoryBean;
     }

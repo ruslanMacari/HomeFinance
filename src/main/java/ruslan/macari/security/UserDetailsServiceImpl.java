@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,20 +18,20 @@ import ruslan.macari.service.UserService;
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Transactional(readOnly=true)
-	@Override
-	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-	
-		ruslan.macari.security.User user = userService.getByName(username);
-		List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
-		return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
-		
-	}
-        
-       private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
+    @Transactional(readOnly = true)
+    @Override
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+
+        ruslan.macari.security.User user = userService.getByName(username);
+        List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
+        return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
+
+    }
+
+    private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
 
         Set<GrantedAuthority> setAuths = new HashSet<>();
         userRoles.forEach((userRole) -> {

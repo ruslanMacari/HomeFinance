@@ -66,8 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getSimpleUsers() {
-        //return userRepository.getSimpleUsers();
-        return null;
+        return userRepository.getSimpleUsers();
     }
 
     @Override
