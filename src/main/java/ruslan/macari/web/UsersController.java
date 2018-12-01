@@ -31,25 +31,10 @@ import ruslan.macari.web.exceptions.PageNotFoundException;
 public class UsersController {
     
     private UserService userService;
-    private CurrentUser currentUser;
-    private User root;
-    
-    @Autowired
-    private User unauthorized;
-
-    @Autowired
-    public void setCurrentUser(CurrentUser currentUser) {
-        this.currentUser = currentUser;
-    }
     
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
-    }
-    
-    @Autowired
-    public void setRoot(User root) {
-        this.root = root;
     }
     
     @Autowired
@@ -61,30 +46,14 @@ public class UsersController {
     private Validator newUserValidator;
     
     @GetMapping()
-    public String showUsers(HttpSession session, Model model) throws AccessException {
-        //handleAccess(session);
+    public String users(Model model) {
         List<User> users = userService.usersExceptRoot();
         model.addAttribute("users", users);
         return "users/list";
     }
     
-    private void handleAccess(HttpSession session) throws AccessException {
-        String id = session.getId();
-        if (!currentUser.isAdmin(id)) {
-            throw new AccessException(currentUser.exists(id) ? currentUser.get(id) : unauthorized);
-        }
-    }
-    
-    @ExceptionHandler(AccessException.class)
-    public ModelAndView accessException(AccessException e) {
-        ModelMap model = new ModelMap();
-        model.put("user", e.getUser());
-        return new ModelAndView("users/access-denied", model);
-    }
-    
     @GetMapping(value = "/{id}")
     public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccessException, PageNotFoundException {
-        //handleAccess(session);
         User user = userService.getById(id);
         handlePageNotFound(user);
         rootChange(id);

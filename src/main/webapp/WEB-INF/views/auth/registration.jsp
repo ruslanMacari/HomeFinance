@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
-    <jsp:param name="title" value="Create User"/>
+    <jsp:param name="title" value="login.registration"/>
 </jsp:include>
 <h1 class="box-header__title"><spring:message code="login.registration"/></h1>
 <div class="form">

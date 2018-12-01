@@ -1,7 +1,5 @@
 package ruslan.macari.web;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.security.Role;
-import ruslan.macari.web.utils.CurrentUser;
 import ruslan.macari.security.User;
-import ruslan.macari.security.UserRole;
 import ruslan.macari.service.UserService;
 
 @Controller
@@ -40,10 +36,6 @@ public class LoginController {
     @Qualifier("newUserValidator")
     private Validator newUserValidator;
 
-    @Autowired
-    @Qualifier("userLoginValidator")
-    private Validator userLoginValidator;
-    
     @Autowired
     public void setRoot(User root) {
         this.root = root;
@@ -72,7 +64,7 @@ public class LoginController {
             return "redirect:/";
         }
         model.addAttribute("listUsers", userService.getSimpleUsers());
-        model.addAttribute("userLogin", new User());
+        model.addAttribute("user", new User());
         return "auth/login";
     }
     
@@ -95,7 +87,8 @@ public class LoginController {
     }
 
     @PostMapping("/registration")
-    public String registration(@Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+    public String registration(@Valid @ModelAttribute("user") User user, BindingResult result, 
+            RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("model", model);
             return "redirect:/login/registration";
@@ -111,21 +104,12 @@ public class LoginController {
         userService.add(user);
     }
 
-    @InitBinder("userLogin")
-    protected void initUserLoginBinder(WebDataBinder dataBinder) {
-        setValidator(dataBinder, userLoginValidator);
-    }
-    
-    private void setValidator(WebDataBinder dataBinder, Validator validator) {
+    @InitBinder()
+    protected void initUserBinder(WebDataBinder dataBinder) {
         if (dataBinder.getTarget() == null) {
             return;
         }
-        dataBinder.setValidator(validator);
-    }
-    
-    @InitBinder("user")
-    protected void initUserBinder(WebDataBinder dataBinder) {
-        setValidator(dataBinder, newUserValidator);
+        dataBinder.setValidator(newUserValidator);
     }
 
 }

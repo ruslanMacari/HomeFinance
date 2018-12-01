@@ -25,7 +25,6 @@ public class MainControllerTest {
     private void init() {
         mainController = new MainController();
         currencyService = mock(CurrencyService.class);
-        mainController.setCurrencyService(currencyService);
     }
     
 //    @Test

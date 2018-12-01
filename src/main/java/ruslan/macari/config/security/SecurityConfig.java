@@ -1,9 +1,7 @@
 package ruslan.macari.config.security;
 
-import java.util.HashSet;
 import ruslan.macari.security.User;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +16,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ruslan.macari.security.UserRole;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -83,9 +80,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         root.setOneRole(Role.ADMIN);
         return root;
     }
-   
-    ///???
-    @Bean User unauthorized() {
-        return new User("Unauthorized");
-    }
+ 
 }

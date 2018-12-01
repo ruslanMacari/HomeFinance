@@ -4,16 +4,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
-    <jsp:param name="title" value="Login"/>
+    <jsp:param name="title" value="login"/>
 </jsp:include>
 <h1 class="box-header__title">Home Finance</h1>
 <div class="form">
     <div class="form__wrapper">
         <c:url value="/login" var="loginUrl" />
-        <sf:form method="POST" commandName="userLogin" action="${loginUrl}">
+        <sf:form method="POST" commandName="user" action="${loginUrl}">
             <div class="form__input-group">
-                <label class="form__label" for="Names"><spring:message code="user.name"/>:</label>
-                <input class="form__text" type="text" list="usersList" id="name" name="username" autocomplete="off"/>
+                <label class="form__label" for="name"><spring:message code="user.name"/>:</label>
+                <input class="form__text" type="text" list="usersList" 
+                       id="name" name="username" autocomplete="off"/>
                 <datalist id="usersList">
                     <c:forEach items="${listUsers}" var="user">
                         <option>${user.name}</option>
@@ -33,7 +34,7 @@
                 <label class="form__label" for="remember-me">
                     <spring:message code="login.remember-me"/>
                 </label>
-                <input class="form__checkbox" name="remember-me" type="checkbox" /> 
+                <input class="form__checkbox" id="remember-me" name="remember-me" type="checkbox" /> 
             </div>        
             <footer> 
                 <input class="form__submit" type="submit" value="<spring:message code="login"/>"> 
