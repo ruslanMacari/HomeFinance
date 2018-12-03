@@ -4,11 +4,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.security.User;
 import ruslan.macari.service.repository.UserRepository;
 import ruslan.macari.service.UserService;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -40,17 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
-        return userRepository.findOne(id);
-    }
-
-    @Override
     public User getByName(String name) {
         return userRepository.findByName(name);
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(String id) {
         userRepository.delete(id);
     }
 

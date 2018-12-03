@@ -11,7 +11,7 @@
 <div class="table">
     <div class="table__heading">
         <div class="table__row">
-            <div class="table__cell table__cell_head">ID</div>
+            <div class="table__cell table__cell_head">#</div>
             <div class="table__cell table__cell_head">Name</div>
             <div class="table__cell table__cell_head">Password</div>
             <div class="table__cell table__cell_head">Administrator</div>
@@ -20,22 +20,23 @@
         </div>
     </div>
     <div class="table__body">
-        <c:forEach items="#{users}" var="user">
+        <c:forEach items="#{users}" var="user" varStatus="count">
             <div class="table__row">
-                <div class="table__cell">${user.id}</div>
+                <div class="table__cell">${count.count}</div>
                 <div class="table__cell">${user.name}</div>
                 <div class="table__cell">${user.password}</div>
-                <c:if test="${user.admin}">
+                <c:set var = "admin" value = "${user.hasAdmin()}"/>
+                <c:if test="${admin}">
                     <div class="table__cell">Yes</div>
                 </c:if>
-                <c:if test="${!user.admin}">
+                <c:if test="${!admin}">
                     <div class="table__cell">No</div>
                 </c:if>
                 <div class="table__cell">
-                    <a class="button" href="users/${user.id}">Details</a>
+                    <a class="button" href="users/${user.name}">Details</a>
                 </div>
                 <div class="table__cell">
-                    <sf:form class="form" action="users/${user.id}" method="delete">
+                    <sf:form class="form" action="users/${user.name}" method="delete">
                         <input class="button button_delete" type="submit" value="Delete"/>
                     </sf:form>
                 </div>

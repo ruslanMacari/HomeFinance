@@ -52,11 +52,10 @@ public class UsersController {
         return "users/list";
     }
     
-    @GetMapping(value = "/{id}")
-    public String getUser(HttpSession session, @PathVariable("id") int id, Model model) throws AccessException, PageNotFoundException {
-        User user = userService.getById(id);
+    @GetMapping(value = "/{name}")
+    public String getUser(HttpSession session, @PathVariable("name") String name, Model model) throws AccessException, PageNotFoundException {
+        User user = userService.getByName(name);
         handlePageNotFound(user);
-        rootChange(id);
         model.addAttribute("user", user);
         return "users/view";
     }
@@ -65,12 +64,6 @@ public class UsersController {
         if (user == null) {
             throw new PageNotFoundException ();
         }
-    }
-    
-    private void rootChange(int id) {
-//        if (userService.getById(id)) {
-//            
-//        }
     }
     
     @ExceptionHandler(PageNotFoundException.class)
@@ -107,10 +100,10 @@ public class UsersController {
         return "redirect:/users";
     }
     
-    @DeleteMapping(value = "/{id}")
-    public String deleteUser(HttpSession session, @PathVariable("id") int id) throws AccessException {
+    @DeleteMapping(value = "/{name}")
+    public String deleteUser(HttpSession session, @PathVariable("name") String name) throws AccessException {
         //handleAccess(session);
-        userService.delete(id);
+        userService.delete(name);
         return "redirect:/users";
     }
     

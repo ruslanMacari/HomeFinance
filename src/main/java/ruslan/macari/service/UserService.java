@@ -13,11 +13,9 @@ public interface UserService {
 
     List<User> listLimit(int limit);
 
-    User getById(int id);
-
     User getByName(String name);
 
-    void delete(int id);
+    void delete(String id);
     
     User getRoot();
     

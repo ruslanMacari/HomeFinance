@@ -48,7 +48,7 @@ public class User {
         this.enabled = enabled;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<UserRole> getUserRole() {
         return userRole;
@@ -63,6 +63,10 @@ public class User {
         Set<UserRole> set = new HashSet();
         set.add(roleUser);
         userRole = set;
+    }
+    
+    public boolean hasAdmin() {
+        return userRole.stream().anyMatch((role) -> (role.equals(Role.ADMIN)));
     }
 
     @Override
