@@ -66,7 +66,13 @@ public class User {
     }
     
     public boolean hasAdmin() {
-        return userRole.stream().anyMatch((role) -> (role.equals(Role.ADMIN)));
+        String admin = Role.ADMIN;
+        for (UserRole role : userRole) {
+            if (role.getRole().equals(admin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
