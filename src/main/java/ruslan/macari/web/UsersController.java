@@ -75,10 +75,16 @@ public class UsersController {
     
     @PostMapping(value = "/{name}")
     public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
-            @PathVariable("name") String name) {
+            @PathVariable("name") String name, @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
+            @RequestParam(value = "admin", defaultValue = "false") boolean admin ) {
         if (result.hasErrors()) {
             return "users/view";
         }
+        if (changePassword) {
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
+        user.setEnabled(true);
+        user.setOneRole(admin ? Role.ADMIN : Role.USER);
         userService.update(user);
         return "redirect:/users";
     }

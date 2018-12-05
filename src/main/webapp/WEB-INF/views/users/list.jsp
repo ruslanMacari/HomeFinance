@@ -13,7 +13,6 @@
         <div class="table__row">
             <div class="table__cell table__cell_head">#</div>
             <div class="table__cell table__cell_head"><spring:message code="user.name"/></div>
-            <div class="table__cell table__cell_head"><spring:message code="user.password"/></div>
             <div class="table__cell table__cell_head"><spring:message code="admin"/></div>
             <div class="table__cell table__cell_head"><spring:message code="details"/></div>
             <div class="table__cell table__cell_head"><spring:message code="delete"/></div>
@@ -24,7 +23,6 @@
             <div class="table__row">
                 <div class="table__cell">${count.count}</div>
                 <div class="table__cell">${user.name}</div>
-                <div class="table__cell">${user.password}</div>
                 <c:set var = "admin" value = "${user.hasAdmin()}"/>
                 <c:if test="${admin}">
                     <div class="table__cell"><spring:message code="yes"/></div>

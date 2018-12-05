@@ -18,8 +18,11 @@
                 </div>
             </div>
             <div class="form__input-group">
-                <sf:label cssClass="form__lable" path="password"><spring:message code="user.password"/>:</sf:label>
-                <sf:input cssClass="form__text" path="password" id="password" value="${user.password}" disabled="true" />
+                <div class="form__input-group">
+                    <label class="form__label" for="changePassword"><spring:message code="change-password"/>:</label>
+                    <input class="form__checkbox" id="changePassword" name="changePassword" value="true" type="checkbox" disabled="true"/>
+                </div>
+                <sf:password class="form__text" path="password" id="password" disabled="true"/>
                 <div>
                     <sf:errors class="form__error" path="password"/>
                 </div>
