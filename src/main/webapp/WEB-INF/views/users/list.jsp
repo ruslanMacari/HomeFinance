@@ -12,6 +12,7 @@
     <div class="table__heading">
         <div class="table__row">
             <div class="table__cell table__cell_head">#</div>
+            <div class="table__cell table__cell_head">ID</div>
             <div class="table__cell table__cell_head"><spring:message code="user.name"/></div>
             <div class="table__cell table__cell_head"><spring:message code="admin"/></div>
             <div class="table__cell table__cell_head"><spring:message code="details"/></div>
@@ -22,6 +23,7 @@
         <c:forEach items="#{users}" var="user" varStatus="count">
             <div class="table__row">
                 <div class="table__cell">${count.count}</div>
+                <div class="table__cell">${user.id}</div>
                 <div class="table__cell">${user.name}</div>
                 <c:set var = "admin" value = "${user.hasAdmin()}"/>
                 <c:if test="${admin}">
@@ -31,10 +33,10 @@
                     <div class="table__cell"><spring:message code="no"/></div>
                 </c:if>
                 <div class="table__cell">
-                    <a class="button" href="users/user: ${user.name}"><spring:message code="details"/></a>
+                    <a class="button" href="users/${user.id}"><spring:message code="details"/></a>
                 </div>
                 <div class="table__cell">
-                    <sf:form class="form" action="users/${user.name}" method="delete">
+                    <sf:form class="form" action="users/${user.id}" method="delete">
                         <input class="button button_delete" type="submit" value="<spring:message code="delete"/>"/>
                     </sf:form>
                 </div>

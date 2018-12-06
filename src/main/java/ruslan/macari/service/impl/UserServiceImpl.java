@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Integer id) {
         userRepository.delete(id);
     }
 
@@ -76,5 +76,10 @@ public class UserServiceImpl implements UserService {
     public List<User> usersExceptRoot() {
         return userRepository.usersExceptRoot("root");
     }
-   
+
+    @Override
+    public User getById(Integer id) {
+        return userRepository.findOne(id);
+    }
+
 }

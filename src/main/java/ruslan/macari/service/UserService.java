@@ -14,8 +14,10 @@ public interface UserService {
     List<User> listLimit(int limit);
 
     User getByName(String name);
+    
+    User getById(Integer id);
 
-    void delete(String id);
+    void delete(Integer id);
     
     User getRoot();
     

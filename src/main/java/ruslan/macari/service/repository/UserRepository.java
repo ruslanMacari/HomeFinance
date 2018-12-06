@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ruslan.macari.security.User;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     User findByName(String name);
     
     User findByNameAndPassword(String name, String password);
@@ -15,17 +15,12 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value ="select u from User u")
     List<User> listLimit(Pageable pageable);
     
-//    @Query(value ="select u from users u where u.admin = true")
-//    List<User> findAdmins();
-//    
     @Query(value = "select user \n"
             + "from User user \n"
             + "where user not in (select uRole.user from UserRole uRole where uRole.role = 'ADMIN')")
     List<User> getSimpleUsers();
 
-//    @Query(value ="select u from users u where u.name = :name and u.id <> :id")
-//    User getByNameExceptID(@Param("name")String name, @Param("id")int id);
-    
     @Query(value ="select u from User u where u.name <> :rootName")
     List<User> usersExceptRoot(@Param("rootName")String rootName);
+    
 }

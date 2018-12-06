@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,12 +17,23 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User {
 
+    private Integer id;
     private String name;
     private String password;
     private boolean enabled;
     private Set<UserRole> userRole = new HashSet<>(0);
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
     @Column(name = "name", unique = true, nullable = false, length = 45)
     public String getName() {
         return name;
@@ -59,10 +72,20 @@ public class User {
     }
     
     public void setOneRole(String role) {
-        UserRole roleUser = new UserRole(this, role);
-        Set<UserRole> set = new HashSet();
-        set.add(roleUser);
-        userRole = set;
+        if (userRole.isEmpty()) {
+            UserRole roleUser = new UserRole(this, role);
+            userRole.add(roleUser);
+        } else {
+            int line = 1;
+            for (UserRole userRoleItem : userRole) {
+                if (line == 1) {
+                    userRoleItem.setRole(role);
+                } else {
+                    userRole.remove(userRoleItem);
+                }
+                line++;
+            }
+        }
     }
     
     public boolean hasAdmin() {
@@ -78,7 +101,8 @@ public class User {
     @Override
     public String toString() {
         return "User{"
-                + "name=" + name
+                + "id=" + id
+                + ", name=" + name
                 + ", password=" + password
                 + '}';
     }
@@ -100,11 +124,12 @@ public class User {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(name);
-        hash = 37 * hash + Objects.hashCode(password);
-        hash = 37 * hash + (enabled ? 1 : 0);
-        hash = 37 * hash + Objects.hashCode(userRole);
+        int hash = 3;
+        hash = 43 * hash + Objects.hashCode(id);
+        hash = 43 * hash + Objects.hashCode(name);
+        hash = 43 * hash + Objects.hashCode(password);
+        hash = 43 * hash + (enabled ? 1 : 0);
+        hash = 43 * hash + Objects.hashCode(userRole);
         return hash;
     }
 
@@ -127,6 +152,9 @@ public class User {
             return false;
         }
         if (!Objects.equals(password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(id, other.id)) {
             return false;
         }
         return Objects.equals(userRole, other.userRole);

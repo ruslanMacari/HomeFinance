@@ -58,9 +58,9 @@ public class UsersController {
         return "users/list";
     }
     
-    @GetMapping(value = "/user: {name}")
-    public String view(@PathVariable("name") String name, Model model) throws PageNotFoundException {
-        User user = userService.getByName(name);
+    @GetMapping(value = "/{id}")
+    public String view(@PathVariable("id") Integer id, Model model) throws PageNotFoundException {
+        User user = userService.getById(id);
         if (user == null) {
             throw new PageNotFoundException ();
         }
@@ -73,19 +73,20 @@ public class UsersController {
         return new ModelAndView("resource-not-found");
     }
     
-    @PostMapping(value = "/{name}")
+    @PostMapping(value = "/{id}")
     public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
-            @PathVariable("name") String name, @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
+            @PathVariable("id") Integer id, @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
             @RequestParam(value = "admin", defaultValue = "false") boolean admin ) {
         if (result.hasErrors()) {
             return "users/view";
         }
+        User foundUser = userService.getById(id);
+        foundUser.setName(user.getName());
         if (changePassword) {
-            user.setPassword(encoder.encode(user.getPassword()));
+            foundUser.setPassword(encoder.encode(user.getPassword()));
         }
-        user.setEnabled(true);
-        user.setOneRole(admin ? Role.ADMIN : Role.USER);
-        userService.update(user);
+        foundUser.setOneRole(admin ? Role.ADMIN : Role.USER);
+        userService.update(foundUser);
         return "redirect:/users";
     }
     
@@ -112,9 +113,9 @@ public class UsersController {
         userService.add(user);
     }
     
-    @DeleteMapping(value = "/{name}")
-    public String deleteUser(@PathVariable("name") String name) {
-        userService.delete(name);
+    @DeleteMapping(value = "/{id}")
+    public String deleteUser(@PathVariable("id") Integer id) {
+        userService.delete(id);
         return "redirect:/users";
     }
     

@@ -12,12 +12,13 @@
     // Unlock
     var disabled = "disabled";
     var unlock = selector.getElement("#unlock");
+    var saveItem = selector.getElement("#save");
     var unlockEvent = function () {
         unlock.className = "hidden";
         selector.getElement("#name").removeAttribute(disabled);
         selector.getElement("#changePassword").removeAttribute(disabled);
         selector.getElement("#admin").removeAttribute(disabled);
-        selector.getElement("#save").classList.remove("hidden");
+        saveItem.classList.remove("hidden");
 
     };
 
@@ -40,5 +41,16 @@
     };
 
     changePassword.addEventListener("click", changePasswordEvent);
+    
+    //on save
+    var saveEvent = function () {
+        if (!changePassword.checked) {
+            passwordItem.value = "1111";
+            passwordItem.removeAttribute(disabled);
+        }
+    };
+    
+    saveItem.addEventListener("click", saveEvent);
+    
 })();
 
