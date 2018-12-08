@@ -31,6 +31,12 @@ public class UsersController {
     
     private UserService userService;
     private PasswordEncoder encoder;
+    private User root;
+
+    @Autowired
+    public void setRoot(User root) {
+        this.root = root;
+    }
     
     @Autowired
     public void setUserService(UserService userService) {
@@ -61,7 +67,8 @@ public class UsersController {
     @GetMapping(value = "/{id}")
     public String view(@PathVariable("id") Integer id, Model model) throws PageNotFoundException {
         User user = userService.getById(id);
-        if (user == null) {
+        if (user == null
+                || user.getName().equals(root.getName())) {
             throw new PageNotFoundException ();
         }
         model.addAttribute("user", user);

@@ -1,3 +1,4 @@
+// in working
 package ruslan.macari.domain;
 
 import java.sql.Date;

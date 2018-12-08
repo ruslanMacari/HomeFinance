@@ -33,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String username;
     
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
     
     @Override
@@ -68,15 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     
     @Bean
-    public Map<String, User> usersMap() {
-        return new ConcurrentHashMap<>();
-    }
-    
-    @Bean
-    public User root() {
+    public User root(PasswordEncoder passwordEncoder) {
         User root = new User();
         root.setName(username);
-        root.setPassword(passwordEncoder().encode(password));
+        root.setPassword(passwordEncoder.encode(password));
         root.setOneRole(Role.ADMIN);
         return root;
     }

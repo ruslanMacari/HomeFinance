@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> listLimit(int limit) {
+    public List<User> listLimit(Integer limit) {
         return userRepository.listLimit(new PageRequest(0, limit));
     }
 
@@ -67,9 +67,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByNameExceptID(String name, int id) {
-        //return userRepository.getByNameExceptID(name, id);
-        return null;
+    public User getByNameExceptID(String name, Integer id) {
+        return userRepository.getByNameExceptID(name, id);
     }
 
     @Override

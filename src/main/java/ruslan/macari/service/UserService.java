@@ -11,7 +11,7 @@ public interface UserService {
 
     List<User> list();
 
-    List<User> listLimit(int limit);
+    List<User> listLimit(Integer limit);
 
     User getByName(String name);
     
@@ -25,7 +25,7 @@ public interface UserService {
     
     List<User> getSimpleUsers();
 
-    User getByNameExceptID(String name, int id);
+    User getByNameExceptID(String name, Integer id);
     
     List<User> usersExceptRoot();
 }

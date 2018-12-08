@@ -1,3 +1,4 @@
+// in working
 package ruslan.macari.domain;
 
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ public class Currency {
     @GeneratedValue
     int id;
     
-    @Size(min = 3, message = "Size must be minim 3")
+    //@Size(min = 3, message = "Size must be minim 3")
     String name;
 
     public int getId() {

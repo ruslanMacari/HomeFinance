@@ -19,7 +19,6 @@ import static org.mockito.Mockito.times;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import ruslan.macari.service.UserService;
-import ruslan.macari.web.utils.CurrentUser;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -41,7 +40,6 @@ public class LoginControllerTest {
     private User user;
     private BindingResult bindingResult;
     private Model model;
-    private CurrentUser currentUser;
     
     @Before
     public void setUp() {

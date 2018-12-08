@@ -1,15 +1,16 @@
 <%@ page isErrorPage="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='includes/head.jsp'>
-    <jsp:param name="title" value="Access Denied!"/>
+    <jsp:param name="title" value="access-denied"/>
 </jsp:include>
 <div class="box-header__title">
-    <h1 class="box-header__title">Access Denied!</h1>
+    <h1 class="box-header__title"><spring:message code="access-denied"/></h1>
     <div class="form error">
-        <h2>User: "${user.name}" has no rights to access that resource.</h2>
+        <h2><spring:message code="access-denied-message" arguments="${user.name}"/></h2>
     </div>
-    <a class="button" href="/HomeFinance">Back to main page.</a>
+    <a class="button" href="/HomeFinance"><spring:message code="back-to-main"/></a>
 </div>
 <jsp:include page='includes/footer.jsp'/>

@@ -1,6 +1,7 @@
 package ruslan.macari.config;
 
 import java.util.Properties;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,19 +34,19 @@ public class AppConfig {
     @Value("${db.username}")
     private String username;
     
-    private final String dialectKey = "hibernate.dialect";
+    private static final String DIALECT_KEY = "hibernate.dialect";
     
-    @Value("${" + dialectKey + "}")
+    @Value("${" + DIALECT_KEY + "}")
     private String dialect;
     
-    private final String showSqlKey = "hibernate.show_sql";
+    private static final String SHOW_SQL_KEY = "hibernate.show_sql";
     
-    @Value("${" + showSqlKey + "}")
+    @Value("${" + SHOW_SQL_KEY + "}")
     private String showSql;
     
-    private final String hbm2ddlAutoKey = "hibernate.hbm2ddl.auto";
+    private static final String HBM2DDLAUTO_KEY = "hibernate.hbm2ddl.auto";
     
-    @Value("${" + hbm2ddlAutoKey + "}")
+    @Value("${" + HBM2DDLAUTO_KEY + "}")
     private String hbm2ddlAuto;
     
     public void setUrl(String url) {
@@ -59,7 +60,6 @@ public class AppConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUrl(url);
         dataSource.setUsername(username);
@@ -68,9 +68,9 @@ public class AppConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         entityManagerFactoryBean.setPackagesToScan("ruslan.macari.domain", "ruslan.macari.security");
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
@@ -79,16 +79,16 @@ public class AppConfig {
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        properties.put(dialectKey, dialect);
-        properties.put(showSqlKey, showSql);
-        properties.put(hbm2ddlAutoKey, hbm2ddlAuto);
+        properties.put(DIALECT_KEY, dialect);
+        properties.put(SHOW_SQL_KEY, showSql);
+        properties.put(HBM2DDLAUTO_KEY, hbm2ddlAuto);
         return properties;
     }
 
     @Bean
-    public JpaTransactionManager transactionManager() {
+    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        transactionManager.setEntityManagerFactory(emf);
         return transactionManager;
     }
     

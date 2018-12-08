@@ -76,26 +76,20 @@ public class User {
             UserRole roleUser = new UserRole(this, role);
             userRole.add(roleUser);
         } else {
-            int line = 1;
+            boolean first = true;
             for (UserRole userRoleItem : userRole) {
-                if (line == 1) {
+                if (first) {
                     userRoleItem.setRole(role);
+                    first = false;
                 } else {
                     userRole.remove(userRoleItem);
                 }
-                line++;
             }
         }
     }
     
     public boolean hasAdmin() {
-        String admin = Role.ADMIN;
-        for (UserRole role : userRole) {
-            if (role.getRole().equals(admin)) {
-                return true;
-            }
-        }
-        return false;
+        return userRole.stream().anyMatch((role) -> (role.getRole().equals(Role.ADMIN)));
     }
 
     @Override
