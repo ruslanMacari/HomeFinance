@@ -14,6 +14,12 @@ import ruslan.macari.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private User root;
+    
+    @Autowired
+    public void setRoot(User root) {
+        this.root = root;
+    } 
     
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -53,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getRoot() {
-        return userRepository.findByName("root");
+        return userRepository.findByName(root.getName());
     }
 
     @Override
