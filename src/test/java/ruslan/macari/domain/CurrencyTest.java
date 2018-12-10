@@ -21,6 +21,9 @@ public class CurrencyTest {
     public void testEquals() {
         currency.setId(10);
         assertTrue(currency.equals(new Currency(10)));
+        assertTrue(currency.equals(currency));
+        assertFalse(currency.equals(null));
+        assertFalse(currency.equals("aaa"));
     }
 
     @Test

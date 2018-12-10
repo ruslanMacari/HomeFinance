@@ -1,8 +1,6 @@
 package ruslan.macari.config.security;
 
 import ruslan.macari.security.User;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
