@@ -4,6 +4,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,12 +32,9 @@ public class UsersController {
     
     private UserService userService;
     private PasswordEncoder encoder;
-    private User root;
-
-    @Autowired
-    public void setRoot(User root) {
-        this.root = root;
-    }
+    
+    @Value("${db.username}")
+    private String rootname;
     
     @Autowired
     public void setUserService(UserService userService) {
@@ -68,7 +66,7 @@ public class UsersController {
     public String view(@PathVariable("id") Integer id, Model model) throws PageNotFoundException {
         User user = userService.getById(id);
         if (user == null
-                || user.getName().equals(root.getName())) {
+                || user.getName().equals(rootname)) {
             throw new PageNotFoundException ();
         }
         model.addAttribute("user", user);

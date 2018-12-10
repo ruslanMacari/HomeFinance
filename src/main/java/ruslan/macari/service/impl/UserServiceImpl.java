@@ -2,6 +2,7 @@ package ruslan.macari.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +15,8 @@ import ruslan.macari.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    private User root;
-    
-    @Autowired
-    public void setRoot(User root) {
-        this.root = root;
-    } 
+    @Value("${db.username}")
+    private String rootname;
     
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -58,11 +55,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getRoot() {
-        return userRepository.findByName(root.getName());
-    }
-
-    @Override
     public User getByNameAndPassword(String name, String password) {
         return userRepository.findByNameAndPassword(name, password);
     }
@@ -79,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> usersExceptRoot() {
-        return userRepository.usersExceptRoot("root");
+        return userRepository.usersExceptRoot(rootname);
     }
 
     @Override

@@ -7,11 +7,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ruslan.macari.security.User;
 import ruslan.macari.config.TestConfig;
+import ruslan.macari.security.Role;
 import ruslan.macari.service.UserService;
 
 @DirtiesContext
@@ -23,17 +25,31 @@ public class UserServiceImplTest {
     private UserService userService;
     private User user;
     
+    @Value("${db.username}")
+    private String root;
+    
     public UserServiceImplTest() {
         user = new User ("test");
+        user.setOneRole(Role.USER);
     }
     
-//    @Before
-//    public void before() {
-//        for (User u : userService.list()) {
-//            userService.delete(u.getId());
-//        }
-//        user.setAdmin(false);
-//    }
+    @Before
+    public void before() {
+        for (User u : userService.list()) {
+            userService.delete(u.getId());
+        }
+        
+    }
+    
+    @Test
+    public void testGetRoot() {
+        User rootUser = new User(root);
+        rootUser.setPassword(root);
+        rootUser.setOneRole(Role.ADMIN);
+        
+        userService.add(rootUser);
+        assertTrue(userService.list().size() == 1);
+    }
 
     @Test
     public void testAdd() {

@@ -1,9 +1,7 @@
 package ruslan.macari.config.security;
 
-import ruslan.macari.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import ruslan.macari.security.Role;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
@@ -17,18 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebMvcSecurity
-@PropertySource("classpath:app.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
-    
-    @Value("${db.password}")
-    private String password;
-    
-    @Value("${db.username}")
-    private String username;
     
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder) throws Exception {
@@ -65,13 +56,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return encoder;
     }
     
-    @Bean
-    public User root(PasswordEncoder passwordEncoder) {
-        User root = new User();
-        root.setName(username);
-        root.setPassword(passwordEncoder.encode(password));
-        root.setOneRole(Role.ADMIN);
-        return root;
-    }
- 
 }

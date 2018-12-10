@@ -19,8 +19,6 @@ public interface UserService {
 
     void delete(Integer id);
     
-    User getRoot();
-    
     User getByNameAndPassword(String name, String password);
     
     List<User> getSimpleUsers();

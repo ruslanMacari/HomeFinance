@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,18 +30,19 @@ import ruslan.macari.service.UserService;
 public class LoginController {
 
     private UserService userService;
-    private User root;
+    
+    @Value("${db.password}")
+    private String rootpassword;
+    
+    @Value("${db.username}")
+    private String rootname;
+    
     private PasswordEncoder encoder;
     
     @Autowired
     @Qualifier("newUserValidator")
     private Validator newUserValidator;
 
-    @Autowired
-    public void setRoot(User root) {
-        this.root = root;
-    } 
-    
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -54,7 +56,11 @@ public class LoginController {
 
     @PostConstruct
     public void init() {
-        if (userService.getRoot() != null) return;
+        if (userService.getByName(rootname) != null) return;
+        User root = new User();
+        root.setName(rootname);
+        root.setPassword(encoder.encode(rootpassword));
+        root.setOneRole(Role.ADMIN);
         userService.add(root);
     }
 
