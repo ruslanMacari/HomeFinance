@@ -123,7 +123,6 @@ public class User {
         hash = 43 * hash + Objects.hashCode(name);
         hash = 43 * hash + Objects.hashCode(password);
         hash = 43 * hash + (enabled ? 1 : 0);
-        hash = 43 * hash + Objects.hashCode(userRole);
         return hash;
     }
 
@@ -148,10 +147,7 @@ public class User {
         if (!Objects.equals(password, other.password)) {
             return false;
         }
-        if (!Objects.equals(id, other.id)) {
-            return false;
-        }
-        return Objects.equals(userRole, other.userRole);
+        return Objects.equals(id, other.id);
     }
 
 }

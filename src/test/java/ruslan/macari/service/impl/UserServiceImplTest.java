@@ -25,36 +25,23 @@ public class UserServiceImplTest {
     private UserService userService;
     private User user;
     
-    @Value("${db.username}")
-    private String root;
-    
     public UserServiceImplTest() {
-        user = new User ("test");
+        user = new User ("test", "pass");
         user.setOneRole(Role.USER);
     }
     
     @Before
     public void before() {
-        for (User u : userService.list()) {
-            userService.delete(u.getId());
-        }
-        
+        userService.list().forEach(u -> userService.delete(u.getId()));
     }
     
     @Test
-    public void testGetRoot() {
-        User rootUser = new User(root);
-        rootUser.setPassword(root);
-        rootUser.setOneRole(Role.ADMIN);
-        
-        userService.add(rootUser);
-        assertTrue(userService.list().size() == 1);
-    }
-
-    @Test
     public void testAdd() {
-//        userService.add(user);
-//        assertTrue(userService.list().size() == 1);
+        userService.add(user);
+        List<User> list = userService.list();
+        assertTrue(list.size() == 1);
+        assertEquals(user, list.get(0));
+        
     }
 
 //    @Test

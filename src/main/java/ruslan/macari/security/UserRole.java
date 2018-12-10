@@ -1,5 +1,6 @@
 package ruslan.macari.security;
 
+import java.util.Objects;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Column;
@@ -57,5 +58,34 @@ public class UserRole{
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.user);
+        hash = 59 * hash + Objects.hashCode(this.role);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserRole other = (UserRole) obj;
+        if (!Objects.equals(this.role, other.role)) {
+            return false;
+        }
+        return Objects.equals(this.id, other.id);
+    }
+        
+        
 
 }
