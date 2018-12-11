@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.Generated;
 
 @Entity
 @Table(name = "userRoles", uniqueConstraints = @UniqueConstraint(columnNames = { "role", "user" }))
@@ -69,6 +70,7 @@ public class UserRole{
     }
 
     @Override
+    @Generated
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

@@ -21,7 +21,7 @@ public class User {
     private Integer id;
     private String name;
     private String password;
-    private boolean enabled;
+    private boolean enabled = true;
     private Set<UserRole> userRole = new HashSet<>(0);
 
     @Id
@@ -104,18 +104,16 @@ public class User {
     }
 
     public User() {
-        enabled = true;
+        
     }
 
     public User(String name) {
         this.name = name;
-        enabled = true;
     }
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        enabled = true;
     }
 
     @Override

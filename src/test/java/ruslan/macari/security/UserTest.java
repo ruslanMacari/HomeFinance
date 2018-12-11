@@ -20,18 +20,16 @@ public class UserTest {
         Set<UserRole> userRoleSet = user.getUserRole();
         String role = "role";
         user.setOneRole(role);
-        assertEquals(1, userRoleSet.size());
-        userRoleSet.forEach((item) -> {
-            assertTrue(item.getRole().equals(role));
-        });
+        assertTrue(userRoleSet.size() == 1);
+        userRoleSet.forEach(item -> assertTrue(item.getRole().equals(role)));
         // test if user role exist
         String newRole = "newRole";
+        UserRole userRole = mock(UserRole.class);
+        when(userRole.getRole()).thenReturn(newRole);
+        userRoleSet.add(userRole);
         user.setOneRole(newRole);
         assertTrue(userRoleSet.size() == 1);
-        userRoleSet.forEach((item) -> {
-            assertTrue(item.getRole().equals(newRole));
-        });
-        
+        userRoleSet.forEach(item -> assertTrue(item.getRole().equals(newRole)));
     }
 
     @Test
