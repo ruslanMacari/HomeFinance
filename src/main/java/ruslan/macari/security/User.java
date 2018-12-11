@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.Generated;
 
 @Entity
 @Table(name = "users")
@@ -93,6 +94,7 @@ public class User {
     }
 
     @Override
+    @Generated
     public String toString() {
         return "User{"
                 + "id=" + id
@@ -127,6 +129,7 @@ public class User {
     }
 
     @Override
+    @Generated
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

@@ -23,7 +23,5 @@ public interface UserService {
     
     List<User> getSimpleUsers();
 
-    User getByNameExceptID(String name, Integer id);
-    
     List<User> usersExceptRoot();
 }

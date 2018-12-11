@@ -201,6 +201,12 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring-securiry}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <build>
         <resources>
@@ -242,7 +248,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
+                <version>0.8.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -258,11 +264,6 @@
                     </execution>
                 </executions>
             </plugin>    
-<!--            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>-->
         </plugins>
         <finalName>HomeFinance</finalName>
     </build>

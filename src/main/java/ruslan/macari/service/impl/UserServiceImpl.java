@@ -65,11 +65,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByNameExceptID(String name, Integer id) {
-        return userRepository.getByNameExceptID(name, id);
-    }
-
-    @Override
     public List<User> usersExceptRoot() {
         return userRepository.usersExceptRoot(rootname);
     }
