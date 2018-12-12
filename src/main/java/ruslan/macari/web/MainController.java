@@ -1,7 +1,6 @@
 package ruslan.macari.web;
 
 import java.security.Principal;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,7 @@ import ruslan.macari.security.User;
 public class MainController {
     
     @GetMapping()
-    public String index(HttpSession session) {
+    public String index() {
         return "index";
     }
 

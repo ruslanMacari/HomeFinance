@@ -33,11 +33,14 @@ public class LoginController {
     private String rootpassword;
     private String rootname;
     private PasswordEncoder encoder;
-    
-    @Autowired
-    @Qualifier("newUserValidator")
     private Validator newUserValidator;
 
+    @Autowired
+    @Qualifier("newUserValidator")
+    public void setNewUserValidator(Validator newUserValidator) {
+        this.newUserValidator = newUserValidator;
+    }
+    
     @Value("${db.password}")
     public void setRootpassword(String rootpassword) {
         this.rootpassword = rootpassword;

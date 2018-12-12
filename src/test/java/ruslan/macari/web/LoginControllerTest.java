@@ -1,44 +1,30 @@
 package ruslan.macari.web;
 
-import java.util.List;
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.security.User;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import ruslan.macari.service.UserService;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ruslan.macari.config.TestConfig;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//@DirtiesContext
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = TestConfig.class)
 public class LoginControllerTest {
     
-    private MockHttpSession session;
     private LoginController loginController;
     private UserService userService;
     private User user;
@@ -47,11 +33,11 @@ public class LoginControllerTest {
     private String rootname = "root";
     private String rootpassword = "pass";
     private PasswordEncoder encoder;
+    private Validator validator;
     
     @Before
     public void setUp() {
         model = mock(Model.class);
-        session = new MockHttpSession();
         loginController = new LoginController();
         userService = mock(UserService.class);
         loginController.setUserService(userService);
@@ -61,6 +47,8 @@ public class LoginControllerTest {
         loginController.setRootpassword(rootpassword);
         encoder = mock(PasswordEncoder.class);
         loginController.setEncoder(encoder);
+        validator = mock(Validator.class);
+        loginController.setNewUserValidator(validator);
     }
     
     @After
@@ -80,72 +68,53 @@ public class LoginControllerTest {
     
     @Test
     public void testAuthorization() {
-        SecurityContext context = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(context);
-        Authentication auth = mock(Authentication.class);
+        SecurityContext contextBefore = SecurityContextHolder.getContext();
+        Authentication auth = getMockAuth();
         when(auth.isAuthenticated()).thenReturn(true);
-        when(context.getAuthentication()).thenReturn(auth);
-        Model model = mock(Model.class);
         assertTrue(loginController.login(model).equals("redirect:/"));
         when(auth.isAuthenticated()).thenReturn(false);
         assertTrue(loginController.login(model).equals("auth/login"));
+        SecurityContextHolder.setContext(contextBefore);
     }
     
+    private Authentication getMockAuth() {
+        SecurityContext context = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(context);
+        Authentication auth = mock(Authentication.class);
+        when(context.getAuthentication()).thenReturn(auth);
+        return auth;
+    }
     
-
-//    @Test
-//    public void testCreateUser() {
-//        ModelAndView modelAndView = loginController.createUser();
-//        assertTrue(modelAndView.getViewName().equals("login/createUser"));
-//        ModelMap map = modelAndView.getModelMap();
-//        assertTrue(map.containsAttribute("user"));
-//        assertEquals(map.get("user"), new User());
-//    }
-//
-//    @Test
-//    public void testSaveUser() {
-//        when(bindingResult.hasErrors()).thenReturn(true);
-//        String result = loginController.saveUser(user, bindingResult);
-//        assertEquals(result, "login/createUser");
-//        verifyZeroInteractions(userService);
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        result = loginController.saveUser(user, bindingResult);
-//        assertEquals(result, "redirect:/authorization");
-//        verify(userService).add(user);
-//    }
-
     @Test
-    public void testPostAuthorization() {
-//        when(bindingResult.hasErrors()).thenReturn(true);
-//        String result = loginController.authorization(user, bindingResult, model, session);
-//        verify(model, times(1)).addAttribute("listUsers", userService.getSimpleUsers());
-//        assertEquals(result, "login/authorization");
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(userService.getByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
-//        result = loginController.authorization(user, bindingResult, model, session);
-//        assertEquals(result, "redirect:/");
-//        assertEquals(session.getAttribute("user"), user);
+    public void testRegistrationGet() {
+        assertTrue(loginController.registration(model).equals("auth/registration"));
+        verify(model, times(1)).addAttribute("user", new User());
+        Map<String, Object> map = new HashMap<>();
+        map.put("model", model);
+        when(model.asMap()).thenReturn(map);
+        loginController.registration(model);
+        verify(model, times(1)).mergeAttributes(map);
     }
-//
-//    @Test
-//    public void testCheckUser() {
-//        UserLogin userLogin = mock(UserLogin.class);
-//        when(bindingResult.hasErrors()).thenReturn(true);
-//        Model model = mock(Model.class);
-//        String result = loginController.checkUser(userLogin, bindingResult, model, session);
-//        assertEquals(result, "login");
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        result = loginController.checkUser(userLogin, bindingResult, model, session);
-//        assertEquals(result, "redirect:/home");
-//    }
-//    
-//    @Test
-//    public void testLogout() {
-//        session = new MockHttpSession();
-//        session.setAttribute("user", new User());
-//        String result = loginController.logout(session);
-//        assertEquals(result, "redirect:/login");
-//        assertNull(session.getAttribute("user"));
-//    }
+    
+    @Test
+    public void testRegistrationPost() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        RedirectAttributes attributes = mock(RedirectAttributes.class);
+        String result = loginController.registration(user, bindingResult, attributes, model);
+        assertTrue(result.equals("redirect:/login/registration"));
+        when(bindingResult.hasErrors()).thenReturn(false);
+        result = loginController.registration(user, bindingResult, attributes, model);
+        assertTrue(result.equals("redirect:/login"));
+    }
+    
+    @Test
+    public void testInitUserBinder() {
+        WebDataBinder dataBinder = mock(WebDataBinder.class);
+        loginController.initUserBinder(dataBinder);
+        verify(dataBinder, never()).setValidator(validator);
+        when(dataBinder.getTarget()).thenReturn(new Object());
+        loginController.initUserBinder(dataBinder);
+        verify(dataBinder, times(1)).setValidator(validator);
+    }
     
 }
