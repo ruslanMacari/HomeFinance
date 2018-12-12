@@ -30,19 +30,24 @@ import ruslan.macari.service.UserService;
 public class LoginController {
 
     private UserService userService;
-    
-    @Value("${db.password}")
     private String rootpassword;
-    
-    @Value("${db.username}")
     private String rootname;
-    
     private PasswordEncoder encoder;
     
     @Autowired
     @Qualifier("newUserValidator")
     private Validator newUserValidator;
 
+    @Value("${db.password}")
+    public void setRootpassword(String rootpassword) {
+        this.rootpassword = rootpassword;
+    }
+    
+    @Value("${db.username}")
+    public void setRootname(String rootname) {
+        this.rootname = rootname;
+    }
+    
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;

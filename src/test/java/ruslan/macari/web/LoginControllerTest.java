@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -40,19 +41,23 @@ public class LoginControllerTest {
     private User user;
     private BindingResult bindingResult;
     private Model model;
+    private String rootname = "root";
+    private String rootpassword = "pass";
+    private PasswordEncoder encoder;
     
     @Before
     public void setUp() {
-//        model = mock(Model.class);
-//        session = new MockHttpSession();
-//        loginController = new LoginController();
-//        userService = mock(UserService.class);
-//        loginController.setUserService(userService);
-//        user = mock(User.class);
-//        bindingResult = mock(BindingResult.class);
-//        currentUser = mock(CurrentUser.class);
-//        //loginController.setCurrentUser(currentUser);
-//        loginController.setRoot(user);
+        model = mock(Model.class);
+        session = new MockHttpSession();
+        loginController = new LoginController();
+        userService = mock(UserService.class);
+        loginController.setUserService(userService);
+        user = mock(User.class);
+        bindingResult = mock(BindingResult.class);
+        loginController.setRootname(rootname);
+        loginController.setRootpassword(rootpassword);
+        encoder = mock(PasswordEncoder.class);
+        loginController.setEncoder(encoder);
     }
     
     @After
@@ -61,12 +66,13 @@ public class LoginControllerTest {
     
     @Test
     public void testInit() {
-//        when(userService.getRoot()).thenReturn(user);
-//        loginController.init();
-//        verify(userService, times(0)).add(user);
-//        when(userService.getRoot()).thenReturn(null);
-//        loginController.init();
-//        verify(userService).add(user);
+        when(userService.getByName(rootname)).thenReturn(user);
+        loginController.init();
+        verify(userService, times(0)).add(user);
+        when(userService.getByName(rootname)).thenReturn(null);
+        when(encoder.encode(rootpassword)).thenReturn(rootpassword);
+        loginController.init();
+        verify(encoder, times(1)).encode(rootpassword);
     }
     
     @Test
