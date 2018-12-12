@@ -24,6 +24,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -77,12 +80,18 @@ public class LoginControllerTest {
     
     @Test
     public void testAuthorization() {
-//        when(currentUser.exists(session.getId())).thenReturn(false);
-//        assertEquals(loginController.authorization(session, model), "login/authorization");
-//        session = mock(MockHttpSession.class);
-//        when(currentUser.exists(session.getId())).thenReturn(true);
-//        assertEquals(loginController.authorization(session, model), "redirect:/");
+        SecurityContext context = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(context);
+        Authentication auth = mock(Authentication.class);
+        when(auth.isAuthenticated()).thenReturn(true);
+        when(context.getAuthentication()).thenReturn(auth);
+        Model model = mock(Model.class);
+        assertTrue(loginController.login(model).equals("redirect:/"));
+        when(auth.isAuthenticated()).thenReturn(false);
+        assertTrue(loginController.login(model).equals("auth/login"));
     }
+    
+    
 
 //    @Test
 //    public void testCreateUser() {

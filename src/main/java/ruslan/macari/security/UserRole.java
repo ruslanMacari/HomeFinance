@@ -61,6 +61,7 @@ public class UserRole{
 	}
 
     @Override
+    @Generated
     public int hashCode() {
         int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.id);

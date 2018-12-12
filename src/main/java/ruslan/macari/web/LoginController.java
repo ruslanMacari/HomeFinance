@@ -70,7 +70,7 @@ public class LoginController {
     }
 
     @GetMapping()
-    public String login(HttpSession session, Model model) {
+    public String login(Model model) {
         if (isAuthenticated()) {
             return "redirect:/";
         }
