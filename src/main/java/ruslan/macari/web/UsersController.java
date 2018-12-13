@@ -32,9 +32,14 @@ public class UsersController {
     
     private UserService userService;
     private PasswordEncoder encoder;
-    
-    @Value("${db.username}")
     private String rootname;
+    private Validator updateUserValidator;
+    private Validator newUserValidator;
+
+    @Value("${db.username}")
+    public void setRootname(String rootname) {
+        this.rootname = rootname;
+    }
     
     @Autowired
     public void setUserService(UserService userService) {
@@ -49,11 +54,15 @@ public class UsersController {
     
     @Autowired
     @Qualifier("updateUserValidator")
-    private Validator updateUserValidator;
-    
+    public void setUpdateUserValidator(Validator updateUserValidator) {
+        this.updateUserValidator = updateUserValidator;
+    }
+
     @Autowired
     @Qualifier("newUserValidator")
-    private Validator newUserValidator;
+    public void setNewUserValidator(Validator newUserValidator) {
+        this.newUserValidator = newUserValidator;
+    }
     
     @GetMapping()
     public String list(Model model) {
