@@ -249,6 +249,12 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*ruslan/macari/web/exceptions/PageNotFoundException.class</exclude>
+                        <exclude>**/*ruslan/macari/config/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
