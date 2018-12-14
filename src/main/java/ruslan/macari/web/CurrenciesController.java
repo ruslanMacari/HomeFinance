@@ -11,7 +11,7 @@ import ruslan.macari.service.CurrencyService;
 
 @Controller
 @RequestMapping("/currencies")
-public class CurrencyController {
+public class CurrenciesController {
  
     private CurrencyService currencyService;
 
