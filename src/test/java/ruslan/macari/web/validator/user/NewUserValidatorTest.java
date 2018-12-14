@@ -1,6 +1,5 @@
 package ruslan.macari.web.validator.user;
 
-import ruslan.macari.web.validator.user.NewUserValidator;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
