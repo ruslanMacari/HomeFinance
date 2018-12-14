@@ -17,6 +17,6 @@
     <sec:authorize access="hasAuthority(@role.ADMIN) and isAuthenticated()">
         <a class="button" href="<c:url value='/users'/>"><spring:message code="users"/></a>
     </sec:authorize>
-<!--    <a class="button" href="<c:url value='/createCurrency'/>">Create New Currency</a>-->
+    <a class="button" href="<c:url value='/currencies'/>"><spring:message code="currencies"/></a>
 </div>
 <jsp:include page='includes/footer.jsp'/>

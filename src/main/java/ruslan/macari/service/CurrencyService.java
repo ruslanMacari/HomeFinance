@@ -9,7 +9,9 @@ public interface CurrencyService {
 
     void update(Currency currency);
     
-    Currency getByID(int id);
+    void delete(Integer id);
+    
+    Currency getByID(Integer id);
 
     List<Currency> list();
     

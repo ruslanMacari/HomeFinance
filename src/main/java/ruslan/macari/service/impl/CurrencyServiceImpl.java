@@ -30,8 +30,13 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public Currency getByID(int id) {
+    public Currency getByID(Integer id) {
         return currencyRepository.findOne(id);
     }
-    
+
+    @Override
+    public void delete(Integer id) {
+        currencyRepository.delete(id);
+    }
+
 }

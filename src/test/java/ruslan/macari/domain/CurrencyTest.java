@@ -10,22 +10,7 @@ public class CurrencyTest {
     public CurrencyTest() {
     }
 
-    @Test
-    public void testHashCode() {
-        currency.setId(10);
-        int result = currency.hashCode();
-        assertEquals(result, 29 * 7 + 10);
-    }
-
-    @Test
-    public void testEquals() {
-        currency.setId(10);
-        assertTrue(currency.equals(new Currency(10)));
-        assertTrue(currency.equals(currency));
-        assertFalse(currency.equals(null));
-        assertFalse(currency.equals("aaa"));
-    }
-
+    
     @Test
     public void testToString() {
         int id = 10;

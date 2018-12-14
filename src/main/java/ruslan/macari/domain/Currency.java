@@ -1,23 +1,27 @@
 // in working
 package ruslan.macari.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import lombok.Generated;
 
 @Entity
-@Table(name = "currency")
-public class Currency {
+@Table(name = "currencies")
+public class Currency implements Serializable {
     
-    @Id
-    @GeneratedValue
-    int id;
-    
-    //@Size(min = 3, message = "Size must be minim 3")
-    String name;
+    private int id;
+    private String name;
+    private String code;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -26,6 +30,7 @@ public class Currency {
         this.id = id;
     }
 
+    @Column(name = "name", unique = true, nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -33,22 +38,30 @@ public class Currency {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Column(name = "code", unique = true, nullable = false, length = 5)
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
     
     public Currency() {
     }
     
-    public Currency(String name) {
+    public Currency(String name, String code) {
         this.name = name;
-    }
-    
-    public Currency(int id) {
-        this.id = id;
+        this.code = code;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + this.id;
+        hash = 17 * hash + this.id;
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.code);
         return hash;
     }
 
@@ -64,7 +77,13 @@ public class Currency {
             return false;
         }
         final Currency other = (Currency) obj;
-        return this.id == other.id;
+        if (id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(name, other.name)) {
+            return false;
+        }
+        return Objects.equals(code, other.code);
     }
 
     @Override
