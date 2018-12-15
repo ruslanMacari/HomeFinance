@@ -1,6 +1,8 @@
 package ruslan.macari.web;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +37,7 @@ public class UsersController {
     private String rootname;
     private Validator updateUserValidator;
     private Validator newUserValidator;
+    private static final Logger LOGGER = Logger.getLogger( UsersController.class.getName() );
 
     @Value("${db.username}")
     public void setRootname(String rootname) {
@@ -116,7 +119,13 @@ public class UsersController {
         if (result.hasErrors()) {
             return "users/new";
         }
-        add(user, admin);
+        try {
+            add(user, admin);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+            result.rejectValue("name", "Duplicated.user.name");
+            return "users/new";
+        }
         return "redirect:/users";
     }
     
