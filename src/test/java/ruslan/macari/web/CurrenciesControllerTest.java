@@ -24,4 +24,9 @@ public class CurrenciesControllerTest {
         assertTrue(controller.list(model).equals("currencies/list"));
     }
     
+    @Test
+    public void testNewCurrency() {
+        assertTrue(controller.newCurrency(model).equals("currencies/new"));
+    }
+    
 }

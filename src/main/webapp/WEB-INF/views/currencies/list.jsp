@@ -13,8 +13,9 @@
         <div class="table__row">
             <div class="table__cell table__cell_head">#</div>
             <div class="table__cell table__cell_head">ID</div>
-            <div class="table__cell table__cell_head"><spring:message code="description"/></div>
             <div class="table__cell table__cell_head"><spring:message code="code"/></div>
+            <div class="table__cell table__cell_head"><spring:message code="description"/></div>
+            <div class="table__cell table__cell_head"><spring:message code="rate"/></div>
             <div class="table__cell table__cell_head"><spring:message code="details"/></div>
             <div class="table__cell table__cell_head"><spring:message code="delete"/></div>
         </div>
@@ -24,8 +25,9 @@
             <div class="table__row">
                 <div class="table__cell">${count.count}</div>
                 <div class="table__cell">${currency.id}</div>
-                <div class="table__cell">${currency.name}</div>
                 <div class="table__cell">${currency.code}</div>
+                <div class="table__cell">${currency.name}</div>
+                <div class="table__cell"></div>
                 <c:url value="currencies/${currency.id}" var="currencyIdUrl" />
                 <div class="table__cell">
                     <a class="button" href="${currencyIdUrl}"><spring:message code="details"/></a>

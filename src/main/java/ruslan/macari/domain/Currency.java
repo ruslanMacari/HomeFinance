@@ -57,6 +57,7 @@ public class Currency implements Serializable {
     }
 
     @Override
+    @Generated
     public int hashCode() {
         int hash = 7;
         hash = 17 * hash + this.id;
@@ -66,6 +67,7 @@ public class Currency implements Serializable {
     }
 
     @Override
+    @Generated
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

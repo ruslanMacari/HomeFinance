@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
+import ruslan.macari.security.User;
 import ruslan.macari.service.CurrencyService;
 
 @Controller
@@ -27,5 +28,10 @@ public class CurrenciesController {
         return "currencies/list";
     }
     
+    @GetMapping(value = "/new")
+    public String newCurrency(Model model) {
+        model.addAttribute("newCurrency", new Currency());
+        return "currencies/new";
+    }
     
 }
