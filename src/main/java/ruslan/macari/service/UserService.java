@@ -23,5 +23,5 @@ public interface UserService {
     
     List<User> getSimpleUsers();
 
-    List<User> usersExceptRoot();
+    List<User> usersExceptRoot();    
 }

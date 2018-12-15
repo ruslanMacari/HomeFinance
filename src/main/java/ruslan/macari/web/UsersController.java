@@ -119,21 +119,25 @@ public class UsersController {
         if (result.hasErrors()) {
             return "users/new";
         }
-        try {
-            add(user, admin);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage());
+        if (add(user, admin) == null) {
             result.rejectValue("name", "Duplicated.user.name");
             return "users/new";
         }
+//        try {
+//            add(user, admin);
+//        } catch (Exception e) {
+//            LOGGER.log(Level.SEVERE, e.getMessage());
+//            result.rejectValue("name", "Duplicated.user.name");
+//            return "users/new";
+//        }
         return "redirect:/users";
     }
     
-    private void add(User user, boolean admin) {
+    private User add(User user, boolean admin) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(true);
         user.setOneRole(admin ? Role.ADMIN : Role.USER);
-        userService.add(user);
+        return userService.add(user);
     }
     
     @DeleteMapping(value = "/{id}")

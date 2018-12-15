@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.security.User;
 import ruslan.macari.service.repository.UserRepository;
@@ -24,7 +25,13 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public User add(User user) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized User add(User user) {
+        User userFound = userRepository.findByName(user.getName());
+        if (userFound != null
+                && userFound.getId() != user.getId()) {
+            return null;
+        }
         User savedUser = userRepository.saveAndFlush(user);
         return savedUser;
     }
