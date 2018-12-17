@@ -1,9 +1,12 @@
 package ruslan.macari.config;
 
 import java.util.Locale;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -33,12 +36,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public ReloadableResourceBundleMessageSource messageSource() {
+    public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
-        source.setBasenames("/WEB-INF/locales/messages", "/WEB-INF/locales/errors");
+        source.setBasenames("classpath:locales/messages", "classpath:locales/errors");
         source.setUseCodeAsDefaultMessage(true);
         source.setDefaultEncoding("UTF-8");
         return source;
+    }
+    
+    @Bean
+    @Override
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
     }
 
     @Bean

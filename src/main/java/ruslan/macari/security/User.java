@@ -12,7 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import lombok.Generated;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "users")
@@ -35,6 +37,7 @@ public class User {
         this.id = id;
     }
     
+    @Size(min = 3, message = "{MinSize.user.name}")
     @Column(name = "name", unique = true, nullable = false, length = 45)
     public String getName() {
         return name;
@@ -44,6 +47,7 @@ public class User {
         this.name = name;
     }
 
+    @Size(min = 4, message = "{MinSize.user.password}")
     @Column(name = "password", nullable = false, length = 60)
     public String getPassword() {
         return password;

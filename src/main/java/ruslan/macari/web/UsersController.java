@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,25 +120,21 @@ public class UsersController {
         if (result.hasErrors()) {
             return "users/new";
         }
-        if (add(user, admin) == null) {
+        try {
+            add(user, admin);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
             result.rejectValue("name", "Duplicated.user.name");
             return "users/new";
         }
-//        try {
-//            add(user, admin);
-//        } catch (Exception e) {
-//            LOGGER.log(Level.SEVERE, e.getMessage());
-//            result.rejectValue("name", "Duplicated.user.name");
-//            return "users/new";
-//        }
         return "redirect:/users";
     }
     
-    private User add(User user, boolean admin) {
+    private void add(User user, boolean admin) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(true);
         user.setOneRole(admin ? Role.ADMIN : Role.USER);
-        return userService.add(user);
+        userService.add(user);
     }
     
     @DeleteMapping(value = "/{id}")
@@ -146,21 +143,21 @@ public class UsersController {
         return "redirect:/users";
     }
     
-    @InitBinder("user")
-    protected void initUserBinder(WebDataBinder dataBinder) {
-        setValidator(dataBinder, updateUserValidator);
-    }
-    
-    private void setValidator(WebDataBinder dataBinder, Validator validator) {
-        if (dataBinder.getTarget() == null) {
-            return;
-        }
-        dataBinder.setValidator(validator);
-    }
-    
-    @InitBinder("newUser")
-    protected void initNewUserBinder(WebDataBinder dataBinder) {
-        setValidator(dataBinder, newUserValidator);
-    }
+//    @InitBinder("user")
+//    protected void initUserBinder(WebDataBinder dataBinder) {
+//        setValidator(dataBinder, updateUserValidator);
+//    }
+//    
+//    private void setValidator(WebDataBinder dataBinder, Validator validator) {
+//        if (dataBinder.getTarget() == null) {
+//            return;
+//        }
+//        dataBinder.setValidator(validator);
+//    }
+//    
+//    @InitBinder("newUser")
+//    protected void initNewUserBinder(WebDataBinder dataBinder) {
+//        setValidator(dataBinder, newUserValidator);
+//    }
 
 }

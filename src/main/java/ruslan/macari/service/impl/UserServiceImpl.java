@@ -25,13 +25,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized User add(User user) {
-        User userFound = userRepository.findByName(user.getName());
-        if (userFound != null
-                && userFound.getId() != user.getId()) {
-            return null;
-        }
+    public User add(User user) {
         User savedUser = userRepository.saveAndFlush(user);
         return savedUser;
     }
