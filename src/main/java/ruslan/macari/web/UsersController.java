@@ -86,10 +86,10 @@ public class UsersController {
         return "users/view";
     }
     
-    @ExceptionHandler(PageNotFoundException.class)
-    public ModelAndView pageNotFoundException() {
-        return new ModelAndView("resource-not-found");
-    }
+//    @ExceptionHandler(PageNotFoundException.class)
+//    public ModelAndView pageNotFoundException() {
+//        return new ModelAndView("resource-not-found");
+//    }
     
     @PostMapping(value = "/{id}")
     public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
@@ -116,7 +116,7 @@ public class UsersController {
     
     @PostMapping(value = "/new")
     public String save(@Valid @ModelAttribute("newUser") User user, BindingResult result, 
-            @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
+            @RequestParam(value = "admin", defaultValue = "false") boolean admin) throws Throwable {
         if (result.hasErrors()) {
             return "users/new";
         }
@@ -126,6 +126,9 @@ public class UsersController {
             LOGGER.log(Level.SEVERE, e.getMessage());
             result.rejectValue("name", "Duplicated.user.name");
             return "users/new";
+        }
+        if (true) {
+            throw new Throwable();
         }
         return "redirect:/users";
     }

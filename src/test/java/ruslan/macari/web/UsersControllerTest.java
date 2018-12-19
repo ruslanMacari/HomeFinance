@@ -76,12 +76,12 @@ public class UsersControllerTest {
         }
     }
 
-    @Test
-    public void testPageNotFoundException() {
-        System.out.println("pageNotFoundException");
-        ModelAndView modelAndView = usersController.pageNotFoundException();
-        assertTrue(modelAndView.getViewName().equals("resource-not-found"));
-    }
+//    @Test
+//    public void testPageNotFoundException() {
+//        System.out.println("pageNotFoundException");
+//        ModelAndView modelAndView = usersController.pageNotFoundException();
+//        assertTrue(modelAndView.getViewName().equals("resource-not-found"));
+//    }
 
     @Test
     public void testUpdate() {
@@ -103,7 +103,7 @@ public class UsersControllerTest {
     }
     
     @Test
-    public void testSave() {
+    public void testSave() throws Throwable {
         System.out.println("save");
         when(result.hasErrors()).thenReturn(true);
         assertTrue(usersController.save(user, result, true).equals("users/new"));

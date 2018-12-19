@@ -21,5 +21,5 @@ public class MainController {
         model.addAttribute("user", new User (user.getName()));
         return "access-denied";
     }
-
+    
 }
