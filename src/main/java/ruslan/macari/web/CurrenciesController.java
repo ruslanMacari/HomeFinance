@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.security.User;
 import ruslan.macari.service.CurrencyService;
 
 @Controller

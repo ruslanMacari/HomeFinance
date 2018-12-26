@@ -12,12 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import lombok.Generated;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "users_unique_name")})
 public class User {
 
     private Integer id;
@@ -38,7 +38,7 @@ public class User {
     }
     
     @Size(min = 3, message = "{MinSize.user.name}")
-    @Column(name = "name", unique = true, nullable = false, length = 45)
+    @Column(name = "name", nullable = false, length = 45)
     public String getName() {
         return name;
     }
