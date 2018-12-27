@@ -1,5 +1,7 @@
 package ruslan.macari.web;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
+import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Controller
 @RequestMapping("/login")
@@ -107,23 +110,29 @@ public class LoginController {
             redirectAttributes.addFlashAttribute("model", model);
             return "redirect:/login/registration";
         }
-        addUser (user);
-        return "redirect:/login";
+        try {
+            addUser(user);
+            return "redirect:/login";
+        } catch (DuplicateFieldsException ex) {
+            result.rejectValue(ex.getField(), ex.getErrorCode());
+            redirectAttributes.addFlashAttribute("model", model);
+            return "redirect:/login/registration";
+        }
     }
     
-    private void addUser(User user) {
+    private void addUser(User user) throws DuplicateFieldsException {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(true);
         user.setOneRole(Role.USER);
         userService.add(user);
     }
 
-    @InitBinder()
-    protected void initUserBinder(WebDataBinder dataBinder) {
-        if (dataBinder.getTarget() == null) {
-            return;
-        }
-        dataBinder.setValidator(newUserValidator);
-    }
+//    @InitBinder()
+//    protected void initUserBinder(WebDataBinder dataBinder) {
+//        if (dataBinder.getTarget() == null) {
+//            return;
+//        }
+//        dataBinder.setValidator(newUserValidator);
+//    }
 
 }

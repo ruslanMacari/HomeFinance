@@ -2,10 +2,11 @@ package ruslan.macari.service;
 
 import java.util.List;
 import ruslan.macari.security.User;
+import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 public interface UserService {
     
-    User add(User user);
+    User add(User user) throws DuplicateFieldsException;
 
     void update(User user);
 

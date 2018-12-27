@@ -1,6 +1,8 @@
 package ruslan.macari.security;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -17,7 +19,7 @@ import javax.validation.constraints.Size;
 import lombok.Generated;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "users_unique_name")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})
 public class User {
 
     private Integer id;
@@ -25,6 +27,15 @@ public class User {
     private String password;
     private boolean enabled = true;
     private Set<UserRole> userRole = new HashSet<>(0);
+    
+    
+    public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_user_name";
+    public static final Map<String, String> CONSTRAINS_I18N_MAP;
+
+    static {
+        CONSTRAINS_I18N_MAP = new HashMap<>();
+        CONSTRAINS_I18N_MAP.put("name", UNIQUE_CONSTRAINT_NAME);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

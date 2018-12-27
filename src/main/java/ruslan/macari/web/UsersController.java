@@ -31,6 +31,7 @@ import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
 import ruslan.macari.util.ValidationUtil;
+import ruslan.macari.web.exceptions.DuplicateFieldsException;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
@@ -113,40 +114,19 @@ public class UsersController {
         return "users/new";
     }
 
-    public static final String EXCEPTION_DUPLICATE_NAME = "duplicated.user.name";
-
-    private static final Map<String, String> CONSTRAINS_I18N_MAP;
-
-    static {
-        CONSTRAINS_I18N_MAP = new HashMap<>();
-        CONSTRAINS_I18N_MAP.put("users_unique_name", EXCEPTION_DUPLICATE_NAME);
-    }
-
     @PostMapping(value = "/new")
     public String save(@Valid @ModelAttribute("newUser") User user, BindingResult result,
-            @RequestParam(value = "admin", defaultValue = "false") boolean admin) throws Throwable {
+            @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
         if (result.hasErrors()) {
             return "users/new";
         }
         try {
             add(user, admin);
-        } catch (DataIntegrityViolationException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage());
-            String rootMsg = ValidationUtil.getRootCause(e).getMessage();
-            if (rootMsg != null) {
-                String lowerCaseMsg = rootMsg.toLowerCase();
-                Optional<Map.Entry<String, String>> entry = CONSTRAINS_I18N_MAP.entrySet().stream()
-                        .filter(it -> lowerCaseMsg.contains(it.getKey()))
-                        .findAny();
-                if (entry.isPresent()) {
-                    result.rejectValue("name", "Duplicated.user.name");
-                    return "users/new";
-                }
-            }
-            // strange situation
-            throw new Throwable();
+            return "redirect:/users";
+        } catch (DuplicateFieldsException ex) {
+            result.rejectValue(ex.getField(), ex.getErrorCode());
+            return "users/new";
         }
-        return "redirect:/users";
     }
 
     private void add(User user, boolean admin) {
