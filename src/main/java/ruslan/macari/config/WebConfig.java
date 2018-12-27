@@ -5,7 +5,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -55,8 +54,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.getDefault());
+        localeResolver.setDefaultLocale(getDafultLocale());
         return localeResolver;
+    }
+    
+    private Locale getDafultLocale() {
+        Locale defaultLocale = Locale.getDefault();
+        if (defaultLocale.getLanguage().equalsIgnoreCase("ru")) {
+            return defaultLocale;
+        }
+        return Locale.ENGLISH;
     }
 
     @Override

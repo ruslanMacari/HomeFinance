@@ -10,6 +10,7 @@
     <div class="form error">
         <h2>User: "${user.name}" has no rights to access that resource.</h2>
     </div>
-    <a class="button" href="/HomeFinance">Back to main page.</a>
+    <c:url var="home" value="/"/>
+    <a class="button" href="${home}">Back to main page.</a>
 </div>
 <jsp:include page='../includes/footer.jsp'/>

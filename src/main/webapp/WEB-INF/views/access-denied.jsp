@@ -11,6 +11,7 @@
     <div class="form error">
         <h2><spring:message code="access-denied-message" arguments="${user.name}"/></h2>
     </div>
-    <a class="button" href="/HomeFinance"><spring:message code="back-to-main"/></a>
+    <c:url var="home" value="/"/>
+    <a class="button" href="${home}"><spring:message code="back-to-main"/></a>
 </div>
 <jsp:include page='includes/footer.jsp'/>

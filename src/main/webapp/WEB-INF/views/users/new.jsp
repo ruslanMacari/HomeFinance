@@ -20,7 +20,8 @@
             </div>
             <input class="form__submit" type="submit" value="<spring:message code="save"/>" />
         </sf:form>
-        <a class="button button_back" href="/HomeFinance/users"><spring:message code="back"/></a>
+        <c:url var="users" value="/users"/>
+        <a class="button button_back" href="${users}"><spring:message code="back"/></a>
     </div>
 </div>
 <jsp:include page='../includes/footer.jsp'/>    

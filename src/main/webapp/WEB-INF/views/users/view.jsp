@@ -40,7 +40,8 @@
             <input class="button" type="button" value="<spring:message code="edit"/>" id="unlock" />
             <input class="form__submit hidden" type="submit" value="<spring:message code="save"/>" id="save"/>
         </sf:form>
-        <a class="button button_back" href="/HomeFinance/users" class="go-back"><spring:message code="back"/></a>
+        <c:url var="users" value="/users"/>    
+        <a class="button button_back" href="${users}" class="go-back"><spring:message code="back"/></a>
     </div>
 </div>
 <jsp:include page='../includes/footer.jsp'/>

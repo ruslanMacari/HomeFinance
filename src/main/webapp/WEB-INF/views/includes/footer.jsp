@@ -1,2 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </div>
-<script type="module" src="/HomeFinance/resources/js/main.js"></script>
+<c:url var="mainJS" value="/resources/js/main.js"/>
+<script type="module" src="${mainJS}"></script>

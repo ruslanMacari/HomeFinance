@@ -17,7 +17,8 @@
             <sf:input class="form__text" path="name"/>
             <input class="form__submit" type="submit" value="<spring:message code="save"/>" />
         </sf:form>
-        <a class="button button_back" href="/HomeFinance/currencies"><spring:message code="back"/></a>
+        <c:url var="currencies" value="/currencies"/>
+        <a class="button button_back" href="${currencies}"><spring:message code="back"/></a>
     </div>
 </div>
 <jsp:include page='../includes/footer.jsp'/>    

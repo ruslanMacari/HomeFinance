@@ -8,6 +8,7 @@
 </jsp:include>
 <div class="box-header__title">
     <h1 class="box-header__title"><spring:message code="resource-not-found"/></h1>
-    <a class="button" href="/HomeFinance"><spring:message code="back-to-main"/></a>
+    <c:url var="home" value="/"/>
+    <a class="button" href="${home}"><spring:message code="back-to-main"/></a>
 </div>
 <jsp:include page='includes/footer.jsp'/>

@@ -41,5 +41,6 @@
         </c:forEach>
     </div>
 </div>
-<a class="button button_back" href="/HomeFinance"><spring:message code="back"/></a>
+<c:url var="home" value="/"/>
+<a class="button button_back" href="${home}"><spring:message code="back"/></a>
 <jsp:include page='../includes/footer.jsp'/>
