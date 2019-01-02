@@ -9,11 +9,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import ruslan.macari.domain.ConstraintEntity;
 import ruslan.macari.service.impl.UserServiceImpl;
-import ruslan.macari.util.SafePersist;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
+import ruslan.macari.util.ConstraintPersist;
 
 @Component
-public class SafePersistImpl implements SafePersist<ConstraintEntity>{
+public class ConstraintPersistImpl implements ConstraintPersist<ConstraintEntity>{
 
     private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
     
@@ -41,7 +41,8 @@ public class SafePersistImpl implements SafePersist<ConstraintEntity>{
     private Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;
-        while (null != (cause = result.getCause()) && (result != cause)) {
+        while (null != (cause = result.getCause()) 
+                && (result != cause)) {
             result = cause;
         }
         return result;

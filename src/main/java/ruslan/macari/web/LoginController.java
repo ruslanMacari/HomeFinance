@@ -1,9 +1,6 @@
 package ruslan.macari.web;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,10 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,20 +23,23 @@ import ruslan.macari.service.UserService;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping(LoginController.URL)
 public class LoginController {
 
+    static final String URL = "/login";
+    static final String REDIRECT = "redirect:";
+    static final String REDIRECT_ROOT = REDIRECT + "/";
+    static final String REDIRECT_URL = REDIRECT + URL;
+    static final String DIRECTORY = "/auth";
+    static final String URL_PATH = DIRECTORY + URL;
+    static final String REGISTRATION = "/registration";
+    static final String REGISTRATION_PATH = DIRECTORY + REGISTRATION;
+    static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
+            
     private UserService userService;
     private String rootpassword;
     private String rootname;
     private PasswordEncoder encoder;
-    private Validator newUserValidator;
-
-    @Autowired
-    @Qualifier("newUserValidator")
-    public void setNewUserValidator(Validator newUserValidator) {
-        this.newUserValidator = newUserValidator;
-    }
     
     @Value("${db.password}")
     public void setRootpassword(String rootpassword) {
@@ -78,11 +75,11 @@ public class LoginController {
     @GetMapping()
     public String login(Model model) {
         if (isAuthenticated()) {
-            return "redirect:/";
+            return REDIRECT_ROOT;
         }
         model.addAttribute("listUsers", userService.getSimpleUsers());
         model.addAttribute("user", new User());
-        return "auth/login";
+        return URL_PATH;
     }
     
     private boolean isAuthenticated() {
@@ -92,7 +89,7 @@ public class LoginController {
                 && !(auth instanceof AnonymousAuthenticationToken);
     }
     
-    @GetMapping("/registration")
+    @GetMapping(REGISTRATION)
     public String registration(Model model) {
         Object flashModel = model.asMap().get("model");
         if (flashModel == null) {
@@ -100,23 +97,23 @@ public class LoginController {
         } else {
             model.mergeAttributes(((Model) flashModel).asMap());
         }
-        return "auth/registration";
+        return REGISTRATION_PATH;
     }
 
-    @PostMapping("/registration")
+    @PostMapping(REGISTRATION)
     public String registration(@Valid @ModelAttribute("user") User user, BindingResult result, 
             RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("model", model);
-            return "redirect:/login/registration";
+            return REDIRECT_REGISTRATION;
         }
         try {
             addUser(user);
-            return "redirect:/login";
+            return REDIRECT_URL;
         } catch (DuplicateFieldsException ex) {
             result.rejectValue(ex.getField(), ex.getErrorCode());
             redirectAttributes.addFlashAttribute("model", model);
-            return "redirect:/login/registration";
+            return REDIRECT_REGISTRATION;
         }
     }
     
@@ -126,13 +123,5 @@ public class LoginController {
         user.setOneRole(Role.USER);
         userService.add(user);
     }
-
-//    @InitBinder()
-//    protected void initUserBinder(WebDataBinder dataBinder) {
-//        if (dataBinder.getTarget() == null) {
-//            return;
-//        }
-//        dataBinder.setValidator(newUserValidator);
-//    }
 
 }

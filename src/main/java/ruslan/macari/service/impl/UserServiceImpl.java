@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.security.User;
 import ruslan.macari.service.repository.UserRepository;
 import ruslan.macari.service.UserService;
-import ruslan.macari.util.SafePersist;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
+import ruslan.macari.util.ConstraintPersist;
 
 @Service
 @Transactional
@@ -20,11 +20,11 @@ public class UserServiceImpl implements UserService {
     @Value("${db.username}")
     private String rootname;
     
-    private SafePersist safePersist;
+    private ConstraintPersist constraintPersist;
     
     @Autowired
-    public void setSafePersist(SafePersist safePersist) {
-        this.safePersist = safePersist;
+    public void setConstraintPersist(ConstraintPersist safePersist) {
+        this.constraintPersist = safePersist;
     }
     
     @Autowired
@@ -34,12 +34,12 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public User add(User user) throws DuplicateFieldsException{
-        return (User) safePersist.add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+        return (User) constraintPersist.add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
     }
 
     @Override
     public void update(User user) {
-        safePersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+        constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
     }
 
     @Override

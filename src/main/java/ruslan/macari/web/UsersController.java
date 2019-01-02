@@ -81,14 +81,23 @@ public class UsersController {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
+        try {
+            userService.update(getUser(id, user, changePassword, admin));
+            return REDIRECT_PATH;
+        } catch (DuplicateFieldsException ex) {
+            result.rejectValue(ex.getField(), ex.getErrorCode());
+            return VIEW_PATH;
+        }
+    }
+    
+    private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
         User foundUser = userService.getById(id);
         foundUser.setName(user.getName());
         if (changePassword) {
             foundUser.setPassword(encoder.encode(user.getPassword()));
         }
         foundUser.setOneRole(admin ? Role.ADMIN : Role.USER);
-        userService.update(foundUser);
-        return REDIRECT_PATH;
+        return foundUser;
     }
     
     @GetMapping(value = NEW)

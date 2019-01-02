@@ -33,7 +33,7 @@ public class LoginControllerTest {
     private String rootname = "root";
     private String rootpassword = "pass";
     private PasswordEncoder encoder;
-    private Validator validator;
+    //private Validator validator;
     
     @Before
     public void setUp() {
@@ -47,8 +47,8 @@ public class LoginControllerTest {
         loginController.setRootpassword(rootpassword);
         encoder = mock(PasswordEncoder.class);
         loginController.setEncoder(encoder);
-        validator = mock(Validator.class);
-        loginController.setNewUserValidator(validator);
+        //validator = mock(Validator.class);
+        //loginController.setNewUserValidator(validator);
     }
     
     @After
@@ -73,7 +73,7 @@ public class LoginControllerTest {
         when(auth.isAuthenticated()).thenReturn(true);
         assertTrue(loginController.login(model).equals("redirect:/"));
         when(auth.isAuthenticated()).thenReturn(false);
-        assertTrue(loginController.login(model).equals("auth/login"));
+        assertTrue(loginController.login(model).equals("/auth/login"));
         SecurityContextHolder.setContext(contextBefore);
     }
     
@@ -87,7 +87,7 @@ public class LoginControllerTest {
     
     @Test
     public void testRegistrationGet() {
-        assertTrue(loginController.registration(model).equals("auth/registration"));
+        assertTrue(loginController.registration(model).equals("/auth/registration"));
         verify(model, times(1)).addAttribute("user", new User());
         Map<String, Object> map = new HashMap<>();
         map.put("model", model);
