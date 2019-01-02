@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({"ruslan.macari.service", "ruslan.macari.security"})
+@ComponentScan({"ruslan.macari.service", "ruslan.macari.security", "ruslan.macari.util"})
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("ruslan.macari.service.repository")
 public class AppConfig {

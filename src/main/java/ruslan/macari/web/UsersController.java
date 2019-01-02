@@ -1,50 +1,42 @@
 package ruslan.macari.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
-import ruslan.macari.util.ValidationUtil;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping(UsersController.URL)
 public class UsersController {
 
     private UserService userService;
     private PasswordEncoder encoder;
     private String rootname;
-    private Validator updateUserValidator;
-    private Validator newUserValidator;
-    private static final Logger LOGGER = Logger.getLogger(UsersController.class.getName());
-
+    static final String URL = "/users";
+    static final String NEW = "/new";
+    static final String NEW_PATH = URL + NEW;
+    static final String REDIRECT_PATH = "redirect:" + URL;
+    static final String LIST_PATH = URL + "/list";
+    static final String VIEW_PATH = URL + "/view";
+    
     @Value("${db.username}")
     public void setRootname(String rootname) {
         this.rootname = rootname;
@@ -61,42 +53,34 @@ public class UsersController {
         this.encoder = encoder;
     }
 
-    @Autowired
-    @Qualifier("updateUserValidator")
-    public void setUpdateUserValidator(Validator updateUserValidator) {
-        this.updateUserValidator = updateUserValidator;
-    }
-
-    @Autowired
-    @Qualifier("newUserValidator")
-    public void setNewUserValidator(Validator newUserValidator) {
-        this.newUserValidator = newUserValidator;
-    }
-
     @GetMapping()
     public String list(Model model) {
         List<User> users = userService.usersExceptRoot();
         model.addAttribute("users", users);
-        return "users/list";
+        return LIST_PATH;
     }
-
+    
     @GetMapping(value = "/{id}")
-    public String view(@PathVariable("id") Integer id, Model model) throws PageNotFoundException {
+    public String view(@PathVariable("id") Integer id, Model model) {
         User user = userService.getById(id);
+        testRoot(user);
+        model.addAttribute("user", user);
+        return VIEW_PATH;
+    }
+    
+    private void testRoot(User user) {
         if (user == null
                 || user.getName().equals(rootname)) {
             throw new PageNotFoundException();
         }
-        model.addAttribute("user", user);
-        return "users/view";
     }
-
+    
     @PostMapping(value = "/{id}")
     public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
             @PathVariable("id") Integer id, @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
             @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
         if (result.hasErrors()) {
-            return "users/view";
+            return VIEW_PATH;
         }
         User foundUser = userService.getById(id);
         foundUser.setName(user.getName());
@@ -105,27 +89,27 @@ public class UsersController {
         }
         foundUser.setOneRole(admin ? Role.ADMIN : Role.USER);
         userService.update(foundUser);
-        return "redirect:/users";
+        return REDIRECT_PATH;
     }
-
-    @GetMapping(value = "/new")
+    
+    @GetMapping(value = NEW)
     public String newUser(Model model) {
         model.addAttribute("newUser", new User());
-        return "users/new";
+        return NEW_PATH;
     }
-
+    
     @PostMapping(value = "/new")
     public String save(@Valid @ModelAttribute("newUser") User user, BindingResult result,
             @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
         if (result.hasErrors()) {
-            return "users/new";
+            return NEW_PATH;
         }
         try {
             add(user, admin);
-            return "redirect:/users";
+            return REDIRECT_PATH;
         } catch (DuplicateFieldsException ex) {
             result.rejectValue(ex.getField(), ex.getErrorCode());
-            return "users/new";
+            return NEW_PATH;
         }
     }
 
@@ -139,23 +123,7 @@ public class UsersController {
     @DeleteMapping(value = "/{id}")
     public String deleteUser(@PathVariable("id") Integer id) {
         userService.delete(id);
-        return "redirect:/users";
+        return REDIRECT_PATH;
     }
 
-//    @InitBinder("user")
-//    protected void initUserBinder(WebDataBinder dataBinder) {
-//        setValidator(dataBinder, updateUserValidator);
-//    }
-//    
-//    private void setValidator(WebDataBinder dataBinder, Validator validator) {
-//        if (dataBinder.getTarget() == null) {
-//            return;
-//        }
-//        dataBinder.setValidator(validator);
-//    }
-//    
-//    @InitBinder("newUser")
-//    protected void initNewUserBinder(WebDataBinder dataBinder) {
-//        setValidator(dataBinder, newUserValidator);
-//    }
 }

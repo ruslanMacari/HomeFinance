@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.security.User;
 import ruslan.macari.service.repository.UserRepository;
 import ruslan.macari.service.UserService;
+import ruslan.macari.util.SafePersist;
 import ruslan.macari.util.ValidationUtil;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
@@ -25,33 +27,43 @@ public class UserServiceImpl implements UserService {
     @Value("${db.username}")
     private String rootname;
     
-    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
+    private SafePersist safePersist;
+    
+    @Autowired
+    public void setSafePersist(SafePersist safePersist) {
+        this.safePersist = safePersist;
+    }
+    
+    //private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
     
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+        safePersist.setRepository(userRepository);
     }
     
     @Override
     public User add(User user) throws DuplicateFieldsException{
-        try {
-            User savedUser = userRepository.saveAndFlush(user);
-            return savedUser;
-        } catch (DataIntegrityViolationException exception) {
-            LOGGER.log(Level.SEVERE, exception.getMessage());
-            String rootMsg = ValidationUtil.getRootCause(exception).getMessage();
-            if (rootMsg != null) {
-                String lowerCaseMsg = rootMsg.toLowerCase();
-                Optional<Map.Entry<String, String>> entry = User.CONSTRAINS_I18N_MAP.entrySet().stream()
-                        .filter(it -> lowerCaseMsg.contains(it.getValue()))
-                        .findAny();
-                if (entry.isPresent()) {
-                    throw new DuplicateFieldsException(entry.get());
-                }
-            }
-            // strange situation
-            throw exception;
-        }
+        return (User)safePersist.add(user);
+        
+//        try {
+//            User savedUser = userRepository.saveAndFlush(user);
+//            return savedUser;
+//        } catch (DataIntegrityViolationException exception) {
+//            LOGGER.log(Level.SEVERE, exception.getMessage());
+//            String rootMsg = ValidationUtil.getRootCause(exception).getMessage();
+//            if (rootMsg != null) {
+//                String lowerCaseMsg = rootMsg.toLowerCase();
+//                Optional<Map.Entry<String, String>> entry = user.getConstraintsMap().entrySet().stream()
+//                        .filter(it -> lowerCaseMsg.contains(it.getValue()))
+//                        .findAny();
+//                if (entry.isPresent()) {
+//                    throw new DuplicateFieldsException(entry.get());
+//                }
+//            }
+//            // strange situation
+//            throw exception;
+//        }
     }
 
     @Override

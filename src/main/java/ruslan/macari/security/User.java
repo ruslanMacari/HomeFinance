@@ -1,5 +1,6 @@
 package ruslan.macari.security;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,13 +15,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import lombok.Generated;
+import ruslan.macari.domain.ConstraintEntity;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})
-public class User {
+public class User implements ConstraintEntity{
 
     private Integer id;
     private String name;
@@ -28,15 +31,21 @@ public class User {
     private boolean enabled = true;
     private Set<UserRole> userRole = new HashSet<>(0);
     
-    
     public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_user_name";
-    public static final Map<String, String> CONSTRAINS_I18N_MAP;
+    
+    private Map<String, String> constraintsMap;
 
-    static {
-        CONSTRAINS_I18N_MAP = new HashMap<>();
-        CONSTRAINS_I18N_MAP.put("name", UNIQUE_CONSTRAINT_NAME);
+    {
+        constraintsMap = new HashMap<>();
+        constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
     }
 
+    @Transient
+    @Override
+    public Map<String, String> getConstraintsMap() {
+        return constraintsMap;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -37,8 +37,6 @@ public class UsersControllerTest {
         usersController.setUserService(userService);
         usersController.setEncoder(encoder);
         usersController.setRootname(rootname);
-        usersController.setUpdateUserValidator(validator);
-        usersController.setNewUserValidator(validator);
         model = mock(Model.class);
         result = mock(BindingResult.class);
         user = mock(User.class);
@@ -47,7 +45,7 @@ public class UsersControllerTest {
     @Test
     public void testList() {
         System.out.println("list");
-        assertTrue(usersController.list(model).equals("users/list"));
+        assertTrue(usersController.list(model).equals("/users/list"));
     }
 
     @Test
@@ -57,7 +55,7 @@ public class UsersControllerTest {
         when(user.getName()).thenReturn("test");
         when(userService.getById(id)).thenReturn(user);
         try {
-            assertTrue(usersController.view(id, model).equals("users/view"));
+            assertTrue(usersController.view(id, model).equals("/users/view"));
         } catch (PageNotFoundException e) {
             fail("Exception must not be thrown!");
         }
@@ -89,7 +87,7 @@ public class UsersControllerTest {
         when(result.hasErrors()).thenReturn(true);
         Integer id = 100;
         String resultUpdate = usersController.update(user, result, id, true, true);
-        assertTrue(resultUpdate.equals("users/view"));
+        assertTrue(resultUpdate.equals("/users/view"));
         when(result.hasErrors()).thenReturn(false);
         when(userService.getById(id)).thenReturn(user);
         resultUpdate = usersController.update(user, result, id, true, true);
@@ -99,14 +97,14 @@ public class UsersControllerTest {
     @Test
     public void testNewUser() {
         System.out.println("newUser");
-        assertTrue(usersController.newUser(model).equals("users/new"));
+        assertTrue(usersController.newUser(model).equals("/users/new"));
     }
     
     @Test
     public void testSave() throws Throwable {
         System.out.println("save");
         when(result.hasErrors()).thenReturn(true);
-        assertTrue(usersController.save(user, result, true).equals("users/new"));
+        assertTrue(usersController.save(user, result, true).equals("/users/new"));
         when(result.hasErrors()).thenReturn(false);
         //assertTrue(usersController.save(user, result, true).equals("redirect:/users"));
     }
