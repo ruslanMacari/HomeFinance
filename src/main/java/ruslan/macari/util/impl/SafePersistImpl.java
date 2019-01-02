@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import ruslan.macari.domain.ConstraintEntity;
 import ruslan.macari.service.impl.UserServiceImpl;
 import ruslan.macari.util.SafePersist;
-import ruslan.macari.util.ValidationUtil;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Component
@@ -24,7 +23,7 @@ public class SafePersistImpl implements SafePersist<ConstraintEntity>{
             return supplier.get();
         } catch (DataIntegrityViolationException exception) {
             LOGGER.log(Level.SEVERE, exception.getMessage());
-            String rootMsg = ValidationUtil.getRootCause(exception).getMessage();
+            String rootMsg = getRootCause(exception).getMessage();
             if (rootMsg != null) {
                 String lowerCaseMsg = rootMsg.toLowerCase();
                 Optional<Map.Entry<String, String>> entry = constraintsMap.entrySet().stream()
@@ -37,6 +36,15 @@ public class SafePersistImpl implements SafePersist<ConstraintEntity>{
             //strange situation
             throw exception;
         }
+    }
+    
+    private Throwable getRootCause(Throwable t) {
+        Throwable result = t;
+        Throwable cause;
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
     }
     
     @Override
