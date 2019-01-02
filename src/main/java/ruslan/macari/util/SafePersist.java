@@ -1,12 +1,11 @@
 package ruslan.macari.util;
 
-import java.io.Serializable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Map;
+import java.util.function.Supplier;
 import ruslan.macari.domain.ConstraintEntity;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 public interface SafePersist<T extends ConstraintEntity>{
-    void setRepository(JpaRepository<T, Serializable> repository);
-    T add(T entity) throws DuplicateFieldsException;
-    void update(T entity);
+    T add(Supplier<T> supplier, Map<String, String> constraintsMap) throws DuplicateFieldsException;
+    void update(Supplier<T> supplier, Map<String, String> constraintsMap) throws DuplicateFieldsException;
 }
