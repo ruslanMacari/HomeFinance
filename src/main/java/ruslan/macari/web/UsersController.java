@@ -29,12 +29,12 @@ public class UsersController {
     private UserService userService;
     private PasswordEncoder encoder;
     private String rootname;
-    static final String URL = "/users";
-    static final String NEW = "/new";
-    static final String NEW_PATH = URL + NEW;
-    static final String REDIRECT_PATH = "redirect:" + URL;
-    static final String LIST_PATH = URL + "/list";
-    static final String VIEW_PATH = URL + "/view";
+    public static final String URL = "/users";
+    public static final String NEW = "/new";
+    public static final String NEW_PATH = URL + NEW;
+    public static final String REDIRECT_PATH = "redirect:" + URL;
+    public static final String LIST_PATH = URL + "/list";
+    public static final String VIEW_PATH = URL + "/view";
     
     @Value("${db.username}")
     public void setRootname(String rootname) {

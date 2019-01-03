@@ -6,22 +6,33 @@ import org.springframework.stereotype.Service;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.repository.CurrencyRepository;
 import ruslan.macari.service.CurrencyService;
+import ruslan.macari.util.ConstraintPersist;
+import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
-    @Autowired
+    private ConstraintPersist constraintPersist;
     private CurrencyRepository currencyRepository;
     
+    @Autowired
+    public void setConstraintPersist(ConstraintPersist constraintPersist) {
+        this.constraintPersist = constraintPersist;
+    }
+    
+    @Autowired
+    public void setCurrencyRepository(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
+    
     @Override
-    public Currency add(Currency currency) {
-        Currency savedCurrency = currencyRepository.saveAndFlush(currency);
-        return savedCurrency;
+    public Currency add(Currency currency) throws DuplicateFieldsException{
+        return (Currency) constraintPersist.add(() -> currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
     }
 
     @Override
-    public void update(Currency currency) {
-        currencyRepository.saveAndFlush(currency);
+    public void update(Currency currency) throws DuplicateFieldsException {
+        constraintPersist.update(() -> currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
     }
 
     @Override

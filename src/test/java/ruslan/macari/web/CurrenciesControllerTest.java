@@ -21,12 +21,12 @@ public class CurrenciesControllerTest {
     
     @Test
     public void testList() {
-        assertTrue(controller.list(model).equals("currencies/list"));
+        assertTrue(controller.list(model).equals(CurrenciesController.LIST_PATH));
     }
     
     @Test
     public void testNewCurrency() {
-        assertTrue(controller.newCurrency(model).equals("currencies/new"));
+        assertTrue(controller.newCurrency(model).equals(CurrenciesController.NEW_PATH));
     }
     
 }

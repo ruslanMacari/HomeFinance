@@ -26,15 +26,15 @@ import ruslan.macari.web.exceptions.DuplicateFieldsException;
 @RequestMapping(LoginController.URL)
 public class LoginController {
 
-    static final String URL = "/login";
-    static final String REDIRECT = "redirect:";
-    static final String REDIRECT_ROOT = REDIRECT + "/";
-    static final String REDIRECT_URL = REDIRECT + URL;
-    static final String DIRECTORY = "/auth";
-    static final String URL_PATH = DIRECTORY + URL;
-    static final String REGISTRATION = "/registration";
-    static final String REGISTRATION_PATH = DIRECTORY + REGISTRATION;
-    static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
+    public static final String URL = "/login";
+    public static final String REDIRECT = "redirect:";
+    public static final String REDIRECT_ROOT = REDIRECT + "/";
+    public static final String REDIRECT_URL = REDIRECT + URL;
+    public static final String DIRECTORY = "/auth";
+    public static final String URL_PATH = DIRECTORY + URL;
+    public static final String REGISTRATION = "/registration";
+    public static final String REGISTRATION_PATH = DIRECTORY + REGISTRATION;
+    public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
             
     private UserService userService;
     private String rootpassword;

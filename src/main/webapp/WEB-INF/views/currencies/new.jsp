@@ -13,8 +13,14 @@
         <sf:form method="post" commandName="newCurrency" action="${currenciesNew}" >
             <sf:label class="form__label" path="code"><spring:message code="code"/>:</sf:label>
             <sf:input class="form__text" path="code"/>
+            <div>
+                <sf:errors class="form__error" path="code"/>
+            </div>
             <sf:label class="form__label" path="name"><spring:message code="description"/>:</sf:label>
             <sf:input class="form__text" path="name"/>
+            <div>
+                <sf:errors class="form__error" path="name"/>
+            </div>
             <input class="form__submit" type="submit" value="<spring:message code="save"/>" />
         </sf:form>
         <c:url var="currencies" value="/currencies"/>

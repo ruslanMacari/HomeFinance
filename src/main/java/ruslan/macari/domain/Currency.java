@@ -2,6 +2,7 @@
 package ruslan.macari.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +10,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Generated;
 
 @Entity
-@Table(name = "currencies")
-public class Currency implements Serializable {
+@Table(name = "currencies", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
+                                                 @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
+public class Currency extends ConstraintEntity implements Serializable {
     
     private int id;
     private String name;
     private String code;
+    
+    public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_description";
+    public static final String UNIQUE_CONSTRAINT_CODE = "duplicated_code";
+    
+    {
+        constraintsMap = new HashMap<>();
+        constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
+        constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +42,7 @@ public class Currency implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "name", unique = true, nullable = false, length = 45)
+    @Column(name = "name", nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -39,7 +51,7 @@ public class Currency implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "code", unique = true, nullable = false, length = 5)
+    @Column(name = "code", nullable = false, length = 5)
     public String getCode() {
         return code;
     }
@@ -92,5 +104,5 @@ public class Currency implements Serializable {
     public String toString() {
         return "Currency{" + "id=" + id + ", name=" + name + '}';
     }
-    
+
 }

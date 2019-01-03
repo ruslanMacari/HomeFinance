@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.config.TestConfig;
 import ruslan.macari.service.CurrencyService;
+import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,8 +39,8 @@ public class CurrencyServiceImplTest {
             currencyService.add(new Currency("USD", "840"));
             fail("Exception must be thrown");
         } catch (Exception e) {
-            if (!(e instanceof DataIntegrityViolationException)) {
-                fail("DataIntegrityViolationException must be thrown");
+            if (!(e instanceof DuplicateFieldsException)) {
+                fail("DuplicateFieldsException must be thrown");
             }
         }
     }

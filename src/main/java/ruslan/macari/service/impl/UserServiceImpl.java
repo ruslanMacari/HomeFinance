@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     private ConstraintPersist constraintPersist;
     
     @Autowired
-    public void setConstraintPersist(ConstraintPersist safePersist) {
-        this.constraintPersist = safePersist;
+    public void setConstraintPersist(ConstraintPersist constraintPersist) {
+        this.constraintPersist = constraintPersist;
     }
     
     @Autowired
