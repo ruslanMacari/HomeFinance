@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ruslan.macari.domain.Currency;
-import ruslan.macari.security.User;
 import ruslan.macari.service.CurrencyService;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 

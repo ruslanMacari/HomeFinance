@@ -19,22 +19,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
-import ruslan.macari.web.exceptions.DuplicateFieldsException;
+import ruslan.macari.util.PathSelector;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
 @RequestMapping(UsersController.URL)
 public class UsersController {
 
-    private UserService userService;
-    private PasswordEncoder encoder;
-    private String rootname;
     public static final String URL = "/users";
     public static final String NEW = "/new";
     public static final String NEW_PATH = URL + NEW;
     public static final String REDIRECT_PATH = "redirect:" + URL;
     public static final String LIST_PATH = URL + "/list";
     public static final String VIEW_PATH = URL + "/view";
+    private UserService userService;
+    private PasswordEncoder encoder;
+    private String rootname;
+    private PathSelector pathSelector;
+
+    @Autowired
+    public void setPathSelector(PathSelector pathSelector) {
+        this.pathSelector = pathSelector;
+    }
     
     @Value("${db.username}")
     public void setRootname(String rootname) {
@@ -81,13 +87,9 @@ public class UsersController {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
-        try {
-            userService.update(getUser(id, user, changePassword, admin));
-            return REDIRECT_PATH;
-        } catch (DuplicateFieldsException ex) {
-            result.rejectValue(ex.getField(), ex.getErrorCode());
-            return VIEW_PATH;
-        }
+        pathSelector.setAction(() -> userService.update(getUser(id, user, changePassword, admin)));
+        pathSelector.setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result);
+        return pathSelector.getPath();
     }
     
     private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
@@ -112,13 +114,8 @@ public class UsersController {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        try {
-            add(user, admin);
-            return REDIRECT_PATH;
-        } catch (DuplicateFieldsException ex) {
-            result.rejectValue(ex.getField(), ex.getErrorCode());
-            return NEW_PATH;
-        }
+        pathSelector.setAction(() -> add(user, admin)).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result);
+        return pathSelector.getPath();
     }
 
     private void add(User user, boolean admin) {
