@@ -87,9 +87,8 @@ public class UsersController {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
-        pathSelector.setAction(() -> userService.update(getUser(id, user, changePassword, admin)));
-        pathSelector.setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result);
-        return pathSelector.getPath();
+        pathSelector.setActionOk(() -> userService.update(getUser(id, user, changePassword, admin)));
+        return pathSelector.setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result).getPath();
     }
     
     private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
@@ -114,7 +113,7 @@ public class UsersController {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        pathSelector.setAction(() -> add(user, admin)).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result);
+        pathSelector.setActionOk(() -> add(user, admin)).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result);
         return pathSelector.getPath();
     }
 

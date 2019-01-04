@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.CurrencyService;
-import ruslan.macari.web.exceptions.DuplicateFieldsException;
+import ruslan.macari.util.PathSelector;
 
 @Controller
 @RequestMapping(CurrenciesController.URL)
@@ -23,7 +23,14 @@ public class CurrenciesController {
     public static final String NEW = "/new";
     public static final String NEW_PATH = URL + NEW;
     public static final String REDIRECT_PATH = "redirect:" + URL;
+    
     private CurrencyService currencyService;
+    private PathSelector pathSelector;
+
+    @Autowired
+    public void setPathSelector(PathSelector pathSelector) {
+        this.pathSelector = pathSelector;
+    }
 
     @Autowired
     public void setCurrencyService(CurrencyService currencyService) {
@@ -48,13 +55,8 @@ public class CurrenciesController {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        try {
-            currencyService.add(currency);
-            return REDIRECT_PATH;
-        } catch (DuplicateFieldsException ex) {
-            result.rejectValue(ex.getField(), ex.getErrorCode());
-            return NEW_PATH;
-        }
+        pathSelector.setActionOk(() -> currencyService.add(currency));
+        return pathSelector.setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result).getPath();
     }
     
 }

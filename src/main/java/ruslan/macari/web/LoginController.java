@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
+import ruslan.macari.util.PathSelector;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Controller
@@ -40,6 +41,12 @@ public class LoginController {
     private String rootpassword;
     private String rootname;
     private PasswordEncoder encoder;
+    private PathSelector pathSelector;
+
+    @Autowired
+    public void setPathSelector(PathSelector pathSelector) {
+        this.pathSelector = pathSelector;
+    }
     
     @Value("${db.password}")
     public void setRootpassword(String rootpassword) {
@@ -107,14 +114,10 @@ public class LoginController {
             redirectAttributes.addFlashAttribute("model", model);
             return REDIRECT_REGISTRATION;
         }
-        try {
-            addUser(user);
-            return REDIRECT_URL;
-        } catch (DuplicateFieldsException ex) {
-            result.rejectValue(ex.getField(), ex.getErrorCode());
-            redirectAttributes.addFlashAttribute("model", model);
-            return REDIRECT_REGISTRATION;
-        }
+        pathSelector.setActionOk(() -> addUser(user));
+        pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
+        return pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result).getPath();
+        
     }
     
     private void addUser(User user) throws DuplicateFieldsException {

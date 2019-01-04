@@ -8,14 +8,21 @@ import ruslan.macari.web.exceptions.DuplicateFieldsException;
 @Component
 public class PathSelectorImpl implements PathSelector{
     
-    private Runnable action;
+    private Runnable actionOk;
+    private Runnable actionError;
     private String pathIfOk;
     private String pathIfError;
     private Errors errors;
     
     @Override
-    public PathSelector setAction(Runnable action) {
-        this.action = action;
+    public PathSelector setActionOk(Runnable actionOk) {
+        this.actionOk = actionOk;
+        return this;
+    }
+    
+    @Override
+    public PathSelector setActionError(Runnable actionError) {
+        this.actionError = actionError;
         return this;
     }
 
@@ -35,14 +42,21 @@ public class PathSelectorImpl implements PathSelector{
     @Override
     public String getPath() {
         try {
-            action.run();
+            actionOk.run();
             return pathIfOk;
         } catch (DuplicateFieldsException ex) {
             errors.rejectValue(ex.getField(), ex.getErrorCode());
+            runActionError();
             return pathIfError;
         }
     }
 
-    
-    
+    private void runActionError() {
+        if (actionError == null) {
+            return;
+        }
+        actionError.run();
+        actionError = null;
+    }
+
 }
