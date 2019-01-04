@@ -2,26 +2,27 @@ package ruslan.macari.util.impl;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import ruslan.macari.util.Action;
 import ruslan.macari.util.PathSelector;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Component
 public class PathSelectorImpl implements PathSelector{
     
-    private Runnable actionOk;
-    private Runnable actionError;
+    private Action actionOk;
+    private Action actionError;
     private String pathIfOk;
     private String pathIfError;
     private Errors errors;
     
     @Override
-    public PathSelector setActionOk(Runnable actionOk) {
+    public PathSelector setActionOk(Action actionOk) {
         this.actionOk = actionOk;
         return this;
     }
     
     @Override
-    public PathSelector setActionError(Runnable actionError) {
+    public PathSelector setActionError(Action actionError) {
         this.actionError = actionError;
         return this;
     }
@@ -42,7 +43,7 @@ public class PathSelectorImpl implements PathSelector{
     @Override
     public String getPath() {
         try {
-            actionOk.run();
+            actionOk.execute();
             return pathIfOk;
         } catch (DuplicateFieldsException ex) {
             errors.rejectValue(ex.getField(), ex.getErrorCode());
@@ -55,7 +56,7 @@ public class PathSelectorImpl implements PathSelector{
         if (actionError == null) {
             return;
         }
-        actionError.run();
+        actionError.execute();
         actionError = null;
     }
 

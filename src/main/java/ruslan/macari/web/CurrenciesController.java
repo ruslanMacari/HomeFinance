@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.CurrencyService;
+import ruslan.macari.util.Action;
 import ruslan.macari.util.PathSelector;
 
 @Controller
@@ -23,6 +25,7 @@ public class CurrenciesController {
     public static final String NEW = "/new";
     public static final String NEW_PATH = URL + NEW;
     public static final String REDIRECT_PATH = "redirect:" + URL;
+    public static final String VIEW_PATH = URL + "/view";
     
     private CurrencyService currencyService;
     private PathSelector pathSelector;
@@ -55,8 +58,15 @@ public class CurrenciesController {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        pathSelector.setActionOk(() -> currencyService.add(currency));
-        return pathSelector.setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result).getPath();
+        Action action = () -> currencyService.add(currency);
+        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result).getPath();
+    }
+    
+    @GetMapping(value = "/{id}")
+    public String view(@PathVariable("id") Integer id, Model model) {
+        Currency currency = currencyService.getByID(id);
+        model.addAttribute("currency", currency);
+        return "/users/view";//VIEW_PATH;
     }
     
 }

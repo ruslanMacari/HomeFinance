@@ -117,7 +117,6 @@ public class LoginController {
         pathSelector.setActionOk(() -> addUser(user));
         pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
         return pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result).getPath();
-        
     }
     
     private void addUser(User user) throws DuplicateFieldsException {

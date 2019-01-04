@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" errorPage="../exception.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
     <jsp:param name="title" value="users.details"/>
 </jsp:include>
+
 <h1 class="box-header__title"><spring:message code="users.details"/></h1>
 <div id="form">
     <div class="form__wrapper">
@@ -37,8 +38,7 @@
                     <input class="form__checkbox" id="admin" name="admin" value="true" type="checkbox" disabled="true"/>
                 </c:if>
             </div>
-            <input class="button" type="button" value="<spring:message code="edit"/>" id="unlock" />
-            <input class="form__submit hidden" type="submit" value="<spring:message code="save"/>" id="save"/>
+            <jsp:include page='../includes/unlock-save.jsp'/>    
         </sf:form>
         <c:url var="users" value="/users"/>    
         <a class="button button_back" href="${users}" class="go-back"><spring:message code="back"/></a>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
+import ruslan.macari.util.Action;
 import ruslan.macari.util.PathSelector;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
@@ -87,8 +88,8 @@ public class UsersController {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
-        pathSelector.setActionOk(() -> userService.update(getUser(id, user, changePassword, admin)));
-        return pathSelector.setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result).getPath();
+        Action action = () -> userService.update(getUser(id, user, changePassword, admin));
+        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result).getPath();
     }
     
     private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
@@ -113,8 +114,8 @@ public class UsersController {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        pathSelector.setActionOk(() -> add(user, admin)).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result);
-        return pathSelector.getPath();
+        Action action = () -> add(user, admin);
+        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result).getPath();
     }
 
     private void add(User user, boolean admin) {

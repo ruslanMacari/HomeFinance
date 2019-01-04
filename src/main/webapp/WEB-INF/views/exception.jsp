@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='includes/head.jsp'>
-    <jsp:param name="title" value="exception"/>
+    <jsp:param name="title" value="users.details"/>
 </jsp:include>
 <div class="box-header__title">
     <h1 class="box-header__title"><spring:message code="exception-title"/></h1>
