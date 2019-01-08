@@ -8,6 +8,9 @@
 </jsp:include>
 <div class="box-header__title">
     <h1 class="box-header__title"><spring:message code="exception-title"/></h1>
+    <c:if test="${errorMessage != null}">
+        <h2>${errorMessage}</h2>
+    </c:if>
     <c:url var="home" value="/"/>
     <a class="button" href="${home}"><spring:message code="back-to-main"/></a>
 </div>

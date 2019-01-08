@@ -1,5 +1,6 @@
 package ruslan.macari.config;
 
+import javax.servlet.Filter;
 import ruslan.macari.config.security.SecurityConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -7,6 +8,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import ruslan.macari.util.JSPExceptionFilter;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -41,6 +43,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
         dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
         return dispatcherServlet;
+    }
+    
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[]{new JSPExceptionFilter()};
     }
     
 }

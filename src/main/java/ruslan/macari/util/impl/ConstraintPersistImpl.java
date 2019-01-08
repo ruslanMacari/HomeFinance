@@ -3,8 +3,8 @@ package ruslan.macari.util.impl;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import ruslan.macari.domain.ConstraintEntity;
@@ -15,14 +15,14 @@ import ruslan.macari.util.ConstraintPersist;
 @Component
 public class ConstraintPersistImpl implements ConstraintPersist<ConstraintEntity>{
 
-    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class.getName());
     
     @Override
     public ConstraintEntity add(Supplier<ConstraintEntity> supplier, Map<String, String> constraintsMap) throws DuplicateFieldsException {
         try {
             return supplier.get();
         } catch (DataIntegrityViolationException exception) {
-            LOGGER.log(Level.SEVERE, exception.getMessage());
+            logger.error(exception.getMessage(), exception);
             String rootMsg = getRootCause(exception).getMessage();
             if (rootMsg != null) {
                 String lowerCaseMsg = rootMsg.toLowerCase();

@@ -72,5 +72,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         interceptor.setParamName("lang");
         registry.addInterceptor(interceptor);
     }
-
+    
 }
