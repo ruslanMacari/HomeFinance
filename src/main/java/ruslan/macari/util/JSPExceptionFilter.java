@@ -32,7 +32,7 @@ public class JSPExceptionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (Exception ex) {
-            logger.error("Error : {}", ex);
+            logger.error(ex.getMessage(), ex);
             request.setAttribute("errorMessage", ex);
             request.getRequestDispatcher("/WEB-INF/views/exception.jsp")
                     .forward(request, response);
