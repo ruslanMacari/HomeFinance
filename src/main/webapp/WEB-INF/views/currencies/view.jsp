@@ -4,22 +4,25 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE>
 <jsp:include page='../includes/head.jsp'>
-    <jsp:param name="title" value="currencies.new"/>
+    <jsp:param name="title" value="currencies.details"/>
 </jsp:include>
-<h1 class="box-header__title"><spring:message code="currencies.new"/></h1>
+<h1 class="box-header__title"><spring:message code="currencies.details"/></h1>
 <div class="form">
     <div class="form__wrapper">
-        <c:url value="/currencies/new" var="currenciesNew"/>
-        <sf:form method="post" commandName="currency" action="${currenciesNew}" >
-            <sf:label class="form__label" path="code"><spring:message code="code"/>:</sf:label>
-            <sf:input class="form__text" path="code" disabled="true"/>
-            <div>
-                <sf:errors class="form__error" path="code"/>
+        <sf:form method="post" commandName="currency">
+            <div class="form__input-group">
+                <sf:label class="form__label" path="code"><spring:message code="code"/>:</sf:label>
+                <sf:input class="form__text disabledJs" path="code" disabled="true"/>
+                <div>
+                    <sf:errors class="form__error" path="code"/>
+                </div>
             </div>
-            <sf:label class="form__label" path="name"><spring:message code="description"/>:</sf:label>
-            <sf:input class="form__text" path="name" disabled="true"/>
-            <div>
-                <sf:errors class="form__error" path="name"/>
+            <div class="form__input-group">
+                <sf:label class="form__label" path="name"><spring:message code="description"/>:</sf:label>
+                <sf:input class="form__text disabledJs" path="name" disabled="true"/>
+                <div>
+                    <sf:errors class="form__error" path="name"/>
+                </div>
             </div>
             <jsp:include page='../includes/unlock-save.jsp'/>    
         </sf:form>

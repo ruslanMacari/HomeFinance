@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import ruslan.macari.util.PathSelector;
 
 @Controller
 @RequestMapping(CurrenciesController.URL)
-public class CurrenciesController {
+public class CurrenciesController extends CommonController<Currency> {
  
     public static final String URL = "/currencies";
     public static final String LIST_PATH = URL + "/list";
@@ -28,12 +29,6 @@ public class CurrenciesController {
     public static final String VIEW_PATH = URL + "/view";
     
     private CurrencyService currencyService;
-    private PathSelector pathSelector;
-
-    @Autowired
-    public void setPathSelector(PathSelector pathSelector) {
-        this.pathSelector = pathSelector;
-    }
 
     @Autowired
     public void setCurrencyService(CurrencyService currencyService) {
@@ -65,8 +60,25 @@ public class CurrenciesController {
     @GetMapping(value = "/{id}")
     public String view(@PathVariable("id") Integer id, Model model) {
         Currency currency = currencyService.getByID(id);
+        test(currency);
         model.addAttribute("currency", currency);
         return VIEW_PATH;
+    }
+    
+    @PostMapping(value = "/{id}")
+    public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
+            @PathVariable("id") Integer id) {
+        if (result.hasErrors()) {
+            return VIEW_PATH;
+        }
+        Action action = () -> currencyService.update(currency);
+        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result).getPath();
+    }
+    
+    @DeleteMapping(value = "/{id}")
+    public String deleteUser(@PathVariable("id") Integer id) {
+        currencyService.delete(id);
+        return REDIRECT_PATH;
     }
     
 }

@@ -15,11 +15,16 @@
     var saveItem = selector.getElement("#save");
     var unlockEvent = function () {
         unlock.className = "hidden";
-        selector.getElement("#name").removeAttribute(disabled);
-        selector.getElement("#changePassword").removeAttribute(disabled);
-        selector.getElement("#admin").removeAttribute(disabled);
+        
+        var disabledElements = document.querySelectorAll(".disabledJs");
+        disabledElements.forEach(element => {
+           element.removeAttribute(disabled); 
+        });
+        
+//        selector.getElement("#name").removeAttribute(disabled);
+//        selector.getElement("#changePassword").removeAttribute(disabled);
+//        selector.getElement("#admin").removeAttribute(disabled);
         saveItem.classList.remove("hidden");
-
     };
 
     if (unlock !== null) {
@@ -40,7 +45,9 @@
         }
     };
 
-    changePassword.addEventListener("click", changePasswordEvent);
+    if (changePassword !== null) {
+        changePassword.addEventListener("click", changePasswordEvent);
+    }
     
     //on save
     var saveEvent = function () {
@@ -50,7 +57,9 @@
         }
     };
     
-    saveItem.addEventListener("click", saveEvent);
+    if (saveItem !== null) {
+        saveItem.addEventListener("click", saveEvent);
+    }    
     
 })();
 

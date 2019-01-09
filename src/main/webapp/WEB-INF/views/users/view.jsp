@@ -13,7 +13,7 @@
         <sf:form method="post" modelAttribute="user">
             <div class="form__input-group">
                 <sf:label class="form__label" path="name"><spring:message code="user.name"/>:</sf:label>
-                <sf:input class="form__text" path="name" id="name" value="${user.name}" disabled="true"/>
+                <sf:input class="form__text disabledJs" path="name" id="name" value="${user.name}" disabled="true"/>
                 <div>
                     <sf:errors class="form__error" path="name"/>
                 </div>
@@ -21,7 +21,7 @@
             <div class="form__input-group">
                 <div class="form__input-group">
                     <label class="form__label" for="changePassword"><spring:message code="change-password"/>:</label>
-                    <input class="form__checkbox" id="changePassword" name="changePassword" value="true" type="checkbox" disabled="true"/>
+                    <input class="form__checkbox disabledJs" id="changePassword" name="changePassword" value="true" type="checkbox" disabled="true"/>
                 </div>
                 <sf:password class="form__text" path="password" id="password" disabled="true"/>
                 <div>
@@ -32,10 +32,10 @@
                 <label class="form__label" for="admin"><spring:message code="admin"/>:</label>
                 <c:set var = "admin" value = "${user.hasAdmin()}"/>
                 <c:if test="${admin}">
-                    <input class="form__checkbox" id="admin" name="admin" value="true" type="checkbox" disabled="true" checked/>
+                    <input class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled="true" checked/>
                 </c:if>
                 <c:if test="${!admin}">
-                    <input class="form__checkbox" id="admin" name="admin" value="true" type="checkbox" disabled="true"/>
+                    <input class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled="true"/>
                 </c:if>
             </div>
             <jsp:include page='../includes/unlock-save.jsp'/>    

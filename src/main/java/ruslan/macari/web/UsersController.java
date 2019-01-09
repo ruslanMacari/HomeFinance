@@ -25,7 +25,7 @@ import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
 @RequestMapping(UsersController.URL)
-public class UsersController {
+public class UsersController extends CommonController<User>{
 
     public static final String URL = "/users";
     public static final String NEW = "/new";
@@ -33,15 +33,10 @@ public class UsersController {
     public static final String REDIRECT_PATH = "redirect:" + URL;
     public static final String LIST_PATH = URL + "/list";
     public static final String VIEW_PATH = URL + "/view";
+    
     private UserService userService;
     private PasswordEncoder encoder;
     private String rootname;
-    private PathSelector pathSelector;
-
-    @Autowired
-    public void setPathSelector(PathSelector pathSelector) {
-        this.pathSelector = pathSelector;
-    }
     
     @Value("${db.username}")
     public void setRootname(String rootname) {
@@ -69,14 +64,14 @@ public class UsersController {
     @GetMapping(value = "/{id}")
     public String view(@PathVariable("id") Integer id, Model model) {
         User user = userService.getById(id);
-        testRoot(user);
+        testUser(user);
         model.addAttribute("user", user);
         return VIEW_PATH;
     }
     
-    private void testRoot(User user) {
-        if (user == null
-                || user.getName().equals(rootname)) {
+    private void testUser(User user) {
+        test(user);
+        if (user.getName().equals(rootname)) {
             throw new PageNotFoundException();
         }
     }
