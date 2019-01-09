@@ -1,4 +1,4 @@
-package ruslan.macari.web;
+package ruslan.macari.web.exceptionshandle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ public class GlobalAdvice {
     
     private final Logger logger = LoggerFactory.getLogger(GlobalAdvice.class.getName());
     
-    @ExceptionHandler({Throwable.class, Exception.class})
+    @ExceptionHandler(Throwable.class)
     public String exception(Exception e) {
         logger.error(e.getMessage(), e);
         return "exception";

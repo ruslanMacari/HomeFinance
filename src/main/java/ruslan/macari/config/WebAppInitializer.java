@@ -8,7 +8,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ruslan.macari.util.JSPExceptionFilter;
+import ruslan.macari.web.exceptionshandle.JSPExceptionFilter;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 

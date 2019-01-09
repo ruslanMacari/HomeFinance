@@ -66,7 +66,7 @@ public class CurrenciesController {
     public String view(@PathVariable("id") Integer id, Model model) {
         Currency currency = currencyService.getByID(id);
         model.addAttribute("currency", currency);
-        return "/users/view";//VIEW_PATH;
+        return VIEW_PATH;
     }
     
 }

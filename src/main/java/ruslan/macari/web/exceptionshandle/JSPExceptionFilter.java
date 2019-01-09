@@ -1,4 +1,4 @@
-package ruslan.macari.util;
+package ruslan.macari.web.exceptionshandle;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -7,6 +7,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,9 @@ public class JSPExceptionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            request.setAttribute("errorMessage", ex);
+            String error = Jsoup.parse(ex.getMessage()).text();
+            logger.error(error, ex);
+            request.setAttribute("errorMessage", error);
             request.getRequestDispatcher("/WEB-INF/views/exception.jsp")
                     .forward(request, response);
         }
