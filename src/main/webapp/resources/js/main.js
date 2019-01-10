@@ -17,9 +17,7 @@
         unlock.className = "hidden";
         
         var disabledElements = document.querySelectorAll(".disabledJs");
-        disabledElements.forEach(element => {
-           element.removeAttribute(disabled); 
-        });
+        disabledElements.forEach(element => element.removeAttribute(disabled));
         
 //        selector.getElement("#name").removeAttribute(disabled);
 //        selector.getElement("#changePassword").removeAttribute(disabled);
