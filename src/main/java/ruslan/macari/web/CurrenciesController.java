@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.CurrencyService;
 import ruslan.macari.util.Action;
-import ruslan.macari.util.PathSelector;
 
 @Controller
 @RequestMapping(CurrenciesController.URL)
@@ -80,5 +79,8 @@ public class CurrenciesController extends CommonController<Currency> {
         currencyService.delete(id);
         return REDIRECT_PATH;
     }
+    
+    //exchange rates service
+    //http://www.bnm.md/ro/official_exchange_rates?get_xml=1&date=13.01.2018
     
 }
