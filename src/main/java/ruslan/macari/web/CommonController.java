@@ -9,7 +9,7 @@ import ruslan.macari.web.exceptions.PageNotFoundException;
 public abstract class CommonController<T> {
     
     protected PathSelector pathSelector;
-
+    
     @Autowired
     public void setPathSelector(PathSelector pathSelector) {
         this.pathSelector = pathSelector;
