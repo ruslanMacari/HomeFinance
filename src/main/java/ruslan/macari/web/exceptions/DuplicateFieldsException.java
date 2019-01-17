@@ -1,12 +1,14 @@
 package ruslan.macari.web.exceptions;
 
 import java.util.Map;
+import lombok.Generated;
 
 public class DuplicateFieldsException extends RuntimeException{
     
     private String field;
     private String errorCode;
-
+    
+    @Generated
     public String getField() {
         return field;
     }

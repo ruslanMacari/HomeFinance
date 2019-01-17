@@ -2,7 +2,6 @@ package ruslan.macari.web;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -13,15 +12,14 @@ import static org.mockito.Mockito.times;
 import org.springframework.ui.Model;
 import ruslan.macari.service.UserService;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ruslan.macari.util.PathSelector;
+import ruslan.macari.util.impl.PathSelectorTest;
 
 public class LoginControllerTest {
     
@@ -33,7 +31,6 @@ public class LoginControllerTest {
     private String rootname = "root";
     private String rootpassword = "pass";
     private PasswordEncoder encoder;
-    //private Validator validator;
     
     @Before
     public void setUp() {
@@ -47,12 +44,6 @@ public class LoginControllerTest {
         loginController.setRootpassword(rootpassword);
         encoder = mock(PasswordEncoder.class);
         loginController.setEncoder(encoder);
-        //validator = mock(Validator.class);
-        //loginController.setNewUserValidator(validator);
-    }
-    
-    @After
-    public void cleanUp() {
     }
     
     @Test
@@ -71,9 +62,9 @@ public class LoginControllerTest {
         SecurityContext contextBefore = SecurityContextHolder.getContext();
         Authentication auth = getMockAuth();
         when(auth.isAuthenticated()).thenReturn(true);
-        assertTrue(loginController.login(model).equals("redirect:/"));
+        assertTrue(loginController.login(model).equals(LoginController.REDIRECT_ROOT));
         when(auth.isAuthenticated()).thenReturn(false);
-        assertTrue(loginController.login(model).equals("/auth/login"));
+        assertTrue(loginController.login(model).equals(LoginController.URL_PATH));
         SecurityContextHolder.setContext(contextBefore);
     }
     
@@ -87,7 +78,7 @@ public class LoginControllerTest {
     
     @Test
     public void testRegistrationGet() {
-        assertTrue(loginController.registration(model).equals("/auth/registration"));
+        assertTrue(loginController.registration(model).equals(LoginController.REGISTRATION_PATH));
         verify(model, times(1)).addAttribute("user", new User());
         Map<String, Object> map = new HashMap<>();
         map.put("model", model);
@@ -101,20 +92,13 @@ public class LoginControllerTest {
         when(bindingResult.hasErrors()).thenReturn(true);
         RedirectAttributes attributes = mock(RedirectAttributes.class);
         String result = loginController.registration(user, bindingResult, attributes, model);
-        assertTrue(result.equals("redirect:/login/registration"));
+        assertTrue(result.equals(LoginController.REDIRECT_REGISTRATION));
         when(bindingResult.hasErrors()).thenReturn(false);
-//        result = loginController.registration(user, bindingResult, attributes, model);
-//        assertTrue(result.equals("redirect:/login"));
+        
+        PathSelector pathSelector = new PathSelectorTest();
+        loginController.setPathSelector(pathSelector);
+        result = loginController.registration(user, bindingResult, attributes, model);
+        assertEquals(result, ((PathSelectorTest)pathSelector).pathIfOk);
     }
-    
-//    @Test
-//    public void testInitUserBinder() {
-//        WebDataBinder dataBinder = mock(WebDataBinder.class);
-//        loginController.initUserBinder(dataBinder);
-//        verify(dataBinder, never()).setValidator(validator);
-//        when(dataBinder.getTarget()).thenReturn(new Object());
-//        loginController.initUserBinder(dataBinder);
-//        verify(dataBinder, times(1)).setValidator(validator);
-//    }
     
 }

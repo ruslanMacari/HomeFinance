@@ -2,20 +2,16 @@ package ruslan.macari.web;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.servlet.ModelAndView;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
 import ruslan.macari.util.PathSelector;
+import ruslan.macari.util.impl.PathSelectorTest;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
 public class UsersControllerTest {
@@ -42,13 +38,14 @@ public class UsersControllerTest {
         model = mock(Model.class);
         result = mock(BindingResult.class);
         user = mock(User.class);
-        pathSelector = mock(PathSelector.class);
+        pathSelector = new PathSelectorTest();
+        usersController.setPathSelector(pathSelector);
     }
 
     @Test
     public void testList() {
         System.out.println("list");
-        assertTrue(usersController.list(model).equals("/users/list"));
+        assertTrue(usersController.list(model).equals(UsersController.LIST_PATH));
     }
 
     @Test
@@ -58,7 +55,7 @@ public class UsersControllerTest {
         when(user.getName()).thenReturn("test");
         when(userService.getById(id)).thenReturn(user);
         try {
-            assertTrue(usersController.view(id, model).equals("/users/view"));
+            assertTrue(usersController.view(id, model).equals(UsersController.VIEW_PATH));
         } catch (PageNotFoundException e) {
             fail("Exception must not be thrown!");
         }
@@ -77,39 +74,32 @@ public class UsersControllerTest {
         }
     }
 
-//    @Test
-//    public void testPageNotFoundException() {
-//        System.out.println("pageNotFoundException");
-//        ModelAndView modelAndView = usersController.pageNotFoundException();
-//        assertTrue(modelAndView.getViewName().equals("resource-not-found"));
-//    }
-
     @Test
     public void testUpdate() {
-        System.out.println("update");
         when(result.hasErrors()).thenReturn(true);
         Integer id = 100;
         String resultUpdate = usersController.update(user, result, id, true, true);
-        assertTrue(resultUpdate.equals("/users/view"));
+        assertTrue(resultUpdate.equals(UsersController.VIEW_PATH));
         when(result.hasErrors()).thenReturn(false);
         when(userService.getById(id)).thenReturn(user);
-//        resultUpdate = usersController.update(user, result, id, true, true);
-//        assertTrue(resultUpdate.equals("redirect:/users"));
+        
+        resultUpdate = usersController.update(user, result, id, true, true);
+        assertTrue(resultUpdate.equals(((PathSelectorTest)pathSelector).pathIfOk));
     }
     
     @Test
     public void testNewUser() {
         System.out.println("newUser");
-        assertTrue(usersController.newUser(model).equals("/users/new"));
+        assertTrue(usersController.newUser(model).equals(UsersController.NEW_PATH));
     }
     
     @Test
     public void testSave() throws Throwable {
         System.out.println("save");
         when(result.hasErrors()).thenReturn(true);
-        assertTrue(usersController.save(user, result, true).equals("/users/new"));
+        assertTrue(usersController.save(user, result, true).equals(UsersController.NEW_PATH));
         when(result.hasErrors()).thenReturn(false);
-        //assertTrue(usersController.save(user, result, true).equals("redirect:/users"));
+        assertTrue(usersController.save(user, result, true).equals(UsersController.REDIRECT_PATH));
     }
     
     @Test
@@ -118,26 +108,4 @@ public class UsersControllerTest {
         assertTrue(usersController.deleteUser(1).equals("redirect:/users"));
     }
     
-//    @Test
-//    public void testInitUserBinder() {
-//        System.out.println("deleteUser");
-//        WebDataBinder dataBinder = mock(WebDataBinder.class);
-//        usersController.initUserBinder(dataBinder);
-//        verify(dataBinder, never()).setValidator(validator);
-//        when(dataBinder.getTarget()).thenReturn(new Object());
-//        usersController.initUserBinder(dataBinder);
-//        verify(dataBinder, times(1)).setValidator(validator);
-//    }
-//    
-//    @Test
-//    public void testInitNewUserBinder() {
-//        System.out.println("deleteUser");
-//        WebDataBinder dataBinder = mock(WebDataBinder.class);
-//        usersController.initNewUserBinder(dataBinder);
-//        verify(dataBinder, never()).setValidator(validator);
-//        when(dataBinder.getTarget()).thenReturn(new Object());
-//        usersController.initNewUserBinder(dataBinder);
-//        verify(dataBinder, times(1)).setValidator(validator);
-//    }
-
 }
