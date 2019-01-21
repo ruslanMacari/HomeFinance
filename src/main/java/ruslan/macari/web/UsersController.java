@@ -20,7 +20,6 @@ import ruslan.macari.security.Role;
 import ruslan.macari.security.User;
 import ruslan.macari.service.UserService;
 import ruslan.macari.util.Action;
-import ruslan.macari.util.PathSelector;
 import ruslan.macari.web.exceptions.PageNotFoundException;
 
 @Controller
