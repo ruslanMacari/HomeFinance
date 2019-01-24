@@ -19,9 +19,6 @@
         var disabledElements = document.querySelectorAll(".disabledJs");
         disabledElements.forEach(element => element.removeAttribute(disabled));
         
-//        selector.getElement("#name").removeAttribute(disabled);
-//        selector.getElement("#changePassword").removeAttribute(disabled);
-//        selector.getElement("#admin").removeAttribute(disabled);
         saveItem.classList.remove("hidden");
     };
 
