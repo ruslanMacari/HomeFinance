@@ -35,8 +35,20 @@
         <json-path>2.2.0</json-path>
         <mockito-all>1.9.5</mockito-all>
         <spring-securiry>3.2.5.RELEASE</spring-securiry>
+        <jackson-core-version>2.5.2</jackson-core-version>
     </properties>
     <dependencies>
+        <!--jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-core-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-core-version}</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
