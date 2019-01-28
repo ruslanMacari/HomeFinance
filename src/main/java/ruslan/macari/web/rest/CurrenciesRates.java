@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class CurrenciesRates {
 
+    private String numCode;
+    private String charCode;
     private String currency;
     private BigDecimal rate;
 
@@ -23,11 +25,20 @@ public class CurrenciesRates {
         this.rate = rate;
     }
 
-    public CurrenciesRates(String currency, BigDecimal rate) {
-        this.currency = currency;
-        this.rate = rate;
+    public String getNumCode() {
+        return numCode;
     }
 
-    public CurrenciesRates() {
+    public void setNumCode(String numCode) {
+        this.numCode = numCode;
     }
+
+    public String getCharCode() {
+        return charCode;
+    }
+
+    public void setCharCode(String charCode) {
+        this.charCode = charCode;
+    }
+    
 }
