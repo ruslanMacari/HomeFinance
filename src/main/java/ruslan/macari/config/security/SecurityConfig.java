@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp").permitAll()
+                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp", "/currencies/rates").permitAll()
                 .antMatchers("/users/**").hasAuthority(Role.ADMIN)
                 .anyRequest().authenticated()
                 .and()

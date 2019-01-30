@@ -11,12 +11,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,51 +32,49 @@ import org.xml.sax.InputSource;
 @RestController
 @RequestMapping("/currencies/rates")
 public class CurrenciesRestController {
-    
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<CurrenciesRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws IOException {
-        return new ResponseEntity<>(getRatesBNM(date), HttpStatus.OK);
+    public ResponseEntity<List<CurrenciesRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
+        return new ResponseEntity<>(getFilteredRates(date, (item) -> true), HttpStatus.OK );
     }
-    
-    private List<CurrenciesRates> getRatesBNM(String date) throws IOException {
+
+    private List<CurrenciesRates> getFilteredRates(String date, Predicate<CurrenciesRates> predicate) throws Exception {
         List<CurrenciesRates> list = new ArrayList<>();
         HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
         con.setRequestMethod("GET");
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder.parse(new InputSource(new StringReader(getRatesXML(con))));
-                document.getDocumentElement().normalize();
-                NodeList nodeList = document.getElementsByTagName("Valute");
-                final String numCode = "NumCode";
-                final String charCode = "CharCode";
-                final String name = "Name";
-                final String value = "Value";
-                short elementNode = Node.ELEMENT_NODE;
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    Node node = nodeList.item(i);
-                    if (node.getNodeType() == elementNode) {
-                        Element element = (Element) node;
-                        CurrenciesRates rates = new CurrenciesRates();
-                        rates.setNumCode(getText(element, numCode));
-                        rates.setCharCode(getText(element, charCode));
-                        rates.setCurrency(getText(element, name));
-                        rates.setRate(new BigDecimal(getText(element, value)));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new InputSource(new StringReader(getRatesXML(con))));
+            document.getDocumentElement().normalize();
+            NodeList nodeList = document.getElementsByTagName("Valute");
+            String numCode = "NumCode";
+            String charCode = "CharCode";
+            String name = "Name";
+            String value = "Value";
+            short elementNode = Node.ELEMENT_NODE;
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == elementNode) {
+                    Element element = (Element) node;
+                    CurrenciesRates rates = new CurrenciesRates();
+                    rates.setNumCode(getText(element, numCode));
+                    rates.setCharCode(getText(element, charCode));
+                    rates.setCurrency(getText(element, name));
+                    rates.setRate(new BigDecimal(getText(element, value)));
+                    if(predicate.test(rates)) {
                         list.add(rates);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } else {
-            System.out.println("GET request not worked");
+            throw new Exception("GET request not worked");
         }
         return list;
     }
     
     private String getUrl(String date) {
-        if(date.isEmpty()) {
+        if (date.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             date = LocalDate.now().format(formatter);
         }
@@ -94,6 +95,11 @@ public class CurrenciesRestController {
     private String getText(Element e, String tagName) {
         return e.getElementsByTagName(tagName).item(0).getTextContent();
     }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<CurrenciesRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date, 
+                                                          @RequestBody List<CurrenciesRates> ratesList) throws Exception {
+        return new ResponseEntity<>(getFilteredRates(date, (rates) -> ratesList.contains(rates)), HttpStatus.OK );
+    }
     
 }
-
