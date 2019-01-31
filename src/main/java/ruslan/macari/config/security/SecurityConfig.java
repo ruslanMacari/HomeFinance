@@ -1,5 +1,6 @@
 package ruslan.macari.config.security;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ruslan.macari.security.Role;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -33,9 +36,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        RequestMatcher csrfRequestMatcher = new RequestMatcher() {
+
+            // Disable CSFR protection on the following urls:
+            private AntPathRequestMatcher[] requestMatchers = {
+                new AntPathRequestMatcher("/rest/**")
+            };
+
+            @Override
+            public boolean matches(HttpServletRequest request) {
+                // If the request match one url the CSFR protection will be disabled
+                for (AntPathRequestMatcher rm : requestMatchers) {
+                    if (rm.matches(request)) {
+                        return true;
+                    }
+                }
+                return false;
+            } 
+        };
+
+        http.csrf().requireCsrfProtectionMatcher(csrfRequestMatcher).disable();
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp", "/currencies/rates").permitAll()
+                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp", "/rest/**").permitAll()
                 .antMatchers("/users/**").hasAuthority(Role.ADMIN)
                 .anyRequest().authenticated()
                 .and()
@@ -49,6 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().accessDeniedPage("/access-denied");
     
     }
+    
+    
 
     @Bean
     public PasswordEncoder passwordEncoder() {

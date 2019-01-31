@@ -19,4 +19,5 @@
     </sec:authorize>
     <a class="button" href="<c:url value='/currencies'/>"><spring:message code="currencies"/></a>
 </div>
+<!--<button type="submit" onclick="send()">call</button>-->
 <jsp:include page='includes/footer.jsp'/>

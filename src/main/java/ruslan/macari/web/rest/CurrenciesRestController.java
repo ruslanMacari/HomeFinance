@@ -15,7 +15,6 @@ import java.util.function.Predicate;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +29,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 @RestController
-@RequestMapping("/currencies/rates")
+@RequestMapping("/rest/currencies/rates")
 public class CurrenciesRestController {
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping()
     public ResponseEntity<List<CurrenciesRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
         return new ResponseEntity<>(getFilteredRates(date, (item) -> true), HttpStatus.OK );
     }
@@ -96,7 +95,7 @@ public class CurrenciesRestController {
         return e.getElementsByTagName(tagName).item(0).getTextContent();
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     public ResponseEntity<List<CurrenciesRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date, 
                                                           @RequestBody List<CurrenciesRates> ratesList) throws Exception {
         return new ResponseEntity<>(getFilteredRates(date, (rates) -> ratesList.contains(rates)), HttpStatus.OK );
