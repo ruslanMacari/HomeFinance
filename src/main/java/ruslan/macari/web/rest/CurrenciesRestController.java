@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.http.HttpStatus;
@@ -34,10 +34,10 @@ public class CurrenciesRestController {
 
     @GetMapping()
     public ResponseEntity<List<CurrenciesRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
-        return new ResponseEntity<>(getFilteredRates(date, (item) -> true), HttpStatus.OK );
+        return new ResponseEntity<>(getRates(date), HttpStatus.OK );
     }
 
-    private List<CurrenciesRates> getFilteredRates(String date, Predicate<CurrenciesRates> predicate) throws Exception {
+    private List<CurrenciesRates> getRates(String date) throws Exception {
         List<CurrenciesRates> list = new ArrayList<>();
         HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
         con.setRequestMethod("GET");
@@ -61,9 +61,7 @@ public class CurrenciesRestController {
                     rates.setCharCode(getText(element, charCode));
                     rates.setCurrency(getText(element, name));
                     rates.setRate(new BigDecimal(getText(element, value)));
-                    if(predicate.test(rates)) {
-                        list.add(rates);
-                    }
+                    list.add(rates);
                 }
             }
         } else {
@@ -98,7 +96,14 @@ public class CurrenciesRestController {
     @PostMapping
     public ResponseEntity<List<CurrenciesRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date, 
                                                           @RequestBody List<CurrenciesRates> ratesList) throws Exception {
-        return new ResponseEntity<>(getFilteredRates(date, (rates) -> ratesList.contains(rates)), HttpStatus.OK );
+        List<CurrenciesRates> list = getRates(date);
+        list = list.stream()
+                .filter((item) -> ratesList.contains(item))
+                .collect(Collectors.toList());
+        if(list.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK );
     }
     
 }

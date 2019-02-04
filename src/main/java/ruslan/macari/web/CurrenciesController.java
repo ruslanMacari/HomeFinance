@@ -80,7 +80,4 @@ public class CurrenciesController extends CommonController<Currency> {
         return REDIRECT_PATH;
     }
     
-    //exchange rates service
-    //http://www.bnm.md/ro/official_exchange_rates?get_xml=1&date=13.01.2018
-    
 }

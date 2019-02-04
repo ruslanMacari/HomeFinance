@@ -1,18 +1,20 @@
 package ruslan.macari.web.rest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class CurrenciesRestControllerTest {
 
-    CurrenciesRestController instance;
+    private CurrenciesRestController instance;
+    private String _01012019 = "01.01.2019";
 
     public CurrenciesRestControllerTest() {
         instance = new CurrenciesRestController();
@@ -26,7 +28,7 @@ public class CurrenciesRestControllerTest {
             fail("must throw NumberFormatException");
         } catch (NumberFormatException e) {
         }
-        date = "01.01.2019";
+        date = _01012019;
         ResponseEntity<List<CurrenciesRates>> allRates = instance.getAllRates(date);
         assertEquals(allRates.getStatusCode(), HttpStatus.OK);
         List<CurrenciesRates> body = allRates.getBody();
@@ -299,4 +301,20 @@ public class CurrenciesRestControllerTest {
         return s;
     }
 
+    @Test
+    public void testGetRates() throws Exception {
+        List<CurrenciesRates> ratesList = new ArrayList<>();
+        ResponseEntity<List<CurrenciesRates>> response = instance.getRates(_01012019, ratesList);
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+        CurrenciesRates rates = new CurrenciesRates();
+        ratesList.add(rates);
+        rates.setCharCode("EUR");
+        rates.setNumCode("978");
+        response = instance.getRates(_01012019, ratesList);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        List<CurrenciesRates> responseList = response.getBody();
+        assertEquals(responseList.size(), 1);
+        assertEquals(responseList.get(0).getRate(), new BigDecimal("19.5212"));
+    }
+    
 }
