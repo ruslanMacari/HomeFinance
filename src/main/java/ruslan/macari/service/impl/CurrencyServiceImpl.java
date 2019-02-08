@@ -3,6 +3,7 @@ package ruslan.macari.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ruslan.macari.domain.Currency;
 import ruslan.macari.service.repository.CurrencyRepository;
 import ruslan.macari.service.CurrencyService;
@@ -10,6 +11,7 @@ import ruslan.macari.util.ConstraintPersist;
 import ruslan.macari.web.exceptions.DuplicateFieldsException;
 
 @Service
+@Transactional
 public class CurrencyServiceImpl implements CurrencyService {
 
     private ConstraintPersist constraintPersist;
