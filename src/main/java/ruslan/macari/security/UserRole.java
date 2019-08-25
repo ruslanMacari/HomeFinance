@@ -15,8 +15,8 @@ import javax.persistence.UniqueConstraint;
 import lombok.Generated;
 
 @Entity
-@Table(name = "userRoles", uniqueConstraints = @UniqueConstraint(columnNames = { "role", "user" }))
-public class UserRole{
+@Table(name = "user_roles" , uniqueConstraints = @UniqueConstraint(columnNames = { "role", "user_id" }))
+public class UserRole {
 
 	private Integer id;
 	private User user;
@@ -42,7 +42,7 @@ public class UserRole{
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {
 		return user;
 	}
@@ -51,7 +51,7 @@ public class UserRole{
 		this.user = user;
 	}
 
-        @Column(name = "role", nullable = false, length = 45)
+	@Column(name = "role", nullable = false, length = 45)
 	public String getRole() {
 		return role;
 	}
@@ -60,35 +60,33 @@ public class UserRole{
 		this.role = role;
 	}
 
-    @Override
-    @Generated
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.id);
-        hash = 59 * hash + Objects.hashCode(this.user);
-        hash = 59 * hash + Objects.hashCode(this.role);
-        return hash;
-    }
+	@Override
+	@Generated
+	public int hashCode() {
+		int hash = 7;
+		hash = 59 * hash + Objects.hashCode(this.id);
+		hash = 59 * hash + Objects.hashCode(this.user);
+		hash = 59 * hash + Objects.hashCode(this.role);
+		return hash;
+	}
 
-    @Override
-    @Generated
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final UserRole other = (UserRole) obj;
-        if (!Objects.equals(this.role, other.role)) {
-            return false;
-        }
-        return Objects.equals(this.id, other.id);
-    }
-        
-        
+	@Override
+	@Generated
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final UserRole other = (UserRole) obj;
+		if (!Objects.equals(this.role, other.role)) {
+			return false;
+		}
+		return Objects.equals(this.id, other.id);
+	}
 
 }

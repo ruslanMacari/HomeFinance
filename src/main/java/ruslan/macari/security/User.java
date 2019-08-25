@@ -37,7 +37,7 @@ public class User extends ConstraintEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     public Integer getId() {
         return id;
     }

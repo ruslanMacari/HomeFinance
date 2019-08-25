@@ -33,7 +33,7 @@ public class Currency extends ConstraintEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "currency_id")
     public int getId() {
         return id;
     }
