@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 import ruslan.macari.config.security.SecurityConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, WebConfig.class, SecurityConfig.class})
+@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class})
 @WebAppConfiguration
 public class ConfigurationTest {
 

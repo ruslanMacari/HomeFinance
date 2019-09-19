@@ -44,12 +44,12 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public Currency getByID(Integer id) {
-        return currencyRepository.findOne(id);
+        return currencyRepository.findById(id).orElse(null);
     }
 
     @Override
     public void delete(Integer id) {
-        currencyRepository.delete(id);
+        currencyRepository.deleteById(id);
     }
 
 }

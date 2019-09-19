@@ -10,44 +10,47 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import ruslan.macari.web.exceptionshandle.JSPExceptionFilter;
 
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-   @Override
-   protected Class<?>[] getRootConfigClasses() {
-      return new Class[] {AppConfig.class, SecurityConfig.class};
-   }
+// TODO: 28.08.2019 to delete class
+public class WebAppInitializer //extends AbstractAnnotationConfigDispatcherServletInitializer
+{
 
-   @Override
-   protected Class<?>[] getServletConfigClasses() {
-      return new Class[] {WebConfig.class};
-   }
+//   @Override
+//   protected Class<?>[] getRootConfigClasses() {
+//      return new Class[] {AppConfig.class, SecurityConfig.class};
+//   }
+//
+//   @Override
+//   protected Class<?>[] getServletConfigClasses() {
+//      return new Class[] {WebConfig.class};
+//   }
+//
+//   @Override
+//   protected String[] getServletMappings() {
+//      return new String[] {"/"};
+//   }
 
-   @Override
-   protected String[] getServletMappings() {
-      return new String[] {"/"};
-   }
-
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        super.onStartup(servletContext);
-        servletContext.setInitParameter("Title", "Home Finance");
-        registerHiddenFieldFilter(servletContext);
-    }
+//    @Override
+//    public void onStartup(ServletContext servletContext) throws ServletException {
+//        super.onStartup(servletContext);
+//        servletContext.setInitParameter("Title", "Home Finance");
+//        registerHiddenFieldFilter(servletContext);
+//    }
     
     private void registerHiddenFieldFilter(ServletContext servletContext) {
         servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*"); 
     }
     
-    @Override
-    protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
-        final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
-        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-        return dispatcherServlet;
-    }
+//    @Override
+//    protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
+//        final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+//        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+//        return dispatcherServlet;
+//    }
     
-    @Override
-    protected Filter[] getServletFilters() {
-        return new Filter[]{new JSPExceptionFilter()};
-    }
+//    @Override
+//    protected Filter[] getServletFilters() {
+//        return new Filter[]{new JSPExceptionFilter()};
+//    }
     
 }

@@ -1,0 +1,30 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+  monitoring="autodetect" dynamicConfig="true">
+
+  <cache name="UspCacheConfig"
+    maxEntriesLocalHeap="10000"
+    maxEntriesLocalDisk="1000"
+    eternal="false"
+    diskSpoolBufferSizeMB="20"
+    timeToIdleSeconds="3600"
+    timeToLiveSeconds="3600"
+    memoryStoreEvictionPolicy="LRU"
+    transactionalMode="off"
+    overflowToDisk="false">
+    <persistence strategy="localTempSwap"/>
+
+  </cache>
+
+  <defaultCache
+    maxEntriesLocalHeap="10000"
+    maxEntriesLocalDisk="1000"
+    eternal="false"
+    diskSpoolBufferSizeMB="20"
+    timeToIdleSeconds="60" timeToLiveSeconds="60"
+    memoryStoreEvictionPolicy="LRU"
+    transactionalMode="off"
+    overflowToDisk="false"/>
+
+</ehcache>
+
