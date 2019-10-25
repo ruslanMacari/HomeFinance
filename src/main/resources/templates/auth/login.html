@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<th:block th:insert="fragments/header"/>
-<jsp:include page='../includes/head.jsp'>
-  <jsp:param name="title" value="login"/>
-</jsp:include>
+<th:block th:insert="fragments/header(title='login')"/>
+
 <h1 class="box-header__title">Home Finance</h1>
-<div class="form">
+<!--<div class="form">
   <div class="form__wrapper">
     <c:url value="/login" var="loginUrl" />
     <sf:form method="POST" commandName="user" action="${loginUrl}">
@@ -42,5 +40,5 @@
     <a class="button button_wide" href="<c:url value='/login/registration'/>"><spring:message code="login.registration"/></a>
   </div>
 </div>
-<jsp:include page='../includes/footer.jsp'/>
+<jsp:include page='../includes/footer.jsp'/>-->
 </html>
