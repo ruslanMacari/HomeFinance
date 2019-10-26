@@ -1,11 +1,9 @@
 package ruslan.macari.config;
 
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TestConfig extends AppConfig {
+public class TestConfig {
 
 //    @Value("${db.url.test}")
 //    private String url;

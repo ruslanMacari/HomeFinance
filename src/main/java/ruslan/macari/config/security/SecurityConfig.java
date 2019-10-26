@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().requireCsrfProtectionMatcher(csrfRequestMatcher).disable();
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/login*", "/login/**", "/access-denied.jsp", "/rest/**").permitAll()
+                .antMatchers("/assets/**", "/login*", "/login/**", "/access-denied.jsp", "/rest/**").permitAll()
                 .antMatchers("/users/**").hasAuthority(Role.ADMIN)
                 .anyRequest().authenticated()
                 .and()
