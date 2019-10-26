@@ -3,7 +3,7 @@ package ruslan.macari.integration;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import static org.junit.Assert.*;
-import ruslan.macari.config.AppConfig;
+
 import ruslan.macari.config.WebConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 import ruslan.macari.config.security.SecurityConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, WebConfig.class, SecurityConfig.class})
+@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class})
 @WebAppConfiguration
 public class ConfigurationTest {
 
