@@ -41,7 +41,7 @@
     <json-path>2.2.0</json-path>
     <mockito-all>1.9.5</mockito-all>
     <spring-securiry>3.2.5.RELEASE</spring-securiry>
-    <jackson-core-version>2.9.8</jackson-core-version>
+    <jackson-core-version>2.10.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
     <kaptcha-version>2.3.2</kaptcha-version>
     <validation-api.version>2.0.1.Final</validation-api.version>
