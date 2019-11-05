@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sf="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sf="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <th:block th:insert="fragments/header(title='login')"/>
 
 <h1 class="box-header__title">Home Finance</h1>
@@ -8,33 +9,29 @@
   <div class="form__wrapper">
     <form method="POST" th:object="${user}" th:action="@{/login}">
       <div class="form__input-group">
-        <label class="form__label" th:for="name" th:text="#{user.name} + ':'"></label>
+        <label class="form__label" th:for="username" th:text="#{user.name} + ':'"></label>
         <input class="form__text" type="text" list="usersList"
-               th:id="name" th:name="username" autocomplete="off"/>
+               th:id="username" th:name="username" autocomplete="off"/>
         <datalist id="usersList">
           <th:each items="${listUsers}" var="user">
             <option th:text="${user.name}"></option>
           </th:each>
         </datalist>
       </div>
-      <!--<div class="form__input-group">
-        <sf:label class="form__label" path="password"><spring:message code="user.password"/>:</sf:label>
-        <sf:password class="form__text" path="password"/>
-        <c:if test="${param.error != null}">
-          <div class="form__error">
-            <spring:message code="login.error"/>
-          </div>
-        </c:if>
-      </div>-->
+      <div class="form__input-group">
+        <label class="form__label" for="password" th:text="#{user.password} + ':'"></label>
+        <input class="form__text" id="password" type="password" name="password"/>
+        <div class="form__error" th:if="${#fields.hasErrors('*')}" th:text="#{login.error}"></div>
+      </div>
       <!--<div class="input-group">
         <label class="form__label" for="remember-me">
           <spring:message code="login.remember-me"/>
         </label>
         <input class="form__checkbox" id="remember-me" name="remember-me" type="checkbox" />
       </div>-->
-      <!--<footer>
-        <input class="form__submit" type="submit" value="<spring:message code="login"/>">
-      </footer>-->
+      <footer>
+        <input class="form__submit" type="submit" th:value="#{login}"/>
+      </footer>
     </form>
     <!--<a class="button button_wide" href="<c:url value='/login/registration'/>"><spring:message code="login.registration"/></a>-->
   </div>
