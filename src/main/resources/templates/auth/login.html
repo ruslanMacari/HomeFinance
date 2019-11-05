@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sf="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://www.w3.org/1999/XSL/Transform">
+      xmlns:th="http://www.thymeleaf.org">
 <th:block th:insert="fragments/header(title='login')"/>
 
 <h1 class="box-header__title">Home Finance</h1>
 <div class="form">
   <div class="form__wrapper">
-    <form method="POST" th:object="${user}" th:action="@{/login}">
+    <form method="post" th:object="${user}" th:action="@{/login}">
       <div class="form__input-group">
         <label class="form__label" th:for="username" th:text="#{user.name} + ':'"></label>
         <input class="form__text" type="text" list="usersList"
@@ -21,19 +20,18 @@
       <div class="form__input-group">
         <label class="form__label" for="password" th:text="#{user.password} + ':'"></label>
         <input class="form__text" id="password" type="password" name="password"/>
-        <div class="form__error" th:if="${#fields.hasErrors('*')}" th:text="#{login.error}"></div>
+        <div class="form__error" th:if="${param.error}" th:text="#{login.error}"></div>
       </div>
-      <!--<div class="input-group">
-        <label class="form__label" for="remember-me">
-          <spring:message code="login.remember-me"/>
+      <div class="input-group">
+        <label class="form__label" for="remember-me" th:text="#{login.remember-me}">
         </label>
         <input class="form__checkbox" id="remember-me" name="remember-me" type="checkbox" />
-      </div>-->
+      </div>
       <footer>
         <input class="form__submit" type="submit" th:value="#{login}"/>
       </footer>
     </form>
-    <!--<a class="button button_wide" href="<c:url value='/login/registration'/>"><spring:message code="login.registration"/></a>-->
+    <a class="button button_wide" th:href="@{/login/registration}" th:text="#{login.registration}"></a>
   </div>
 </div>
 <th:block th:insert="fragments/footer"/>
