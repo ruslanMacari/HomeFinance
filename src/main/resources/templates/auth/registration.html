@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='login.registration')"/>
+<h1 class="box-header__title" th:text="#{login.registration}"></h1>
+<div class="form">
+    <div class="form__wrapper">
+        <form method="post" th:object="${user}" th:action="@{/registration}">
+            <th:block th:insert="fragments/user-name-password"/>
+            <input class="form__submit" type="submit" th:value="#{login.register}"/>
+        </form>
+    </div>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
