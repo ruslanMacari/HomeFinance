@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:insert="fragments/header(title='home')"/>
+
+<div class="box-header__title">
+    <h1 th:inline="text">[[#{hello}]], <span sec:authentication="name"/></h1>
+    <th:block sec:authorize="isAuthenticated() and hasAuthority('ADMIN')">
+        <a class="button" th:href="@{/users/}" th:text="#{users}"/>
+    </th:block>
+    <a class="button" th:href="@{/currencies/}" th:text="#{currencies}"/>
+    <div class="s_30"></div>
+    <a class="button" th:href="@{/logout}" th:text="#{logout}"/>
+</div>
+
+<th:block th:insert="fragments/footer"/>
+</html>
