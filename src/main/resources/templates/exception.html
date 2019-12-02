@@ -5,6 +5,7 @@
 <div class="box-header__title">
     <h1 class="box-header__title" th:text="#{exception-title}"/>
     <h2 th:if="${errorMessage != null}" th:text="${errorMessage}"/>
+    <h3 th:if="${statusCode != null}" th:text="'Status Code: ' + ${statusCode}"/>
     <a class="button" href="/" th:text="#{back-to-main}"/>
 </div>
 <th:block th:insert="fragments/footer"/>
