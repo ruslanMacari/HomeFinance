@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='resource-not-found')"/>
+
+<div class="box-header__title">
+    <h1 class="box-header__title" th:text="#{resource-not-found}"/>
+    <a class="button" href="/" th:text="#{back-to-main}"/>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
