@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='users')"/>
+<h1 class="box-header__title" th:text="#{users.header}"/>
+<a class="button" th:href="@{../users/new}" th:text="#{users.new}"/>
+<div class="table">
+    <div class="table__heading">
+        <div class="table__row">
+            <div class="table__cell table__cell_head">#</div>
+            <div class="table__cell table__cell_head">ID</div>
+            <div class="table__cell table__cell_head" th:text="#{user.name}"/>
+            <div class="table__cell table__cell_head" th:text="#{admin}"/>
+            <div class="table__cell table__cell_head" th:text="#{details}"/>
+            <div class="table__cell table__cell_head" th:text="#{delete}"/>
+        </div>
+    </div>
+    <div class="table__body">
+        <th:block th:each="user, iterator : ${users}">
+            <div class="table__row" th:with="admin=${user.hasAdmin()}">
+                <div class="table__cell" th:text="${iterator.index}"/>
+                <div class="table__cell" th:text="${user.id}"/>
+                <div class="table__cell" th:text="${user.name}"/>
+                <div th:if="${admin}" class="table__cell" th:text="#{yes}"/>
+                <div th:if="${!admin}" class="table__cell" th:text="#{no}"/>
+                <div class="table__cell">
+                    <a class="button" th:href="@{../users/} + ${user.id}" th:text="#{details}"/>
+                </div>
+                <div class="table__cell">
+                    <form class="form" th:action="@{../users/} + ${user.id}" th:method="delete">
+                        <input th:onclick="return confirm('[[#{delete.confirmation}]]');"
+                               class="button button_delete" type="submit" th:value="#{delete}"/>
+                    </form>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
+<a class="button button_back" href="/" th:text="#{back}"/>
+<th:block th:insert="fragments/footer"/>
+</html>
