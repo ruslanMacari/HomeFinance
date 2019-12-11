@@ -28,7 +28,8 @@
                 </div>
                 <div class="table__cell">
                     <form class="form" th:action="@{../users/} + ${user.id}" th:method="delete">
-                        <input class="button button_delete" type="submit" th:value="#{delete}"/>
+                        <input th:onclick="return confirm('[[#{delete.confirmation}]]');"
+                               class="button button_delete" type="submit" th:value="#{delete}"/>
                     </form>
                 </div>
             </div>
