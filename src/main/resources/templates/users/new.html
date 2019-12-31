@@ -1,0 +1,20 @@
+<!DOCTYPE>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='users.new')"/>
+<h1 class="box-header__title" th:text="#{users.new}"/>
+<div class="form">
+  <div class="form__wrapper">
+    <form method="post" th:object="${newUser}" th:action="@{/users/new}">
+      <th:block th:insert="fragments/user-name-password"/>
+      <div class="input-group">
+        <label class="form__label" for="admin" th:text="#{admin}"/>
+        <input class="form__checkbox" id="admin" name="admin" type="checkbox"/>
+      </div>
+      <input class="form__submit" type="submit" th:value="#{save}"/>
+    </form>
+    <a class="button button_back" th:href="@{/users}" th:text="#{back}"/>
+  </div>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
