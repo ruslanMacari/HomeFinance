@@ -1,0 +1,38 @@
+<!DOCTYPE>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='users.details')"/>
+<h1 class="box-header__title" th:text="#{users.details}"/>
+<div id="form">
+    <div class="form__wrapper">
+        <form method="post" th:object="${user}">
+            <div class="form__input-group">
+                <label class="form__label" th:for="name" th:text="#{user.name} + ':'"/>
+                <input class="form__text disabledJs" th:id="name" th:name="name" th:value="${user.name}" disabled/>
+                <div>
+                    <div class="form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+            </div>
+            <div class="form__input-group">
+                <div class="form__input-group">
+                    <label class="form__label" for="changePassword" th:text="#{change-password} + ':'"/>
+                    <input class="form__checkbox disabledJs" id="changePassword"
+                           name="changePassword" value="true" type="checkbox" disabled/>
+                </div>
+                <input type="password" th:name="password" th:id="password" class="form__text" disabled/>
+                <div>
+                    <div class="form__error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+                </div>
+            </div>
+            <div class="form__input-group">       
+                <label class="form__label" for="admin" th:text="#{admin} + ':'"/>
+                <input th:if="${user.hasAdmin()}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled checked/>
+                <input th:unless="${user.hasAdmin()}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled/>
+            </div>
+            <th:block th:insert="fragments/unlock-save"/>
+        </form>
+        <a class="button button_back go-back" th:href="@{../users}" th:text="#{back}"/>
+    </div>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
