@@ -28,7 +28,7 @@
                     <a class="button" th:href="@{../currencies/} + ${currency.id}" th:text="#{details}"/>
                 </div>
                 <div class="table__cell">
-                    <form class="form" th:action="@{../currencies/} + ${user.id}" th:method="delete">
+                    <form class="form" th:action="@{../currencies/} + ${currency.id}" th:method="delete">
                         <input th:onclick="return confirm('[[#{delete.confirmation}]]');"
                                class="button button_delete" type="submit" th:value="#{delete}"/>
                     </form>

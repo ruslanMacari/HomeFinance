@@ -1,0 +1,31 @@
+<!DOCTYPE>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='currencies.new')"/>
+<h1 class="box-header__title" th:text="#{currencies.new}"/>
+<div class="form">
+  <div class="form__wrapper">
+    <form method="post" th:object="${newCurrency}" th:action="@{../currencies/new}">
+      <div class="form__input-group">
+        <label class="form__label" th:name="code" th:text="#{code}"/>
+        <input class="form__text" th:name="code"/>
+        <div>
+          <div class="form__error" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"
+               th:name="code"></div>
+        </div>
+      </div>
+      <div class="form__input-group">
+        <label class="form__label" th:name="name" th:text="#{description}"/>
+        <input class="form__text" th:name="name"/>
+        <div>
+          <div class="form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+               th:name="name"></div>
+        </div>
+      </div>
+      <input class="form__submit" type="submit" th:value="#{save}"/>
+    </form>
+    <a class="button button_back" th:href="@{../currencies/}" th:text="#{back}"/>
+  </div>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
