@@ -1,0 +1,30 @@
+<!DOCTYPE>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="fragments/header(title='currencies.details')"/>
+<h1 class="box-header__title" th:text="#{currencies.details}"/>
+<div class="form">
+    <div class="form__wrapper">
+        <form method="post" th:object="${currency}" th:action="@{../currencies/update}">
+            <div class="form__input-group">
+                <label class="form__label" th:for="code" th:text="#{code} + ':'"/>
+                <input class="form__text disabledJs" th:value="${currency.code}" th:name="code" disabled/>
+                <div>
+                    <div class="form__error" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"/>
+                </div>
+                <input hidden th:value="${currency.id}" th:name="id"/>
+            </div>
+            <div class="form__input-group">
+                <label class="form__label" th:for="name" th:text="#{currency.name} + ':'"/>
+                <input class="form__text disabledJs" th:id="name" th:name="name" th:value="${currency.name}" disabled/>
+                <div>
+                    <div class="form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+            </div>
+            <th:block th:insert="fragments/unlock-save"/>
+        </form>
+        <a class="button button_back go-back" th:href="@{../currencies}" th:text="#{back}"/>
+    </div>
+</div>
+<th:block th:insert="fragments/footer"/>
+</html>
