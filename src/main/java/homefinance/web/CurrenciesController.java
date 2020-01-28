@@ -64,9 +64,8 @@ public class CurrenciesController extends CommonController<Currency> {
         return VIEW_PATH;
     }
     
-    @PostMapping(value = "/{id}")
-    public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
-            @PathVariable("id") Integer id) {
+    @PostMapping("/update")
+    public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result) {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
