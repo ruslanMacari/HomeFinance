@@ -60,10 +60,10 @@ public class CurrenciesControllerTest {
     @Test
     public void testUpdate() {
         when(result.hasErrors()).thenReturn(true);
-        String path = controller.update(currency, result, 1);
+        String path = controller.update(currency, result);
         assertEquals(path, CurrenciesController.VIEW_PATH);
         when(result.hasErrors()).thenReturn(false);
-        path = controller.update(currency, result, 1);
+        path = controller.update(currency, result);
         assertEquals(path, CurrenciesController.REDIRECT_PATH);
     }
     
