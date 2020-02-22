@@ -1,9 +1,9 @@
-package homefinance.web.rest;
+package homefinance.money.currency;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class CurrenciesRates {
+public class CurrencyRates {
 
     private String numCode;
     private String charCode;
@@ -11,7 +11,7 @@ public class CurrenciesRates {
     private BigDecimal rate;
 
     public String getCurrency() {
-        return currency;
+        return this.currency;
     }
 
     public void setCurrency(String currency) {
@@ -19,7 +19,7 @@ public class CurrenciesRates {
     }
 
     public BigDecimal getRate() {
-        return rate;
+        return this.rate;
     }
 
     public void setRate(BigDecimal rate) {
@@ -27,7 +27,7 @@ public class CurrenciesRates {
     }
 
     public String getNumCode() {
-        return numCode;
+        return this.numCode;
     }
 
     public void setNumCode(String numCode) {
@@ -35,7 +35,7 @@ public class CurrenciesRates {
     }
 
     public String getCharCode() {
-        return charCode;
+        return this.charCode;
     }
 
     public void setCharCode(String charCode) {
@@ -57,16 +57,23 @@ public class CurrenciesRates {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
-        final CurrenciesRates other = (CurrenciesRates) obj;
+        final CurrencyRates other = (CurrencyRates) obj;
         if (!Objects.equals(this.numCode, other.numCode)) {
             return false;
         }
         return true;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "CurrencyRates{" +
+            "numCode='" + this.numCode + '\'' +
+            ", charCode='" + this.charCode + '\'' +
+            ", currency='" + this.currency + '\'' +
+            ", rate=" + this.rate +
+            '}';
+    }
 }

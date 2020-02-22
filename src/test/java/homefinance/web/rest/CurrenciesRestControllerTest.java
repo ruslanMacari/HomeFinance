@@ -2,6 +2,8 @@ package homefinance.web.rest;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import homefinance.money.currency.CurrencyRates;
+import homefinance.money.currency.CurrenciesRestController;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +31,14 @@ public class CurrenciesRestControllerTest {
         } catch (NumberFormatException e) {
         }
         date = _01012019;
-        ResponseEntity<List<CurrenciesRates>> allRates = instance.getAllRates(date);
+        ResponseEntity<List<CurrencyRates>> allRates = instance.getAllRates(date);
         assertEquals(allRates.getStatusCode(), HttpStatus.OK);
-        List<CurrenciesRates> body = allRates.getBody();
+        List<CurrencyRates> body = allRates.getBody();
         ObjectMapper mapper = new ObjectMapper();
-        JavaType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, CurrenciesRates.class);
-        List<CurrenciesRates> list = mapper.readValue(getJsonString(), collectionType);
+        JavaType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, CurrencyRates.class);
+        List<CurrencyRates> list = mapper.readValue(getJsonString(), collectionType);
         assertEquals(body.size(), list.size());
-        CurrenciesRates item = list.get(0);
+        CurrencyRates item = list.get(0);
         assertEquals(item.getNumCode(), "978");
         assertEquals(item.getCharCode(), "EUR");
         assertEquals(item.getRate(), new BigDecimal("19.5212"));
@@ -303,16 +305,16 @@ public class CurrenciesRestControllerTest {
 
     @Test
     public void testGetRates() throws Exception {
-        List<CurrenciesRates> ratesList = new ArrayList<>();
-        ResponseEntity<List<CurrenciesRates>> response = instance.getRates(_01012019, ratesList);
+        List<CurrencyRates> ratesList = new ArrayList<>();
+        ResponseEntity<List<CurrencyRates>> response = instance.getRates(_01012019, ratesList);
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
-        CurrenciesRates rates = new CurrenciesRates();
+        CurrencyRates rates = new CurrencyRates();
         ratesList.add(rates);
         rates.setCharCode("EUR");
         rates.setNumCode("978");
         response = instance.getRates(_01012019, ratesList);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        List<CurrenciesRates> responseList = response.getBody();
+        List<CurrencyRates> responseList = response.getBody();
         assertEquals(responseList.size(), 1);
         assertEquals(responseList.get(0).getRate(), new BigDecimal("19.5212"));
     }

@@ -1,7 +1,6 @@
-package homefinance.service.repository;
+package homefinance.money.currency;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import homefinance.domain.Currency;
 
 public interface CurrencyRepository extends JpaRepository<Currency, Integer> {
     

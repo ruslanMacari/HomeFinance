@@ -1,12 +1,12 @@
-package homefinance.service.impl;
+package homefinance.money.currency.impl;
 
-import homefinance.service.repository.CurrencyRepository;
+import homefinance.money.currency.Currency;
+import homefinance.money.currency.CurrencyRepository;
+import homefinance.money.currency.CurrencyService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import homefinance.domain.Currency;
-import homefinance.service.CurrencyService;
 import homefinance.util.ConstraintPersist;
 import homefinance.web.exceptions.DuplicateFieldsException;
 

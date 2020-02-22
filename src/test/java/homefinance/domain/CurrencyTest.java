@@ -1,5 +1,6 @@
 package homefinance.domain;
 
+import homefinance.money.currency.Currency;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
