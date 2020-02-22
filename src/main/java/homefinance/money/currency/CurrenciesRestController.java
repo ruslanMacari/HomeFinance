@@ -34,12 +34,12 @@ import org.xml.sax.InputSource;
 public class CurrenciesRestController {
 
     @GetMapping("/get-rates")
-    public ResponseEntity<List<CurrencyRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
+    public ResponseEntity<List<CurrencyRate>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
         return new ResponseEntity<>(getRates(date), HttpStatus.OK );
     }
 
-    private List<CurrencyRates> getRates(String date) throws Exception {
-        List<CurrencyRates> list = new ArrayList<>();
+    private List<CurrencyRate> getRates(String date) throws Exception {
+        List<CurrencyRate> list = new ArrayList<>();
         HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
         con.setRequestMethod("GET");
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -57,7 +57,7 @@ public class CurrenciesRestController {
                 Node node = nodeList.item(i);
                 if (node.getNodeType() == elementNode) {
                     Element element = (Element) node;
-                    CurrencyRates rates = new CurrencyRates();
+                    CurrencyRate rates = new CurrencyRate();
                     rates.setNumCode(getText(element, numCode));
                     rates.setCharCode(getText(element, charCode));
                     rates.setCurrency(getText(element, name));
@@ -95,9 +95,9 @@ public class CurrenciesRestController {
     }
 
     @PostMapping("get-rates")
-    public ResponseEntity<List<CurrencyRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date,
-                                                          @RequestBody List<CurrencyRates> ratesList) throws Exception {
-        List<CurrencyRates> list = getRates(date);
+    public ResponseEntity<List<CurrencyRate>> getRates(@RequestParam(value = "date", defaultValue = "") String date,
+                                                          @RequestBody List<CurrencyRate> ratesList) throws Exception {
+        List<CurrencyRate> list = getRates(date);
         list = list.stream()
                 .filter(ratesList::contains)
                 .collect(Collectors.toList());

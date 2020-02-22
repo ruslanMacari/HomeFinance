@@ -1,6 +1,6 @@
 package homefinance.money.currency.impl;
 
-import homefinance.money.currency.CurrencyRates;
+import homefinance.money.currency.CurrencyRate;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.ExchangeRatesApi;
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
   }
 
   @Override
-  public List<CurrencyRates> getCurrencyRatesByDate(LocalDate date) {
+  public List<CurrencyRate> getCurrencyRatesByDate(LocalDate date) {
     return this.exchangeRatesApi.getCurrencyRatesByDate(date);
   }
 }
