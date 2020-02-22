@@ -1,5 +1,6 @@
-package homefinance.web;
+package homefinance.money.currency;
 
+import homefinance.web.CommonController;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import homefinance.domain.Currency;
-import homefinance.service.CurrencyService;
 import homefinance.util.Action;
 
 @Controller
-@RequestMapping(CurrenciesController.URL)
-public class CurrenciesController extends CommonController<Currency> {
+@RequestMapping(CurrencyController.URL)
+public class CurrencyController extends CommonController<Currency> {
  
     public static final String URL = "/currencies";
     public static final String LIST_PATH = URL + "/list";

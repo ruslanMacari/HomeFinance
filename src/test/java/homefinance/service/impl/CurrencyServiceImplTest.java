@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import homefinance.domain.Currency;
+import homefinance.money.currency.Currency;
 import homefinance.config.TestConfig;
-import homefinance.service.CurrencyService;
+import homefinance.money.currency.CurrencyService;
 import homefinance.web.exceptions.DuplicateFieldsException;
 
 @DirtiesContext

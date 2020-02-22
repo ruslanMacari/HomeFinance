@@ -1,4 +1,4 @@
-package homefinance.web.rest;
+package homefinance.money.currency;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,17 +28,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+// TODO: 30.01.2020 RMACARI: replace with service
 @RestController
-@RequestMapping("/rest/currencies/rates")
+@RequestMapping("/rest/currencies")
 public class CurrenciesRestController {
 
-    @GetMapping()
-    public ResponseEntity<List<CurrenciesRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
+    @GetMapping("/get-rates")
+    public ResponseEntity<List<CurrencyRates>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
         return new ResponseEntity<>(getRates(date), HttpStatus.OK );
     }
 
-    private List<CurrenciesRates> getRates(String date) throws Exception {
-        List<CurrenciesRates> list = new ArrayList<>();
+    private List<CurrencyRates> getRates(String date) throws Exception {
+        List<CurrencyRates> list = new ArrayList<>();
         HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
         con.setRequestMethod("GET");
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -56,7 +57,7 @@ public class CurrenciesRestController {
                 Node node = nodeList.item(i);
                 if (node.getNodeType() == elementNode) {
                     Element element = (Element) node;
-                    CurrenciesRates rates = new CurrenciesRates();
+                    CurrencyRates rates = new CurrencyRates();
                     rates.setNumCode(getText(element, numCode));
                     rates.setCharCode(getText(element, charCode));
                     rates.setCurrency(getText(element, name));
@@ -93,17 +94,22 @@ public class CurrenciesRestController {
         return e.getElementsByTagName(tagName).item(0).getTextContent();
     }
 
-    @PostMapping
-    public ResponseEntity<List<CurrenciesRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date, 
-                                                          @RequestBody List<CurrenciesRates> ratesList) throws Exception {
-        List<CurrenciesRates> list = getRates(date);
+    @PostMapping("get-rates")
+    public ResponseEntity<List<CurrencyRates>> getRates(@RequestParam(value = "date", defaultValue = "") String date,
+                                                          @RequestBody List<CurrencyRates> ratesList) throws Exception {
+        List<CurrencyRates> list = getRates(date);
         list = list.stream()
-                .filter((item) -> ratesList.contains(item))
+                .filter(ratesList::contains)
                 .collect(Collectors.toList());
         if(list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK );
+    }
+
+    @PostMapping("/fill-currencies")
+    public String fillCurrencies() {
+        return CurrencyController.LIST_PATH;
     }
     
 }

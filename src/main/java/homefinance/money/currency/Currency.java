@@ -1,6 +1,7 @@
 // in working
-package homefinance.domain;
+package homefinance.money.currency;
 
+import homefinance.domain.ConstraintEntity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
