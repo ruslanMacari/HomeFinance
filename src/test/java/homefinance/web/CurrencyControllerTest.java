@@ -24,8 +24,7 @@ public class CurrencyControllerTest {
     @Before
     public void initialize() {
         currencyService = mock(CurrencyService.class);
-        controller = new CurrencyController();
-        controller.setCurrencyService(currencyService);
+        controller = new CurrencyController(currencyService);
         model = mock(Model.class);
         currency = mock(Currency.class);
         pathSelector = new PathSelectorTest();

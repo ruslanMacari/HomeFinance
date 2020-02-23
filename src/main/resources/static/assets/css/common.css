@@ -13,7 +13,8 @@ h1 {
 body {
     font-family: Verdana, Tahomma, Geneva;
     color: black;
-    background-image: url(../img/background-mountains-fhd.jpg);
+    background-color: #dedede;
+    /*background-image: url(../img/background-mountains-fhd.jpg);*/
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
