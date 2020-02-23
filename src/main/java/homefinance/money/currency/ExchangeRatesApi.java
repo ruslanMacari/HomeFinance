@@ -38,7 +38,7 @@ public class ExchangeRatesApi {
       .newInstance();
   private static final Logger logger = LoggerFactory.getLogger(CurrencyRatesServiceImpl.class);
 
-  public List<CurrencyRates> getCurrencyRatesByDate(LocalDate date) {
+  public List<CurrencyRate> getCurrencyRatesByDate(LocalDate date) {
     this.checkDate(date);
     HttpURLConnection connection = this.getOkConnection(date);
     if (Objects.isNull(connection)) {
@@ -48,7 +48,7 @@ public class ExchangeRatesApi {
     if (Objects.isNull(document)) {
       return new ArrayList<>();
     }
-    return this.getCurrencyRates(document);
+    return this.getCurrencyRate(document);
   }
 
   private void checkDate(LocalDate date) {
@@ -108,26 +108,30 @@ public class ExchangeRatesApi {
     return xml;
   }
 
-  private List<CurrencyRates> getCurrencyRates(Document document) {
+  private List<CurrencyRate> getCurrencyRate(Document document) {
     document.getDocumentElement().normalize();
     NodeList nodeList = document.getElementsByTagName(TAG_NAME_VALUTE);
-    List<CurrencyRates> list = new ArrayList<>();
+    List<CurrencyRate> list = new ArrayList<>();
     for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
-      if (node.getNodeType() == ELEMENT_NODE) {
-        list.add(this.getCurrencyRates((Element) node));
+      if (this.nodeIsElement(node)) {
+        list.add(this.getCurrencyRate((Element) node));
       }
     }
     return list;
   }
 
-  private CurrencyRates getCurrencyRates(Element element) {
-    CurrencyRates rates = new CurrencyRates();
-    rates.setNumCode(this.getText(element, TAG_NAME_NUM_CODE));
-    rates.setCharCode(this.getText(element, TAG_NAME_CHAR_CODE));
-    rates.setCurrency(this.getText(element, TAG_NAME_NAME));
-    rates.setRate(new BigDecimal(this.getText(element, TAG_NAME_VALUE)));
-    return rates;
+  private boolean nodeIsElement(Node node) {
+    return ELEMENT_NODE == node.getNodeType();
+  }
+
+  private CurrencyRate getCurrencyRate(Element element) {
+    CurrencyRate currencyRate = new CurrencyRate();
+    currencyRate.setNumCode(this.getText(element, TAG_NAME_NUM_CODE));
+    currencyRate.setCharCode(this.getText(element, TAG_NAME_CHAR_CODE));
+    currencyRate.setCurrency(this.getText(element, TAG_NAME_NAME));
+    currencyRate.setRate(new BigDecimal(this.getText(element, TAG_NAME_VALUE)));
+    return currencyRate;
   }
 
   private String getText(Element e, String tagName) {
@@ -136,6 +140,43 @@ public class ExchangeRatesApi {
         .getTextContent();
   }
 
-  // TODO: 22.02.2020 RMACARI: add getRateByCurrency
+  public BigDecimal getRateByDateAndCurrency(LocalDate date, Currency currency) {
+    this.checkDate(date);
+    HttpURLConnection connection = this.getOkConnection(date);
+    if (Objects.isNull(connection)) {
+      return null;
+    }
+    Document document = this.getDocument(connection);
+    if (Objects.isNull(document)) {
+      return null;
+    }
+    return this.geRate(document, currency);
+  }
+
+  private BigDecimal geRate(Document document, Currency currency) {
+    this.checkCurrency(currency);
+    document.getDocumentElement().normalize();
+    NodeList nodeList = document.getElementsByTagName(TAG_NAME_VALUTE);
+    String currencyCode = currency.getCode();
+    for (int i = 0; i < nodeList.getLength(); i++) {
+      Node node = nodeList.item(i);
+      if (this.nodeIsElement(node)) {
+        Element element = (Element) node;
+        String numCode = this.getText(element, TAG_NAME_NUM_CODE);
+        if (currencyCode.equals(numCode)) {
+          return new BigDecimal(this.getText(element, TAG_NAME_VALUE));
+        }
+      }
+    }
+    return null;
+  }
+
+  private void checkCurrency(Currency currency) {
+    if (Objects.isNull(currency)) {
+      logger.error("currency is null");
+      throw new IllegalArgumentException("Currency must be filled");
+    }
+  }
+
 
 }
