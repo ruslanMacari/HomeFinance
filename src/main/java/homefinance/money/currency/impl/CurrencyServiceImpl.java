@@ -9,6 +9,7 @@ import homefinance.util.ConstraintPersist;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +20,12 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   private final ConstraintPersist constraintPersist;
   private final CurrencyRepository currencyRepository;
-  private final CurrencyRatesService currencyRatesService;
+  private CurrencyRatesService currencyRatesService;
+
+  @Autowired
+  public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
+    this.currencyRatesService = currencyRatesService;
+  }
 
   public CurrencyServiceImpl(
       ConstraintPersist constraintPersist, CurrencyRepository currencyRepository,
@@ -53,7 +59,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
         Currency currency = new Currency();
         currency.setCode(code);
-        currency.setName(currencyRate.getCharCode());
+        currency.setName(currencyRate.getCurrency());
         this.add(currency);
       }
     }

@@ -18,7 +18,8 @@ import lombok.Generated;
 @Table(name = "currencies", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
                                                  @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
 public class Currency extends ConstraintEntity implements Serializable {
-    
+
+    // TODO: 24.02.2020 RMACARI: add full name?
     private int id;
     private String name;
     private String code;
