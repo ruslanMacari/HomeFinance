@@ -1,7 +1,6 @@
 package homefinance.money.currency.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import homefinance.money.currency.Currency;
@@ -25,17 +24,17 @@ public class CurrencyServiceImplIntegrationTest {
 
   @Before
   public void setUp() {
-      this.currencyService.list().forEach(currency -> this.currencyService.delete(currency.getId()));
+    this.currencyService.list().forEach(currency -> this.currencyService.delete(currency.getId()));
   }
 
   @Test
   public void testAdd() {
     int size = this.currencyService.list().size();
     Currency currency = new Currency("USD", "840");
-      this.currencyService.add(currency);
+    this.currencyService.add(currency);
     assertEquals(this.currencyService.list().size(), size + 1);
     try {
-        this.currencyService.add(new Currency("USD", "840"));
+      this.currencyService.add(new Currency("USD", "840"));
       fail("Exception must be thrown");
     } catch (Exception e) {
       if (!(e instanceof DuplicateFieldsException)) {
@@ -47,10 +46,10 @@ public class CurrencyServiceImplIntegrationTest {
   @Test
   public void testUpdate() {
     Currency currency = new Currency("USD", "840");
-      this.currencyService.add(currency);
+    this.currencyService.add(currency);
     String newName = "updated";
     currency.setName(newName);
-      this.currencyService.update(currency);
+    this.currencyService.update(currency);
     Currency found = this.currencyService.getByID(currency.getId());
     assertEquals(newName, found.getName());
   }
