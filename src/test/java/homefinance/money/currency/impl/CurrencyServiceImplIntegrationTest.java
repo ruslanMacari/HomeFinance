@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CurrencyServiceImplIntegrationTest {
 
   @Autowired
-  CurrencyService currencyService;
+  private CurrencyService currencyService;
 
   @Before
   public void setUp() {
