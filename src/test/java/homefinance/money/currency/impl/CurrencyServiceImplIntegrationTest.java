@@ -33,7 +33,7 @@ public class CurrencyServiceImplIntegrationTest {
     int size = this.currencyService.list().size();
     Currency currency = new Currency("USD", "840");
       this.currencyService.add(currency);
-    assertTrue(this.currencyService.list().size() == size + 1);
+    assertEquals(this.currencyService.list().size(), size + 1);
     try {
         this.currencyService.add(new Currency("USD", "840"));
       fail("Exception must be thrown");
