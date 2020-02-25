@@ -9,6 +9,8 @@ import homefinance.util.ConstraintPersist;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.time.LocalDate;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class CurrencyServiceImpl implements CurrencyService {
   private final ConstraintPersist constraintPersist;
   private final CurrencyRepository currencyRepository;
   private CurrencyRatesService currencyRatesService;
+  private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
 
   @Autowired
   public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
@@ -48,21 +51,23 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public void fillDistinctCurrencies() {
-    // TODO: 23.02.2020 RMACARI: add unit test + refactor
+    LocalDate now = LocalDate.now();
     List<CurrencyRate> currencyRatesByDate = this.currencyRatesService
-        .getCurrencyRatesByDate(LocalDate.now());
-    if (!CollectionUtils.isEmpty(currencyRatesByDate)) {
-      for (CurrencyRate currencyRate : currencyRatesByDate) {
-        String code = currencyRate.getNumCode();
-        if (this.getByCode(code) != null) {
-          continue;
-        }
-        Currency currency = new Currency();
-        currency.setCode(code);
-        currency.setName(currencyRate.getCurrency());
-        this.add(currency);
-      }
+        .getCurrencyRatesByDate(now);
+    if (CollectionUtils.isEmpty(currencyRatesByDate)) {
+      logger.info("No currency rates found by date: {}", now);
+      return;
     }
+    currencyRatesByDate.stream()
+        .filter(currencyRate -> this.getByCode(currencyRate.getNumCode()) == null)
+        .forEach(this::addCurrency);
+  }
+
+  private void addCurrency(CurrencyRate currencyRate) {
+    Currency currency = new Currency();
+    currency.setCode(currencyRate.getNumCode());
+    currency.setName(currencyRate.getCurrency());
+    this.add(currency);
   }
 
   @Override

@@ -103,7 +103,13 @@ public class CurrencyServiceImplIntegrationTest {
     assertThat(currencies.size(), is(1));
     assertThat(currencies.get(0).getCode(), is("test1"));
     assertThat(currencies.get(0).getName(), is("Test currency"));
+
+    // no new currencies must be added
+    this.currencyService.fillDistinctCurrencies();
+    currencies = this.currencyService.list();
+    assertThat(currencies.size(), is(1));
+    assertThat(currencies.get(0).getCode(), is("test1"));
+    assertThat(currencies.get(0).getName(), is("Test currency"));
   }
 
-  // TODO: 24.02.2020 RMACARI: test distinct add
 }
