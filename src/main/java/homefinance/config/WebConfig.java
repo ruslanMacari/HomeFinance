@@ -22,13 +22,12 @@ public class WebConfig implements WebMvcConfigurer {
   public MessageSource messageSource() {
     ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
     source.setBasenames("classpath:locales/messages", "classpath:locales/errors");
-    source.setUseCodeAsDefaultMessage(true);
+    //source.setUseCodeAsDefaultMessage(true);
     source.setDefaultEncoding("UTF-8");
     return source;
   }
 
   @Bean
-  @Override
   public LocalValidatorFactoryBean getValidator() {
     LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
     bean.setValidationMessageSource(messageSource());

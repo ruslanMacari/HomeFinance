@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Size;
 import lombok.Generated;
 
 @Entity
@@ -19,10 +20,10 @@ import lombok.Generated;
                                                  @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
 public class Currency extends ConstraintEntity implements Serializable {
 
-    // TODO: 24.02.2020 RMACARI: add full name?
     private int id;
     private String name;
     private String code;
+    private String charCode;
     
     public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_description";
     public static final String UNIQUE_CONSTRAINT_CODE = "duplicated_code";
@@ -45,6 +46,7 @@ public class Currency extends ConstraintEntity implements Serializable {
     }
 
     @Column(name = "name", nullable = false, length = 45)
+    @Size(min=3, max = 45, message = "{size.error}")
     public String getName() {
         return name;
     }
@@ -54,6 +56,7 @@ public class Currency extends ConstraintEntity implements Serializable {
     }
 
     @Column(name = "code", nullable = false, length = 5)
+    @Size(min=1, max = 5, message = "{size.error}")
     public String getCode() {
         return code;
     }
@@ -61,7 +64,17 @@ public class Currency extends ConstraintEntity implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
-    
+
+    @Column(name = "char_code", nullable = false, length = 5)
+    @Size(min=1, max = 5, message = "{size.error}")
+    public String getCharCode() {
+        return this.charCode;
+    }
+
+    public void setCharCode(String charCode) {
+        this.charCode = charCode;
+    }
+
     public Currency() {
     }
     
@@ -104,7 +117,11 @@ public class Currency extends ConstraintEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Currency{" + "id=" + id + ", name=" + name + '}';
+        return "Currency{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", code='" + code + '\'' +
+            ", charCode='" + charCode + '\'' +
+            '}';
     }
-
 }

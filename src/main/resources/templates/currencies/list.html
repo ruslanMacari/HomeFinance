@@ -10,6 +10,7 @@
             <div class="table__cell table__cell_head">#</div>
             <div class="table__cell table__cell_head">ID</div>
             <div class="table__cell table__cell_head" th:text="#{code}"/>
+            <div class="table__cell table__cell_head" th:text="#{charCode}"/>
             <div class="table__cell table__cell_head" th:text="#{description}"/>
             <div class="table__cell table__cell_head" th:text="#{rate}"/>
             <div class="table__cell table__cell_head" th:text="#{details}"/>
@@ -22,6 +23,7 @@
                 <div class="table__cell" th:text="${iterator.index}"/>
                 <div class="table__cell" th:text="${currency.id}"/>
                 <div class="table__cell" th:text="${currency.code}"/>
+                <div class="table__cell" th:text="${currency.charCode}"/>
                 <div class="table__cell" th:text="${currency.name}"/>
                 <div class="table__cell"></div>
                 <div class="table__cell">

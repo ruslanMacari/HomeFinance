@@ -102,6 +102,7 @@ public class CurrencyServiceImplIntegrationTest {
     List<Currency> currencies = this.currencyService.list();
     assertThat(currencies.size(), is(1));
     assertThat(currencies.get(0).getCode(), is("test1"));
+    assertThat(currencies.get(0).getCharCode(), is("test"));
     assertThat(currencies.get(0).getName(), is("Test currency"));
 
     // no new currencies must be added
@@ -109,6 +110,7 @@ public class CurrencyServiceImplIntegrationTest {
     currencies = this.currencyService.list();
     assertThat(currencies.size(), is(1));
     assertThat(currencies.get(0).getCode(), is("test1"));
+    assertThat(currencies.get(0).getCharCode(), is("test"));
     assertThat(currencies.get(0).getName(), is("Test currency"));
   }
 

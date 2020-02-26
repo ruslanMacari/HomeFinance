@@ -67,6 +67,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     Currency currency = new Currency();
     currency.setCode(currencyRate.getNumCode());
     currency.setName(currencyRate.getCurrency());
+    currency.setCharCode(currencyRate.getCharCode());
     this.add(currency);
   }
 

@@ -138,6 +138,17 @@
       <version>${spring-aspects.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.0.2.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator-annotation-processor</artifactId>
+      <version>6.0.2.Final</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache-core -->
     <!--<dependency>-->
     <!--<groupId>net.sf.ehcache</groupId>-->
