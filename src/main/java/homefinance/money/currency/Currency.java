@@ -16,112 +16,112 @@ import javax.validation.constraints.Size;
 import lombok.Generated;
 
 @Entity
-@Table(name = "currencies", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
-                                                 @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
+@Table(name = "currencies", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
+    @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
 public class Currency extends ConstraintEntity implements Serializable {
 
-    private int id;
-    private String name;
-    private String code;
-    private String charCode;
-    
-    public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_description";
-    public static final String UNIQUE_CONSTRAINT_CODE = "duplicated_code";
-    
-    {
-        constraintsMap = new HashMap<>();
-        constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
-        constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
-    }
+  public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_description";
+  public static final String UNIQUE_CONSTRAINT_CODE = "duplicated_code";
+  private int id;
+  private String name;
+  private String code;
+  private String charCode;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "currency_id")
-    public int getId() {
-        return id;
-    }
+  {
+      this.constraintsMap = new HashMap<>();
+      this.constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
+      this.constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public Currency() {
+  }
 
-    @Column(name = "name", nullable = false, length = 45)
-    @Size(min=3, max = 45, message = "{size.error}")
-    public String getName() {
-        return name;
-    }
+  public Currency(String name, String code) {
+    this.name = name;
+    this.code = code;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "currency_id")
+  public int getId() {
+    return this.id;
+  }
 
-    @Column(name = "code", nullable = false, length = 5)
-    @Size(min=1, max = 5, message = "{size.error}")
-    public String getCode() {
-        return code;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  @Column(name = "name", nullable = false, length = 45)
+  @Size(min = 3, max = 45, message = "{size.error}")
+  public String getName() {
+    return this.name;
+  }
 
-    @Column(name = "char_code", nullable = false, length = 5)
-    @Size(min=1, max = 5, message = "{size.error}")
-    public String getCharCode() {
-        return this.charCode;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setCharCode(String charCode) {
-        this.charCode = charCode;
-    }
+  @Column(name = "code", nullable = false, length = 5)
+  @Size(min = 3, max = 5, message = "{size.error}")
+  public String getCode() {
+    return this.code;
+  }
 
-    public Currency() {
-    }
-    
-    public Currency(String name, String code) {
-        this.name = name;
-        this.code = code;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    @Override
-    @Generated
-    public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + this.id;
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.code);
-        return hash;
-    }
+  @Column(name = "char_code", nullable = false, length = 5)
+  @Size(min = 3, max = 5, message = "{size.error}")
+  public String getCharCode() {
+    return this.charCode;
+  }
 
-    @Override
-    @Generated
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Currency other = (Currency) obj;
-        if (id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(name, other.name)) {
-            return false;
-        }
-        return Objects.equals(code, other.code);
-    }
+  public void setCharCode(String charCode) {
+    this.charCode = charCode;
+  }
 
-    @Override
-    public String toString() {
-        return "Currency{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", code='" + code + '\'' +
-            ", charCode='" + charCode + '\'' +
-            '}';
+  @Override
+  @Generated
+  public int hashCode() {
+    int hash = 7;
+    hash = 17 * hash + this.id;
+    hash = 17 * hash + Objects.hashCode(this.name);
+    hash = 17 * hash + Objects.hashCode(this.code);
+    return hash;
+  }
+
+  @Override
+  @Generated
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    final Currency other = (Currency) obj;
+    if (this.id != other.id) {
+      return false;
+    }
+    if (!Objects.equals(this.name, other.name)) {
+      return false;
+    }
+    return Objects.equals(this.code, other.code);
+  }
+
+  @Override
+  public String toString() {
+    return "Currency{" +
+        "id=" + this.id +
+        ", name='" + this.name + '\'' +
+        ", code='" + this.code + '\'' +
+        ", charCode='" + this.charCode + '\'' +
+        '}';
+  }
 }
