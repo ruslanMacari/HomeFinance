@@ -1,4 +1,3 @@
-// in working
 package homefinance.money.currency;
 
 import homefinance.domain.ConstraintEntity;

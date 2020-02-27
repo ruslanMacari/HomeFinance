@@ -17,6 +17,10 @@
             <div class="form__input-group">
                 <label class="form__label" th:for="charCode" th:text="#{charCode} + ':'"/>
                 <input class="form__text disabledJs" th:value="${currency.charCode}" th:name="charCode" disabled/>
+                <div>
+                    <div class="form__error" th:if="${#fields.hasErrors('charCode')}" th:errors="*{charCode}"
+                         th:name="charCode"></div>
+                </div>
             </div>
             <div class="form__input-group">
                 <label class="form__label" th:for="name" th:text="#{description} + ':'"/>

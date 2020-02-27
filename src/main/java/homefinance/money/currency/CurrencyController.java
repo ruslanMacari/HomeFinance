@@ -35,7 +35,7 @@ public class CurrencyController extends CommonController<Currency> {
 
     @GetMapping()
     public String list(Model model) {
-        List<Currency> currencies = currencyService.list();
+        List<Currency> currencies = this.currencyService.list();
         model.addAttribute("currencies", currencies);
         return LIST_PATH;
     }
@@ -51,14 +51,17 @@ public class CurrencyController extends CommonController<Currency> {
         if (result.hasErrors()) {
             return NEW_PATH;
         }
-        Action action = () -> currencyService.add(currency);
-        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result).getPath();
+        return this.pathSelector
+            .setActionOk(() -> this.currencyService.add(currency))
+            .setPaths(REDIRECT_PATH, NEW_PATH)
+            .setErrors(result)
+            .getPath();
     }
 
     @GetMapping(value = "/{id}")
     public String view(@PathVariable("id") Integer id, Model model) {
-        Currency currency = currencyService.getByID(id);
-        test(currency);
+        Currency currency = this.currencyService.getByID(id);
+        this.test(currency);
         model.addAttribute("currency", currency);
         return VIEW_PATH;
     }
@@ -68,13 +71,16 @@ public class CurrencyController extends CommonController<Currency> {
         if (result.hasErrors()) {
             return VIEW_PATH;
         }
-        Action action = () -> currencyService.update(currency);
-        return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result).getPath();
+        return this.pathSelector
+            .setActionOk(() -> this.currencyService.update(currency))
+            .setPaths(REDIRECT_PATH, VIEW_PATH)
+            .setErrors(result)
+            .getPath();
     }
 
     @DeleteMapping(value = "/{id}")
     public String deleteUser(@PathVariable("id") Integer id) {
-        currencyService.delete(id);
+        this.currencyService.delete(id);
         return REDIRECT_PATH;
     }
 
