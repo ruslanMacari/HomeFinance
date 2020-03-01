@@ -1,6 +1,6 @@
 package homefinance.money.currency.entity;
 
-import homefinance.domain.ConstraintEntity;
+import homefinance.entity.ConstraintEntity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
@@ -39,6 +39,12 @@ public class Currency extends ConstraintEntity implements Serializable {
   public Currency(String name, String code) {
     this.name = name;
     this.code = code;
+  }
+
+  public Currency(String name, String code, String charCode) {
+    this.name = name;
+    this.code = code;
+    this.charCode = charCode;
   }
 
   @Id

@@ -1,5 +1,5 @@
 // in working
-package homefinance.domain;
+package homefinance.entity;
 
 import homefinance.money.currency.entity.Currency;
 import java.sql.Date;

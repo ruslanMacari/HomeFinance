@@ -1,4 +1,4 @@
-package homefinance.domain;
+package homefinance.entity;
 
 import homefinance.money.currency.entity.Currency;
 import org.junit.Test;

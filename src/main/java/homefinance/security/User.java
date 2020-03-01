@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import lombok.Generated;
-import homefinance.domain.ConstraintEntity;
+import homefinance.entity.ConstraintEntity;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})

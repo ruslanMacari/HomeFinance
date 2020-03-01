@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import org.springframework.dao.DataIntegrityViolationException;
-import homefinance.domain.ConstraintEntity;
+import homefinance.entity.ConstraintEntity;
 import homefinance.web.exceptions.DuplicateFieldsException;
 
 public class ConstraintPersistImplTest {

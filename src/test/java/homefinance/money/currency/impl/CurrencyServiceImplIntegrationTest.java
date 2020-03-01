@@ -43,11 +43,11 @@ public class CurrencyServiceImplIntegrationTest {
   @Test
   public void testAdd() {
     int size = this.currencyService.list().size();
-    Currency currency = new Currency("USD", "840");
+    Currency currency = new Currency("USD", "840", "usd");
     this.currencyService.add(currency);
     assertEquals(this.currencyService.list().size(), size + 1);
     try {
-      this.currencyService.add(new Currency("USD", "840"));
+      this.currencyService.add(new Currency("USD", "840", "usd"));
       fail("Exception must be thrown");
     } catch (Exception e) {
       if (!(e instanceof DuplicateFieldsException)) {
@@ -58,7 +58,7 @@ public class CurrencyServiceImplIntegrationTest {
 
   @Test
   public void testUpdate() {
-    Currency currency = new Currency("USD", "840");
+    Currency currency = new Currency("USD", "840", "usd");
     this.currencyService.add(currency);
     String newName = "updated";
     currency.setName(newName);
@@ -71,9 +71,9 @@ public class CurrencyServiceImplIntegrationTest {
   public void testList() {
     int size = this.currencyService.list().size();
     List<Currency> list = new ArrayList<>(3);
-    list.add(new Currency("test1", "1"));
-    list.add(new Currency("test2", "2"));
-    list.add(new Currency("test3", "3"));
+    list.add(new Currency("test1", "001", "test"));
+    list.add(new Currency("test2", "002", "test"));
+    list.add(new Currency("test3", "003", "test"));
     list.forEach(currency -> this.currencyService.add(currency));
     assertEquals(size + 3, this.currencyService.list().size());
   }

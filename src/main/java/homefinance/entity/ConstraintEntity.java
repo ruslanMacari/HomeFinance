@@ -1,4 +1,4 @@
-package homefinance.domain;
+package homefinance.entity;
 
 import java.util.Map;
 

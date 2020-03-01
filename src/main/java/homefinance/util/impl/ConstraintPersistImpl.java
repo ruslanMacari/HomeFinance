@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-import homefinance.domain.ConstraintEntity;
+import homefinance.entity.ConstraintEntity;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import homefinance.util.ConstraintPersist;
 
