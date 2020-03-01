@@ -1,4 +1,4 @@
-package homefinance.money.currency;
+package homefinance.money.currency.entity;
 
 import homefinance.domain.ConstraintEntity;
 import java.io.Serializable;

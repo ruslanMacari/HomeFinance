@@ -9,8 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.money.currency.Currency;
-import homefinance.money.currency.CurrencyRate;
+import homefinance.money.currency.entity.Currency;
+import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.ArrayList;
@@ -93,11 +93,12 @@ public class CurrencyServiceImplIntegrationTest {
   @Test
   public void when_fillDistinctCurrencies_and_currencyRatesIsFilled_thenAddCurrency() {
     this.currencyService.setCurrencyRatesService(this.currencyRatesService);
-    CurrencyRate currencyRate = new CurrencyRate();
-    currencyRate.setNumCode("test1");
-    currencyRate.setCharCode("test");
-    currencyRate.setCurrency("Test currency");
-    when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(Arrays.asList(currencyRate));
+    CurrencyRateModel currencyRateModel = new CurrencyRateModel();
+    currencyRateModel.setNumCode("test1");
+    currencyRateModel.setCharCode("test");
+    currencyRateModel.setCurrency("Test currency");
+    when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(Arrays.asList(
+        currencyRateModel));
     this.currencyService.fillDistinctCurrencies();
     List<Currency> currencies = this.currencyService.list();
     assertThat(currencies.size(), is(1));

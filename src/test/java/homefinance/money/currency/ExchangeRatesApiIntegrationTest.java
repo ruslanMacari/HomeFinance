@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
+import homefinance.money.currency.entity.Currency;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ExchangeRatesApiIntegrationTest {
 
   @Test
   public void test_getCurrencyRatesByDate() {
-    List<CurrencyRate> currencyRateByDate = this.exchangeRatesApi
+    List<CurrencyRateModel> currencyRateByDate = this.exchangeRatesApi
         .getCurrencyRatesByDate(LocalDate.of(2020, 2, 19));
     assertFalse(currencyRateByDate.isEmpty());
     currencyRateByDate.forEach(System.out::println);

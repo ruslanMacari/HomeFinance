@@ -1,7 +1,7 @@
 package homefinance.money.currency.impl;
 
-import homefinance.money.currency.Currency;
-import homefinance.money.currency.CurrencyRate;
+import homefinance.money.currency.entity.Currency;
+import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.CurrencyRepository;
 import homefinance.money.currency.CurrencyService;
@@ -52,7 +52,7 @@ public class CurrencyServiceImpl implements CurrencyService {
   @Override
   public void fillDistinctCurrencies() {
     LocalDate now = LocalDate.now();
-    List<CurrencyRate> currencyRatesByDate = this.currencyRatesService
+    List<CurrencyRateModel> currencyRatesByDate = this.currencyRatesService
         .getCurrencyRatesByDate(now);
     if (CollectionUtils.isEmpty(currencyRatesByDate)) {
       logger.info("No currency rates found by date: {}", now);
@@ -63,11 +63,11 @@ public class CurrencyServiceImpl implements CurrencyService {
         .forEach(this::addCurrency);
   }
 
-  private void addCurrency(CurrencyRate currencyRate) {
+  private void addCurrency(CurrencyRateModel currencyRateModel) {
     Currency currency = new Currency();
-    currency.setCode(currencyRate.getNumCode());
-    currency.setName(currencyRate.getCurrency());
-    currency.setCharCode(currencyRate.getCharCode());
+    currency.setCode(currencyRateModel.getNumCode());
+    currency.setName(currencyRateModel.getCurrency());
+    currency.setCharCode(currencyRateModel.getCharCode());
     this.add(currency);
   }
 

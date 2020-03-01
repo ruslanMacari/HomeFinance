@@ -8,7 +8,7 @@ import org.junit.Before;
 import static org.mockito.Mockito.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import homefinance.money.currency.Currency;
+import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.CurrencyService;
 import homefinance.util.PathSelector;
 

@@ -1,5 +1,6 @@
 package homefinance.money.currency;
 
+import homefinance.money.currency.entity.Currency;
 import homefinance.web.CommonController;
 import java.util.List;
 import javax.validation.Valid;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import homefinance.util.Action;
 
 @Controller
 @RequestMapping(CurrencyController.URL)

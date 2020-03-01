@@ -3,7 +3,7 @@ package homefinance.money.currency;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class CurrencyRate {
+public class CurrencyRateModel {
 
     private String numCode;
     private String charCode;
@@ -60,7 +60,7 @@ public class CurrencyRate {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        final CurrencyRate other = (CurrencyRate) obj;
+        final CurrencyRateModel other = (CurrencyRateModel) obj;
         if (!Objects.equals(this.numCode, other.numCode)) {
             return false;
         }

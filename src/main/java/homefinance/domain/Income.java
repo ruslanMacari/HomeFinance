@@ -1,7 +1,7 @@
 // in working
 package homefinance.domain;
 
-import homefinance.money.currency.Currency;
+import homefinance.money.currency.entity.Currency;
 import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;

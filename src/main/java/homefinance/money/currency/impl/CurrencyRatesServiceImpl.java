@@ -1,7 +1,7 @@
 package homefinance.money.currency.impl;
 
-import homefinance.money.currency.Currency;
-import homefinance.money.currency.CurrencyRate;
+import homefinance.money.currency.entity.Currency;
+import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.ExchangeRatesApi;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
   }
 
   @Override
-  public List<CurrencyRate> getCurrencyRatesByDate(LocalDate date) {
+  public List<CurrencyRateModel> getCurrencyRatesByDate(LocalDate date) {
     return this.exchangeRatesApi.getCurrencyRatesByDate(date);
   }
 

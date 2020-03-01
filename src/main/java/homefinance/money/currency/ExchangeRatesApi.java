@@ -1,5 +1,6 @@
 package homefinance.money.currency;
 
+import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.impl.CurrencyRatesServiceImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class ExchangeRatesApi {
       .newInstance();
   private static final Logger logger = LoggerFactory.getLogger(CurrencyRatesServiceImpl.class);
 
-  public List<CurrencyRate> getCurrencyRatesByDate(LocalDate date) {
+  public List<CurrencyRateModel> getCurrencyRatesByDate(LocalDate date) {
     this.checkDate(date);
     HttpURLConnection connection = this.getOkConnection(date);
     if (Objects.isNull(connection)) {
@@ -108,10 +109,10 @@ public class ExchangeRatesApi {
     return xml;
   }
 
-  private List<CurrencyRate> getCurrencyRate(Document document) {
+  private List<CurrencyRateModel> getCurrencyRate(Document document) {
     document.getDocumentElement().normalize();
     NodeList nodeList = document.getElementsByTagName(TAG_NAME_VALUTE);
-    List<CurrencyRate> list = new ArrayList<>();
+    List<CurrencyRateModel> list = new ArrayList<>();
     for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
       if (this.nodeIsElement(node)) {
@@ -125,13 +126,13 @@ public class ExchangeRatesApi {
     return ELEMENT_NODE == node.getNodeType();
   }
 
-  private CurrencyRate getCurrencyRate(Element element) {
-    CurrencyRate currencyRate = new CurrencyRate();
-    currencyRate.setNumCode(this.getText(element, TAG_NAME_NUM_CODE));
-    currencyRate.setCharCode(this.getText(element, TAG_NAME_CHAR_CODE));
-    currencyRate.setCurrency(this.getText(element, TAG_NAME_NAME));
-    currencyRate.setRate(new BigDecimal(this.getText(element, TAG_NAME_VALUE)));
-    return currencyRate;
+  private CurrencyRateModel getCurrencyRate(Element element) {
+    CurrencyRateModel currencyRateModel = new CurrencyRateModel();
+    currencyRateModel.setNumCode(this.getText(element, TAG_NAME_NUM_CODE));
+    currencyRateModel.setCharCode(this.getText(element, TAG_NAME_CHAR_CODE));
+    currencyRateModel.setCurrency(this.getText(element, TAG_NAME_NAME));
+    currencyRateModel.setRate(new BigDecimal(this.getText(element, TAG_NAME_VALUE)));
+    return currencyRateModel;
   }
 
   private String getText(Element e, String tagName) {

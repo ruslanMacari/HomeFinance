@@ -1,5 +1,6 @@
 package homefinance.money.currency;
 
+import homefinance.money.currency.entity.Currency;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.List;
 
