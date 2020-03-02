@@ -10,6 +10,15 @@ public class CurrencyRateModel {
     private String currency;
     private BigDecimal rate;
 
+    public CurrencyRateModel() {
+    }
+
+    public CurrencyRateModel(String numCode, String charCode, double rate) {
+        this.numCode = numCode;
+        this.charCode = charCode;
+        this.rate = BigDecimal.valueOf(rate);
+    }
+
     public String getCurrency() {
         return this.currency;
     }

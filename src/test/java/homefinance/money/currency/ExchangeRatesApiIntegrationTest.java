@@ -1,7 +1,6 @@
 package homefinance.money.currency;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 import homefinance.money.currency.entity.Currency;
@@ -25,8 +24,16 @@ public class ExchangeRatesApiIntegrationTest {
   public void test_getCurrencyRatesByDate() {
     List<CurrencyRateModel> currencyRateByDate = this.exchangeRatesApi
         .getCurrencyRatesByDate(LocalDate.of(2020, 2, 19));
-    assertFalse(currencyRateByDate.isEmpty());
+    assertThat(currencyRateByDate.size(), is(42));
+    this.assertValues(currencyRateByDate.get(5), new CurrencyRateModel("784", "AED", 4.8031));
+    this.assertValues(currencyRateByDate.get(41), new CurrencyRateModel("960", "XDR", 24.1134));
     currencyRateByDate.forEach(System.out::println);
+  }
+
+  private void assertValues(CurrencyRateModel valueSource, CurrencyRateModel valueDestination) {
+    assertThat(valueSource.getNumCode(), is(valueDestination.getNumCode()));
+    assertThat(valueSource.getCharCode(), is(valueDestination.getCharCode()));
+    assertThat(valueSource.getRate(), is(valueDestination.getRate()));
   }
 
   @Test
