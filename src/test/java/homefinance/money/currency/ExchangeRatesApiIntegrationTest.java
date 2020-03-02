@@ -30,10 +30,10 @@ public class ExchangeRatesApiIntegrationTest {
     currencyRateByDate.forEach(System.out::println);
   }
 
-  private void assertValues(CurrencyRateModel valueSource, CurrencyRateModel valueDestination) {
-    assertThat(valueSource.getNumCode(), is(valueDestination.getNumCode()));
-    assertThat(valueSource.getCharCode(), is(valueDestination.getCharCode()));
-    assertThat(valueSource.getRate(), is(valueDestination.getRate()));
+  private void assertValues(CurrencyRateModel source, CurrencyRateModel destination) {
+    assertThat(source.getNumCode(), is(destination.getNumCode()));
+    assertThat(source.getCharCode(), is(destination.getCharCode()));
+    assertThat(source.getRate(), is(destination.getRate()));
   }
 
   @Test
