@@ -1,136 +1,136 @@
 package homefinance.service.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import homefinance.security.Role;
+import homefinance.security.User;
+import homefinance.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import homefinance.security.User;
-import homefinance.config.TestConfig;
-import homefinance.security.Role;
-import homefinance.service.UserService;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest()
 public class UserServiceImplTest {
-    
-    @Autowired
-    private UserService userService;
-    private User user;
-    
-    @Value("${db.username}")
-    private String rootname;
-    
-    public UserServiceImplTest() {
-        user = new User ("test", "pass");
-        user.setOneRole(Role.USER);
-    }
-    
-    @Before
-    public void before() {
-        userService.list().forEach(u -> userService.delete(u.getId()));
-    }
-    
-    @Test
-    public void testAdd() {
-        userService.add(user);
-        List<User> list = userService.list();
-        assertTrue(list.size() == 1);
-        assertEquals(user, list.get(0));
-        
-    }
 
-    @Test
-    public void testUpdate() {
-        userService.add(user);
-        String newName = "user new";
-        user.setName(newName);
-        userService.update(user);
-        String dbUserName = userService.getById(user.getId()).getName();
-        assertTrue(dbUserName.equals(newName));
-    }
+  @Autowired
+  private UserService userService;
+  private User user;
 
-    @Test
-    public void testList() {
-        addThreeUsers();
-        assertEquals(3, userService.list().size());
-    }
-    
-    private void addThreeUsers() {
-        List<User> list = new ArrayList<>(3);
-        list.add(new User("test1", "pass"));
-        list.add(new User("test2", "pass"));
-        list.add(new User("test3", "pass"));
-        list.forEach(user -> userService.add(user));
-    }
+  @Value("${db.username}")
+  private String rootname;
 
-    @Test
-    public void testListLimit() {
-        addThreeUsers();
-        assertTrue(userService.listLimit(2).size() == 2);
-    }
+  public UserServiceImplTest() {
+    this.user = new User("test", "pass");
+    this.user.setOneRole(Role.USER);
+  }
 
-    @Test
-    public void testGetById() {
-        userService.add(user);
-        User foundUser = userService.getById(user.getId());
-        assertTrue(foundUser.equals(user));
-    }
+  @Before
+  public void before() {
+    this.userService.list().forEach(u -> this.userService.delete(u.getId()));
+  }
 
-    @Test
-    public void testGetByName() {
-        userService.add(user);
-        User foundUser = userService.getByName(user.getName());
-        assertTrue(foundUser.equals(user));
-    }
+  @Test
+  public void testAdd() {
+    this.userService.add(this.user);
+    List<User> list = this.userService.list();
+    assertEquals(1, list.size());
+    assertEquals(this.user, list.get(0));
 
-    @Test
-    public void testDelete() {
-        userService.add(user);
-        userService.delete(user.getId());
-        assertTrue(userService.list().isEmpty());
+  }
+
+  @Test
+  public void testUpdate() {
+    this.userService.add(this.user);
+    String newName = "user new";
+    this.user.setName(newName);
+    this.userService.update(this.user);
+    String dbUserName = this.userService.getById(this.user.getId()).getName();
+    assertEquals(dbUserName, newName);
+  }
+
+  @Test
+  public void testList() {
+    this.addThreeUsers();
+    assertEquals(3, this.userService.list().size());
+  }
+
+  private void addThreeUsers() {
+    List<User> list = new ArrayList<>(3);
+    list.add(new User("test1", "pass"));
+    list.add(new User("test2", "pass"));
+    list.add(new User("test3", "pass"));
+    list.forEach(user -> this.userService.add(user));
+  }
+
+  @Test
+  public void testListLimit() {
+    this.addThreeUsers();
+    assertEquals(2, this.userService.listLimit(2).size());
+  }
+
+  @Test
+  public void testGetById() {
+    this.userService.add(this.user);
+    User foundUser = this.userService.getById(this.user.getId());
+    assertEquals(foundUser, this.user);
+  }
+
+  @Test
+  public void testGetByName() {
+    this.userService.add(this.user);
+    User foundUser = this.userService.getByName(this.user.getName());
+    assertEquals(foundUser, this.user);
+  }
+
+  @Test
+  public void testDelete() {
+    this.userService.add(this.user);
+    this.userService.delete(this.user.getId());
+    assertTrue(this.userService.list().isEmpty());
+  }
+
+  @Test
+  public void testGetByNameAndPassword() {
+    String name = "test GetByNameAndPassword";
+    String password = "password";
+    User userNamePass = new User(name, password);
+    this.userService.add(userNamePass);
+    User foundUser = this.userService.getByNameAndPassword(name, password);
+    assertEquals(foundUser, userNamePass);
+  }
+
+  @Test
+  public void testGetSimpleUsers() {
+    User admin = new User("admin", "pass");
+    admin.setOneRole(Role.ADMIN);
+    this.userService.add(admin);
+    this.userService.add(this.user);
+    List<User> simpleUsers = this.userService.getSimpleUsers();
+    assertEquals(1, simpleUsers.size());
+    for (User u : simpleUsers) {
+      if (u.equals(admin)) {
+        fail("admin user must not be found");
+        break;
+      }
     }
-    
-    @Test
-    public void testGetByNameAndPassword() {
-        String name = "test GetByNameAndPassword";
-        String password = "password";
-        User userNamePass = new User(name, password);
-        userService.add(userNamePass);
-        User foundUser = userService.getByNameAndPassword(name, password);
-        assertTrue(foundUser.equals(userNamePass));
-    }
-    
-    @Test
-    public void testGetSimpleUsers() {
-        User admin = new User("admin", "pass");
-        admin.setOneRole(Role.ADMIN);
-        userService.add(admin);
-        userService.add(user);
-        List<User> simpleUsers = userService.getSimpleUsers();
-        assertTrue(simpleUsers.size() == 1);
-        for(User u : simpleUsers) {
-            if (u.equals(admin)) {
-                fail("admin user must not be found");
-                break;
-            }
-        }
-    }
-    
-    
-    @Test
-    public void testUsersExceptRoot() {
-        User root = new User(rootname, "pass");
-        userService.add(root);
-        List<User> result = userService.usersExceptRoot();
-        assertTrue(result.isEmpty());
-    }
+  }
+
+
+  @Test
+  public void testUsersExceptRoot() {
+    User root = new User(this.rootname, "pass");
+    this.userService.add(root);
+    List<User> result = this.userService.usersExceptRoot();
+    assertTrue(result.isEmpty());
+  }
 
 }
