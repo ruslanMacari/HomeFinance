@@ -1,7 +1,8 @@
 package homefinance.security;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,30 +23,27 @@ public class UserDetailsServiceImplTest {
 
   @Test
   public void testLoadUserByUsername() {
-    System.out.println("loadUserByUsername");
     UserDetailsServiceImpl serviceImpl = new UserDetailsServiceImpl();
-    serviceImpl.setUserService(getUserService());
-    UserDetails details = serviceImpl.loadUserByUsername(username);
+    serviceImpl.setUserService(this.getUserService());
+    UserDetails details = serviceImpl.loadUserByUsername(this.username);
     Collection<? extends GrantedAuthority> authorities = details.getAuthorities();
-    assertTrue(authorities.size() == 1);
-    for (GrantedAuthority auth : authorities) {
-      assertEquals(Role.USER, auth.getAuthority());
-    }
+    assertEquals(1, authorities.size());
+    assertThat(authorities.stream().findFirst().get().getAuthority(), is(Role.USER));
   }
 
   private UserService getUserService() {
     UserService userService = mock(UserService.class);
-    User user = getUser();
-    when(userService.getByName(username)).thenReturn(user);
+    User user = this.getUser();
+    when(userService.getByName(this.username)).thenReturn(user);
     return userService;
   }
 
   private User getUser() {
     User user = mock(User.class);
-    when(user.getName()).thenReturn(username);
+    when(user.getName()).thenReturn(this.username);
     when(user.getPassword()).thenReturn("pass");
     when(user.isEnabled()).thenReturn(true);
-    Set<UserRole> set = getUserRoles();
+    Set<UserRole> set = this.getUserRoles();
     when(user.getUserRole()).thenReturn(set);
     return user;
   }
