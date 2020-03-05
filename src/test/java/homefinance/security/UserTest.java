@@ -1,6 +1,9 @@
 package homefinance.security;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -11,39 +14,39 @@ import org.junit.Test;
 
 public class UserTest {
 
+  private User user;
+
   public UserTest() {
+    this.user = new User("test");
   }
 
   @Test
   public void testSetOneRole() {
-    System.out.println("setOneRole");
     // test if no user role seted
-    User user = new User("test");
-    Set<UserRole> userRoleSet = user.getUserRole();
+    Set<UserRole> userRoleSet = this.user.getUserRole();
     String role = "role";
-    user.setOneRole(role);
-    assertTrue(userRoleSet.size() == 1);
-    userRoleSet.forEach(item -> assertTrue(item.getRole().equals(role)));
+    this.user.setOneRole(role);
+    assertEquals(1, userRoleSet.size());
+    assertThat(userRoleSet.stream().findFirst().get().getRole(), is(role));
     // test if user role exist
     String newRole = "newRole";
     UserRole userRole = mock(UserRole.class);
     when(userRole.getRole()).thenReturn(newRole);
     userRoleSet.add(userRole);
-    user.setOneRole(newRole);
-    assertTrue(userRoleSet.size() == 1);
-    userRoleSet.forEach(item -> assertTrue(item.getRole().equals(newRole)));
+    this.user.setOneRole(newRole);
+    assertEquals(1, userRoleSet.size());
+    assertThat(userRoleSet.stream().findFirst().get().getRole(), is(newRole));
   }
 
   @Test
   public void testHasAdmin() {
     UserRole userRole = mock(UserRole.class);
     when(userRole.getRole()).thenReturn(Role.ADMIN);
-    User user = new User("test");
     Set<UserRole> userRoles = new HashSet<>();
     userRoles.add(userRole);
-    user.setUserRole(userRoles);
-    assertTrue(user.hasAdmin());
+    this.user.setUserRole(userRoles);
+    assertTrue(this.user.hasAdmin());
     when(userRole.getRole()).thenReturn("test");
-    assertFalse(user.hasAdmin());
+    assertFalse(this.user.hasAdmin());
   }
 }
