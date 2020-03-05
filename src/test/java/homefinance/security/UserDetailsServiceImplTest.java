@@ -18,9 +18,6 @@ public class UserDetailsServiceImplTest {
 
   private String username = "test";
 
-  public UserDetailsServiceImplTest() {
-  }
-
   @Test
   public void testLoadUserByUsername() {
     UserDetailsServiceImpl serviceImpl = new UserDetailsServiceImpl();
