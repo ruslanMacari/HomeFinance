@@ -1,8 +1,9 @@
 package homefinance.service.impl;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import homefinance.security.Role;
 import homefinance.security.User;
@@ -116,12 +117,7 @@ public class UserServiceImplTest {
     this.userService.add(this.user);
     List<User> simpleUsers = this.userService.getSimpleUsers();
     assertEquals(1, simpleUsers.size());
-    for (User u : simpleUsers) {
-      if (u.equals(admin)) {
-        fail("admin user must not be found");
-        break;
-      }
-    }
+    assertThat(simpleUsers.stream().findFirst().get(), is(this.user));
   }
 
 
