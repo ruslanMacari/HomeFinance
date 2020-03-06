@@ -17,31 +17,24 @@ public class ConstraintPersistImplTest {
   private ConstraintPersistImpl instance = new ConstraintPersistImpl();
   private ConstraintEntity entity = mock(ConstraintEntity.class);
   private String errorMsg = "exception";
-  private String msg = "Test Error";
-  private DataIntegrityViolationException exeption = new DataIntegrityViolationException(msg,
-      new Exception(errorMsg));
-
-  @Test
-  public void testUpdate() {
-    testAdd();
-  }
 
   @Test
   public void testAdd() {
     Map<String, String> map = new HashMap<>();
-    map.put(errorMsg, errorMsg);
-    ConstraintEntity result = instance.add(() -> getEntityOk(), map);
-    assertEquals(result, entity);
+    map.put(this.errorMsg, this.errorMsg);
+    ConstraintEntity result = this.instance.add(this::getEntityOk, map);
+    assertEquals(result, this.entity);
     try {
-      instance.add(() -> getEntityError(), map);
+      this.instance.add(this::getEntityError, map);
       fail("DuplicateFieldsException must be thrown");
     } catch (DuplicateFieldsException duplicateEx) {
-      assertTrue(duplicateEx.getErrorCode().equals(errorMsg));
+      assertEquals(duplicateEx.getErrorCode(), this.errorMsg);
       try {
         map.clear();
-        instance.add(() -> getEntityError(), map);
+        this.instance.add(this::getEntityError, map);
         fail("DataIntegrityViolationException must be thrown");
       } catch (DataIntegrityViolationException e) {
+        String msg = "Test Error";
         assertTrue(e.getMessage().contains(msg));
       }
 
@@ -49,14 +42,11 @@ public class ConstraintPersistImplTest {
   }
 
   private ConstraintEntity getEntityOk() {
-    return entity;
+    return this.entity;
   }
 
   private ConstraintEntity getEntityError() {
-      if (true) {
-          throw new DataIntegrityViolationException("Test Error", new Exception(errorMsg));
-      }
-    return entity;
+    throw new DataIntegrityViolationException("Test Error", new Exception(this.errorMsg));
   }
 
 }
