@@ -14,41 +14,41 @@ public class PathSelectorImplTest {
 
   @Before
   public void setUp() {
-    pathSelector = new PathSelectorImpl();
+    this.pathSelector = new PathSelectorImpl();
   }
 
   @Test
   public void testSetActionOk() {
-    assertEquals(pathSelector.setActionOk(() -> System.out.println("test")), pathSelector);
+    assertEquals(this.pathSelector.setActionOk(() -> System.out.println("test")), this.pathSelector);
   }
 
   @Test
   public void testSetActionError() {
-    assertEquals(pathSelector.setActionError(() -> System.out.println("test")), pathSelector);
+    assertEquals(this.pathSelector.setActionError(() -> System.out.println("test")),
+        this.pathSelector);
   }
 
   @Test
   public void testSetPaths() {
-    assertEquals(pathSelector.setPaths("test1", "test2"), pathSelector);
+    assertEquals(this.pathSelector.setPaths("test1", "test2"), this.pathSelector);
   }
 
   @Test
   public void testSetErrors() {
-    assertEquals(pathSelector.setErrors(mock(Errors.class)), pathSelector);
+    assertEquals(this.pathSelector.setErrors(mock(Errors.class)), this.pathSelector);
   }
 
   @Test
   public void testGetPath() {
     String pathOk = "ok";
     String pathError = "error";
-    pathSelector.setActionOk(() -> System.out.println("ok")).setPaths(pathOk, pathError);
-    assertEquals(pathSelector.getPath(), pathOk);
-    pathSelector.setActionOk(() -> {
+    this.pathSelector.setActionOk(() -> System.out.println("ok")).setPaths(pathOk, pathError);
+    assertEquals(this.pathSelector.getPath(), pathOk);
+    this.pathSelector.setActionOk(() -> {
       throw mock(DuplicateFieldsException.class);
     });
-    pathSelector.setErrors(mock(Errors.class)).setActionError(() -> System.out.println("error"));
-    assertEquals(pathSelector.getPath(), pathError);
-    assertEquals(pathSelector.getPath(), pathError);
+    this.pathSelector.setErrors(mock(Errors.class)).setActionError(() -> System.out.println("error"));
+    assertEquals(this.pathSelector.getPath(), pathError);
   }
 
 }

@@ -1,6 +1,7 @@
 package homefinance.util.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -23,12 +24,12 @@ public class ConstraintPersistImplTest {
     Map<String, String> map = new HashMap<>();
     map.put(this.errorMsg, this.errorMsg);
     ConstraintEntity result = this.instance.add(this::getEntityOk, map);
-    assertEquals(result, this.entity);
+    assertThat(result, is(this.entity));
     try {
       this.instance.add(this::getEntityError, map);
       fail("DuplicateFieldsException must be thrown");
     } catch (DuplicateFieldsException duplicateEx) {
-      assertEquals(duplicateEx.getErrorCode(), this.errorMsg);
+      assertThat(duplicateEx.getErrorCode(), is(this.errorMsg));
       try {
         map.clear();
         this.instance.add(this::getEntityError, map);
@@ -37,7 +38,6 @@ public class ConstraintPersistImplTest {
         String msg = "Test Error";
         assertTrue(e.getMessage().contains(msg));
       }
-
     }
   }
 
