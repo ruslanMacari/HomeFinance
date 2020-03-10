@@ -18,76 +18,77 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(CurrencyController.URL)
 public class CurrencyController extends CommonController<Currency> {
 
-    public static final String URL = "/currencies";
-    public static final String LIST_PATH = URL + "/list";
-    public static final String NEW = "/new";
-    public static final String NEW_PATH = URL + NEW;
-    public static final String REDIRECT_PATH = "redirect:" + URL;
-    public static final String VIEW_PATH = URL + "/view";
+  public static final String URL = "/currencies";
+  public static final String LIST_PATH = URL + "/list";
+  public static final String NEW = "/new";
+  public static final String NEW_PATH = URL + NEW;
+  public static final String REDIRECT_PATH = "redirect:" + URL;
+  public static final String VIEW_PATH = URL + "/view";
 
-    private CurrencyService currencyService;
+  private CurrencyService currencyService;
 
-    public CurrencyController(CurrencyService currencyService) {
-        this.currencyService = currencyService;
+  public CurrencyController(CurrencyService currencyService) {
+    this.currencyService = currencyService;
+  }
+
+  // TODO: 23.02.2020 RMACARI: refactor to avoid using entities on views, use models
+
+  @GetMapping()
+  public String list(Model model) {
+    List<Currency> currencies = this.currencyService.list();
+    model.addAttribute("currencies", currencies);
+    return LIST_PATH;
+  }
+
+  @GetMapping(NEW)
+  public String newCurrency(Model model) {
+    model.addAttribute("newCurrency", new Currency());
+    return NEW_PATH;
+  }
+
+  @PostMapping(NEW)
+  public String save(@Valid @ModelAttribute("newCurrency") Currency currency,
+      BindingResult result) {
+    if (result.hasErrors()) {
+      return NEW_PATH;
     }
+    return this.pathSelector
+        .setActionOk(() -> this.currencyService.add(currency))
+        .setPaths(REDIRECT_PATH, NEW_PATH)
+        .setErrors(result)
+        .getPath();
+  }
 
-    // TODO: 23.02.2020 RMACARI: refactor to avoid using entities on views, use models
+  @GetMapping(value = "/{id}")
+  public String view(@PathVariable("id") Integer id, Model model) {
+    Currency currency = this.currencyService.getByID(id);
+    this.test(currency);
+    model.addAttribute("currency", currency);
+    return VIEW_PATH;
+  }
 
-    @GetMapping()
-    public String list(Model model) {
-        List<Currency> currencies = this.currencyService.list();
-        model.addAttribute("currencies", currencies);
-        return LIST_PATH;
+  @PostMapping("/update")
+  public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result) {
+    if (result.hasErrors()) {
+      return VIEW_PATH;
     }
+    return this.pathSelector
+        .setActionOk(() -> this.currencyService.update(currency))
+        .setPaths(REDIRECT_PATH, VIEW_PATH)
+        .setErrors(result)
+        .getPath();
+  }
 
-    @GetMapping(NEW)
-    public String newCurrency(Model model) {
-        model.addAttribute("newCurrency", new Currency());
-        return NEW_PATH;
-    }
+  @DeleteMapping(value = "/{id}")
+  public String deleteUser(@PathVariable("id") Integer id) {
+    this.currencyService.delete(id);
+    return REDIRECT_PATH;
+  }
 
-    @PostMapping(NEW)
-    public String save(@Valid @ModelAttribute("newCurrency") Currency currency, BindingResult result) {
-        if (result.hasErrors()) {
-            return NEW_PATH;
-        }
-        return this.pathSelector
-            .setActionOk(() -> this.currencyService.add(currency))
-            .setPaths(REDIRECT_PATH, NEW_PATH)
-            .setErrors(result)
-            .getPath();
-    }
-
-    @GetMapping(value = "/{id}")
-    public String view(@PathVariable("id") Integer id, Model model) {
-        Currency currency = this.currencyService.getByID(id);
-        this.test(currency);
-        model.addAttribute("currency", currency);
-        return VIEW_PATH;
-    }
-
-    @PostMapping("/update")
-    public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result) {
-        if (result.hasErrors()) {
-            return VIEW_PATH;
-        }
-        return this.pathSelector
-            .setActionOk(() -> this.currencyService.update(currency))
-            .setPaths(REDIRECT_PATH, VIEW_PATH)
-            .setErrors(result)
-            .getPath();
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) {
-        this.currencyService.delete(id);
-        return REDIRECT_PATH;
-    }
-
-    @GetMapping("/fill")
-    public String fillCurrencies() {
-        this.currencyService.fillDistinctCurrencies();
-        return REDIRECT_PATH;
-    }
+  @GetMapping("/fill")
+  public String fillCurrencies() {
+    this.currencyService.fillDistinctCurrencies();
+    return REDIRECT_PATH;
+  }
 
 }

@@ -9,9 +9,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
+import homefinance.money.currency.entity.Currency;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.ArrayList;
 import java.util.Arrays;

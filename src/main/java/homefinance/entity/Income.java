@@ -12,47 +12,47 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "income")
 public class Income {
-    
-    @Id
-    private Date date;
-    
-    @OneToOne
-    @JoinColumn(name = "currency_id")
-    private Currency currency;
-    
-    private int amount;
 
-    public Date getDate() {
-        return date;
-    }
+  @Id
+  private Date date;
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+  @OneToOne
+  @JoinColumn(name = "currency_id")
+  private Currency currency;
 
-    public Currency getCurrency() {
-        return currency;
-    }
+  private int amount;
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+  public Income(Date date, Currency currency, int amount) {
+    this.date = date;
+    this.currency = currency;
+    this.amount = amount;
+  }
 
-    public Income(Date date, Currency currency, int amount) {
-        this.date = date;
-        this.currency = currency;
-        this.amount = amount;
-    }
+  public Income() {
+  }
 
-    public Income() {
-    }
-    
-    public int getAmount() {
-        return amount;
-    }
+  public Date getDate() {
+    return date;
+  }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-    
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  public Currency getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public void setAmount(int amount) {
+    this.amount = amount;
+  }
+
 }

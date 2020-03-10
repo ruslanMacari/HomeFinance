@@ -19,7 +19,8 @@ public class PathSelectorImplTest {
 
   @Test
   public void testSetActionOk() {
-    assertEquals(this.pathSelector.setActionOk(() -> System.out.println("test")), this.pathSelector);
+    assertEquals(this.pathSelector.setActionOk(() -> System.out.println("test")),
+        this.pathSelector);
   }
 
   @Test
@@ -47,7 +48,8 @@ public class PathSelectorImplTest {
     this.pathSelector.setActionOk(() -> {
       throw mock(DuplicateFieldsException.class);
     });
-    this.pathSelector.setErrors(mock(Errors.class)).setActionError(() -> System.out.println("error"));
+    this.pathSelector.setErrors(mock(Errors.class))
+        .setActionError(() -> System.out.println("error"));
     assertEquals(this.pathSelector.getPath(), pathError);
   }
 

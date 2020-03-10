@@ -6,17 +6,18 @@ import org.springframework.stereotype.Component;
 
 @Component("role")
 public final class Role {
-    
-    public final static String USER = "USER";
-    public final static String ADMIN = "ADMIN";
-    private static final Set<String> roles = new HashSet<>();
-    static {
-        roles.add(USER);
-        roles.add(ADMIN);
-    }
 
-    public static Set<String> getRoles() {
-        return roles;
-    }
-    
+  public final static String USER = "USER";
+  public final static String ADMIN = "ADMIN";
+  private static final Set<String> roles = new HashSet<>();
+
+  static {
+    roles.add(USER);
+    roles.add(ADMIN);
+  }
+
+  public static Set<String> getRoles() {
+    return roles;
+  }
+
 }

@@ -19,19 +19,19 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 public class WebConfig implements WebMvcConfigurer {
 
   @Bean
+  public LocalValidatorFactoryBean getValidator() {
+    LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+    bean.setValidationMessageSource(messageSource());
+    return bean;
+  }
+
+  @Bean
   public MessageSource messageSource() {
     ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
     source.setBasenames("classpath:locales/messages", "classpath:locales/errors");
     //source.setUseCodeAsDefaultMessage(true);
     source.setDefaultEncoding("UTF-8");
     return source;
-  }
-
-  @Bean
-  public LocalValidatorFactoryBean getValidator() {
-    LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-    bean.setValidationMessageSource(messageSource());
-    return bean;
   }
 
   @Bean

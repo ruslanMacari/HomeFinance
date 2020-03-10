@@ -1,8 +1,8 @@
 package homefinance.security;
 
-import java.util.Objects;
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,78 +15,79 @@ import javax.persistence.UniqueConstraint;
 import lombok.Generated;
 
 @Entity
-@Table(name = "user_roles" , uniqueConstraints = @UniqueConstraint(columnNames = { "role", "user_id" }))
+@Table(name = "user_roles", uniqueConstraints = @UniqueConstraint(columnNames = {"role",
+    "user_id"}))
 public class UserRole {
 
-	private Integer id;
-	private User user;
-	private String role;
+  private Integer id;
+  private User user;
+  private String role;
 
-	public UserRole() {
-	}
+  public UserRole() {
+  }
 
-	public UserRole(User user, String role) {
-		this.user = user;
-		this.role = role;
-	}
+  public UserRole(User user, String role) {
+    this.user = user;
+    this.role = role;
+  }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
-	public Integer getId() {
-		return id;
-	}
+  @Id
+  @GeneratedValue(strategy = IDENTITY)
+  @Column(name = "id", unique = true, nullable = false)
+  public Integer getId() {
+    return id;
+  }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	public User getUser() {
-		return user;
-	}
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  public User getUser() {
+    return user;
+  }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-	@Column(name = "role", nullable = false, length = 45)
-	public String getRole() {
-		return role;
-	}
+  @Column(name = "role", nullable = false, length = 45)
+  public String getRole() {
+    return role;
+  }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+  public void setRole(String role) {
+    this.role = role;
+  }
 
-	@Override
-	@Generated
-	public int hashCode() {
-		int hash = 7;
-		hash = 59 * hash + Objects.hashCode(this.id);
-		hash = 59 * hash + Objects.hashCode(this.user);
-		hash = 59 * hash + Objects.hashCode(this.role);
-		return hash;
-	}
+  @Override
+  @Generated
+  public int hashCode() {
+    int hash = 7;
+    hash = 59 * hash + Objects.hashCode(this.id);
+    hash = 59 * hash + Objects.hashCode(this.user);
+    hash = 59 * hash + Objects.hashCode(this.role);
+    return hash;
+  }
 
-	@Override
-	@Generated
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final UserRole other = (UserRole) obj;
-		if (!Objects.equals(this.role, other.role)) {
-			return false;
-		}
-		return Objects.equals(this.id, other.id);
-	}
+  @Override
+  @Generated
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final UserRole other = (UserRole) obj;
+    if (!Objects.equals(this.role, other.role)) {
+      return false;
+    }
+    return Objects.equals(this.id, other.id);
+  }
 
 }

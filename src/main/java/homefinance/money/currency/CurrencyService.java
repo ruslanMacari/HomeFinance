@@ -5,18 +5,18 @@ import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.List;
 
 public interface CurrencyService {
-    
-    Currency add(Currency currency) throws DuplicateFieldsException;
 
-    void update(Currency currency) throws DuplicateFieldsException;
-    
-    void delete(Integer id);
-    
-    Currency getByID(Integer id);
+  Currency add(Currency currency) throws DuplicateFieldsException;
 
-    List<Currency> list();
+  void update(Currency currency) throws DuplicateFieldsException;
 
-    Currency getByCode(String code);
+  void delete(Integer id);
 
-    void fillDistinctCurrencies();
+  Currency getByID(Integer id);
+
+  List<Currency> list();
+
+  Currency getByCode(String code);
+
+  void fillDistinctCurrencies();
 }

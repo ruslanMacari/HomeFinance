@@ -7,6 +7,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "currency_rate")
 public class CurrencyRate extends BaseEntity {
+
   private int currencyId;
 
   public int getCurrencyId() {

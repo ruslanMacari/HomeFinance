@@ -33,83 +33,86 @@ import org.xml.sax.InputSource;
 @RequestMapping("/rest/currencies")
 public class CurrenciesRestController {
 
-    @GetMapping("/get-rates")
-    public ResponseEntity<List<CurrencyRateModel>> getAllRates(@RequestParam(value = "date", defaultValue = "") String date) throws Exception {
-        return new ResponseEntity<>(getRates(date), HttpStatus.OK );
-    }
+  @GetMapping("/get-rates")
+  public ResponseEntity<List<CurrencyRateModel>> getAllRates(
+      @RequestParam(value = "date", defaultValue = "") String date) throws Exception {
+    return new ResponseEntity<>(getRates(date), HttpStatus.OK);
+  }
 
-    private List<CurrencyRateModel> getRates(String date) throws Exception {
-        List<CurrencyRateModel> list = new ArrayList<>();
-        HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
-        con.setRequestMethod("GET");
-        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new InputSource(new StringReader(getRatesXML(con))));
-            document.getDocumentElement().normalize();
-            NodeList nodeList = document.getElementsByTagName("Valute");
-            String numCode = "NumCode";
-            String charCode = "CharCode";
-            String name = "Name";
-            String value = "Value";
-            short elementNode = Node.ELEMENT_NODE;
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                if (node.getNodeType() == elementNode) {
-                    Element element = (Element) node;
-                    CurrencyRateModel rates = new CurrencyRateModel();
-                    rates.setNumCode(getText(element, numCode));
-                    rates.setCharCode(getText(element, charCode));
-                    rates.setCurrency(getText(element, name));
-                    rates.setRate(new BigDecimal(getText(element, value)));
-                    list.add(rates);
-                }
-            }
-        } else {
-            throw new Exception("GET request not worked");
+  private List<CurrencyRateModel> getRates(String date) throws Exception {
+    List<CurrencyRateModel> list = new ArrayList<>();
+    HttpURLConnection con = (HttpURLConnection) new URL(getUrl(date)).openConnection();
+    con.setRequestMethod("GET");
+    if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      Document document = builder.parse(new InputSource(new StringReader(getRatesXML(con))));
+      document.getDocumentElement().normalize();
+      NodeList nodeList = document.getElementsByTagName("Valute");
+      String numCode = "NumCode";
+      String charCode = "CharCode";
+      String name = "Name";
+      String value = "Value";
+      short elementNode = Node.ELEMENT_NODE;
+      for (int i = 0; i < nodeList.getLength(); i++) {
+        Node node = nodeList.item(i);
+        if (node.getNodeType() == elementNode) {
+          Element element = (Element) node;
+          CurrencyRateModel rates = new CurrencyRateModel();
+          rates.setNumCode(getText(element, numCode));
+          rates.setCharCode(getText(element, charCode));
+          rates.setCurrency(getText(element, name));
+          rates.setRate(new BigDecimal(getText(element, value)));
+          list.add(rates);
         }
-        return list;
+      }
+    } else {
+      throw new Exception("GET request not worked");
     }
-    
-    private String getUrl(String date) {
-        if (date.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            date = LocalDate.now().format(formatter);
-        }
-        return "http://www.bnm.md/ro/official_exchange_rates?get_xml=1&date=" + date;
-    }
+    return list;
+  }
 
-    private String getRatesXML(HttpURLConnection connection) throws IOException {
-        String xmlString = "";
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                xmlString = xmlString.concat(inputLine);
-            }
-        }
-        return xmlString;
+  private String getUrl(String date) {
+    if (date.isEmpty()) {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+      date = LocalDate.now().format(formatter);
     }
+    return "http://www.bnm.md/ro/official_exchange_rates?get_xml=1&date=" + date;
+  }
 
-    private String getText(Element e, String tagName) {
-        return e.getElementsByTagName(tagName).item(0).getTextContent();
+  private String getRatesXML(HttpURLConnection connection) throws IOException {
+    String xmlString = "";
+    try (BufferedReader in = new BufferedReader(
+        new InputStreamReader(connection.getInputStream()))) {
+      String inputLine;
+      while ((inputLine = in.readLine()) != null) {
+        xmlString = xmlString.concat(inputLine);
+      }
     }
+    return xmlString;
+  }
 
-    @PostMapping("get-rates")
-    public ResponseEntity<List<CurrencyRateModel>> getRates(@RequestParam(value = "date", defaultValue = "") String date,
-                                                          @RequestBody List<CurrencyRateModel> ratesList) throws Exception {
-        List<CurrencyRateModel> list = getRates(date);
-        list = list.stream()
-                .filter(ratesList::contains)
-                .collect(Collectors.toList());
-        if(list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(list, HttpStatus.OK );
-    }
+  private String getText(Element e, String tagName) {
+    return e.getElementsByTagName(tagName).item(0).getTextContent();
+  }
 
-    @PostMapping("/fill-currencies")
-    public String fillCurrencies() {
-        return CurrencyController.LIST_PATH;
+  @PostMapping("get-rates")
+  public ResponseEntity<List<CurrencyRateModel>> getRates(
+      @RequestParam(value = "date", defaultValue = "") String date,
+      @RequestBody List<CurrencyRateModel> ratesList) throws Exception {
+    List<CurrencyRateModel> list = getRates(date);
+    list = list.stream()
+        .filter(ratesList::contains)
+        .collect(Collectors.toList());
+    if (list.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
+  @PostMapping("/fill-currencies")
+  public String fillCurrencies() {
+    return CurrencyController.LIST_PATH;
+  }
+
 }

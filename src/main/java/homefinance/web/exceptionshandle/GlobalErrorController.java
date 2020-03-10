@@ -18,7 +18,7 @@ public class GlobalErrorController implements ErrorController {
     model.addAttribute("errorMessage", exception);
     model.addAttribute("statusCode", statusCode);
     if (Objects.nonNull(statusCode)
-      && HttpStatus.NOT_FOUND.value() == statusCode) {
+        && HttpStatus.NOT_FOUND.value() == statusCode) {
       return "resource-not-found";
     }
     return "exception";

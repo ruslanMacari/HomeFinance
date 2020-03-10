@@ -28,9 +28,9 @@ public class Currency extends ConstraintEntity implements Serializable {
   private String charCode;
 
   {
-      this.constraintsMap = new HashMap<>();
-      this.constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
-      this.constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
+    this.constraintsMap = new HashMap<>();
+    this.constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
+    this.constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
   }
 
   public Currency() {

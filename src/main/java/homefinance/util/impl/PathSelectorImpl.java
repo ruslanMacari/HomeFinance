@@ -43,11 +43,11 @@ public class PathSelectorImpl implements PathSelector {
   @Override
   public String getPath() {
     try {
-        this.actionOk.execute();
+      this.actionOk.execute();
       return this.pathIfOk;
     } catch (DuplicateFieldsException ex) {
-        this.errors.rejectValue(ex.getField(), ex.getErrorCode());
-        this.runActionError();
+      this.errors.rejectValue(ex.getField(), ex.getErrorCode());
+      this.runActionError();
       return this.pathIfError;
     }
   }
@@ -56,8 +56,8 @@ public class PathSelectorImpl implements PathSelector {
     if (this.actionError == null) {
       return;
     }
-      this.actionError.execute();
-      this.actionError = null;
+    this.actionError.execute();
+    this.actionError = null;
   }
 
 }
