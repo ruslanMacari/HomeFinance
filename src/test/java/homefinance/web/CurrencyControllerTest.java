@@ -1,7 +1,7 @@
 package homefinance.web;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,58 +21,58 @@ public class CurrencyControllerTest {
   private CurrencyController controller;
   private Model model;
   private Currency currency;
-  private PathSelector pathSelector;
   private BindingResult result;
 
   @Before
   public void initialize() {
-    currencyService = mock(CurrencyService.class);
-    controller = new CurrencyController(currencyService);
-    model = mock(Model.class);
-    currency = mock(Currency.class);
-    pathSelector = new PathSelectorTest();
-    controller.setPathSelector(pathSelector);
-    result = mock(BindingResult.class);
+    this.currencyService = mock(CurrencyService.class);
+    this.controller = new CurrencyController(this.currencyService);
+    this.model = mock(Model.class);
+    this.currency = mock(Currency.class);
+    PathSelector pathSelector = new PathSelectorTest();
+    this.controller.setPathSelector(pathSelector);
+    this.result = mock(BindingResult.class);
   }
 
   @Test
   public void testList() {
-    assertTrue(controller.list(model).equals(CurrencyController.LIST_PATH));
+    assertThat(this.controller.list(this.model), is(CurrencyController.LIST_PATH));
   }
 
   @Test
   public void testNewCurrency() {
-    assertTrue(controller.newCurrency(model).equals(CurrencyController.NEW_PATH));
+    assertThat(this.controller.newCurrency(this.model), is(CurrencyController.NEW_PATH));
   }
 
   @Test
   public void testSave() {
-    when(result.hasErrors()).thenReturn(true);
-    assertEquals(controller.save(currency, result), CurrencyController.NEW_PATH);
-    when(result.hasErrors()).thenReturn(false);
-    assertEquals(controller.save(currency, result), CurrencyController.REDIRECT_PATH);
+    when(this.result.hasErrors()).thenReturn(true);
+    assertThat(this.controller.save(this.currency, this.result), is(CurrencyController.NEW_PATH));
+    when(this.result.hasErrors()).thenReturn(false);
+    assertThat(this.controller.save(this.currency, this.result),
+        is(CurrencyController.REDIRECT_PATH));
   }
 
   @Test
   public void testView() {
     Integer id = 5;
-    when(currencyService.getByID(id)).thenReturn(currency);
-    assertEquals(controller.view(id, model), CurrencyController.VIEW_PATH);
+    when(this.currencyService.getByID(id)).thenReturn(this.currency);
+    assertThat(this.controller.view(id, this.model), is(CurrencyController.VIEW_PATH));
   }
 
   @Test
   public void testUpdate() {
-    when(result.hasErrors()).thenReturn(true);
-    String path = controller.update(currency, result);
-    assertEquals(path, CurrencyController.VIEW_PATH);
-    when(result.hasErrors()).thenReturn(false);
-    path = controller.update(currency, result);
-    assertEquals(path, CurrencyController.REDIRECT_PATH);
+    when(this.result.hasErrors()).thenReturn(true);
+    String path = this.controller.update(this.currency, this.result);
+    assertThat(path, is(CurrencyController.VIEW_PATH));
+    when(this.result.hasErrors()).thenReturn(false);
+    path = this.controller.update(this.currency, this.result);
+    assertThat(path, is(CurrencyController.REDIRECT_PATH));
   }
 
   @Test
   public void testDeleteUser() {
-    assertEquals(controller.deleteUser(1), CurrencyController.REDIRECT_PATH);
+    assertThat(this.controller.deleteUser(1), is(CurrencyController.REDIRECT_PATH));
   }
 
 }

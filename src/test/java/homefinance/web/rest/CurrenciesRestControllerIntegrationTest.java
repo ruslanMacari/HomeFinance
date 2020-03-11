@@ -14,12 +14,12 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CurrenciesRestControllerTest {
+public class CurrenciesRestControllerIntegrationTest {
 
   private CurrenciesRestController instance;
   private String _01012019 = "01.01.2019";
 
-  public CurrenciesRestControllerTest() {
+  public CurrenciesRestControllerIntegrationTest() {
     instance = new CurrenciesRestController();
   }
 
