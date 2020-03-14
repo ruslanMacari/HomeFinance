@@ -17,7 +17,7 @@ public class MainController {
   }
 
   @GetMapping(value = "/access-denied")
-  public String accesssDenied(Principal user, Model model) {
+  public String accessDenied(Principal user, Model model) {
     model.addAttribute("user", new User(user.getName()));
     return "access-denied";
   }

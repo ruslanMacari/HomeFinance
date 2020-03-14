@@ -18,7 +18,7 @@ public class MainControllerTest {
 
   @Test
   public void testAccesssDenied() {
-    String result = mainController.accesssDenied(mock(Principal.class), mock(Model.class));
+    String result = mainController.accessDenied(mock(Principal.class), mock(Model.class));
     assertTrue(result.equals("access-denied"));
   }
 }

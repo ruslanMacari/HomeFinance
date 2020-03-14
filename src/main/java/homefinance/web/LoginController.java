@@ -71,22 +71,22 @@ public class LoginController {
 
   @PostConstruct
   public void init() {
-      if (userService.getByName(rootname) != null) {
+      if (this.userService.getByName(this.rootname) != null) {
           return;
       }
     User root = new User();
-    root.setName(rootname);
-    root.setPassword(encoder.encode(rootpassword));
+    root.setName(this.rootname);
+    root.setPassword(this.encoder.encode(this.rootpassword));
     root.setOneRole(Role.ADMIN);
-    userService.add(root);
+    this.userService.add(root);
   }
 
   @GetMapping()
   public String login(Model model) {
-    if (isAuthenticated()) {
+    if (this.isAuthenticated()) {
       return REDIRECT_ROOT;
     }
-    model.addAttribute("listUsers", userService.getSimpleUsers());
+    model.addAttribute("listUsers", this.userService.getSimpleUsers());
     model.addAttribute("user", new User());
     return URL_PATH;
   }
@@ -116,16 +116,16 @@ public class LoginController {
       redirectAttributes.addFlashAttribute("model", model);
       return REDIRECT_REGISTRATION;
     }
-    pathSelector.setActionOk(() -> addUser(user));
-    pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
-    return pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result).getPath();
+    this.pathSelector.setActionOk(() -> this.addUser(user));
+    this.pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
+    return this.pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result).getPath();
   }
 
   private void addUser(User user) throws DuplicateFieldsException {
-    user.setPassword(encoder.encode(user.getPassword()));
+    user.setPassword(this.encoder.encode(user.getPassword()));
     user.setEnabled(true);
     user.setOneRole(Role.USER);
-    userService.add(user);
+    this.userService.add(user);
   }
 
 }
