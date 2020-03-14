@@ -30,8 +30,6 @@ public class LoginControllerTest {
   private User user;
   private BindingResult bindingResult;
   private Model model;
-  private String rootname = "root";
-  private String rootpassword = "pass";
   private PasswordEncoder encoder;
 
   @Before
@@ -42,21 +40,8 @@ public class LoginControllerTest {
     loginController.setUserService(userService);
     user = mock(User.class);
     bindingResult = mock(BindingResult.class);
-    loginController.setRootname(rootname);
-    loginController.setRootpassword(rootpassword);
     encoder = mock(PasswordEncoder.class);
     loginController.setEncoder(encoder);
-  }
-
-  @Test
-  public void testInit() {
-    when(userService.getByName(rootname)).thenReturn(user);
-    loginController.init();
-    verify(userService, times(0)).add(user);
-    when(userService.getByName(rootname)).thenReturn(null);
-    when(encoder.encode(rootpassword)).thenReturn(rootpassword);
-    loginController.init();
-    verify(encoder, times(1)).encode(rootpassword);
   }
 
   @Test

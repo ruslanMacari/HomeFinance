@@ -1,14 +1,18 @@
 package homefinance.service.impl;
 
+import homefinance.security.Role;
 import homefinance.security.User;
 import homefinance.service.UserService;
 import homefinance.service.repository.UserRepository;
 import homefinance.util.ConstraintPersist;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +21,41 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
   private UserRepository userRepository;
+  private String rootName;
+  private String rootPassword;
+  private PasswordEncoder encoder;
+
+  @Value("${db.password}")
+  public void setRootPassword(String rootPassword) {
+    this.rootPassword = rootPassword;
+  }
+
   @Value("${db.username}")
-  private String rootname;
+  public void setRootName(String rootName) {
+    this.rootName = rootName;
+  }
+
+  @Autowired
+  @Qualifier("passwordEncoder")
+  public void setEncoder(PasswordEncoder encoder) {
+    this.encoder = encoder;
+  }
+
+  @PostConstruct
+  public void init() {
+    this.createRootUserIfNotExist();
+  }
+
+  private void createRootUserIfNotExist() {
+    if (this.getByName(this.rootName) != null) {
+      return;
+    }
+    User root = new User();
+    root.setName(this.rootName);
+    root.setPassword(this.encoder.encode(this.rootPassword));
+    root.setOneRole(Role.ADMIN);
+    this.add(root);
+  }
 
   private ConstraintPersist constraintPersist;
 
@@ -34,53 +71,53 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User add(User user) throws DuplicateFieldsException {
-    return (User) constraintPersist
-        .add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+    return (User) this.constraintPersist
+        .add(() -> this.userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public void update(User user) {
-    constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+    this.constraintPersist.update(() -> this.userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public List<User> list() {
-    return userRepository.findAll();
+    return this.userRepository.findAll();
   }
 
   @Override
   public List<User> listLimit(Integer limit) {
-    return userRepository.listLimit(new PageRequest(0, limit));
+    return this.userRepository.listLimit(new PageRequest(0, limit));
   }
 
   @Override
   public User getByName(String name) {
-    return userRepository.findByName(name);
+    return this.userRepository.findByName(name);
   }
 
   @Override
   public void delete(Integer id) {
-    userRepository.deleteById(id);
+    this.userRepository.deleteById(id);
   }
 
   @Override
   public User getByNameAndPassword(String name, String password) {
-    return userRepository.findByNameAndPassword(name, password);
+    return this.userRepository.findByNameAndPassword(name, password);
   }
 
   @Override
   public List<User> getSimpleUsers() {
-    return userRepository.getSimpleUsers();
+    return this.userRepository.getSimpleUsers();
   }
 
   @Override
   public List<User> usersExceptRoot() {
-    return userRepository.usersExceptRoot(rootname);
+    return this.userRepository.usersExceptRoot(this.rootName);
   }
 
   @Override
   public User getById(Integer id) {
-    return userRepository.findById(id).orElse(null);
+    return this.userRepository.findById(id).orElse(null);
   }
 
 }

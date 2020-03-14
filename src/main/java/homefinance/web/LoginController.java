@@ -5,11 +5,9 @@ import homefinance.security.User;
 import homefinance.service.UserService;
 import homefinance.util.PathSelector;
 import homefinance.web.exceptions.DuplicateFieldsException;
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,24 +36,12 @@ public class LoginController {
   public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
 
   private UserService userService;
-  private String rootpassword;
-  private String rootname;
   private PasswordEncoder encoder;
   private PathSelector pathSelector;
 
   @Autowired
   public void setPathSelector(PathSelector pathSelector) {
     this.pathSelector = pathSelector;
-  }
-
-  @Value("${db.password}")
-  public void setRootpassword(String rootpassword) {
-    this.rootpassword = rootpassword;
-  }
-
-  @Value("${db.username}")
-  public void setRootname(String rootname) {
-    this.rootname = rootname;
   }
 
   @Autowired
@@ -67,18 +53,6 @@ public class LoginController {
   @Qualifier("passwordEncoder")
   public void setEncoder(PasswordEncoder encoder) {
     this.encoder = encoder;
-  }
-
-  @PostConstruct
-  public void init() {
-      if (this.userService.getByName(this.rootname) != null) {
-          return;
-      }
-    User root = new User();
-    root.setName(this.rootname);
-    root.setPassword(this.encoder.encode(this.rootpassword));
-    root.setOneRole(Role.ADMIN);
-    this.userService.add(root);
   }
 
   @GetMapping()
@@ -118,7 +92,8 @@ public class LoginController {
     }
     this.pathSelector.setActionOk(() -> this.addUser(user));
     this.pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
-    return this.pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result).getPath();
+    return this.pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result)
+        .getPath();
   }
 
   private void addUser(User user) throws DuplicateFieldsException {
