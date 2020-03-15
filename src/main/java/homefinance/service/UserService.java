@@ -8,6 +8,8 @@ public interface UserService {
 
   User add(User user) throws DuplicateFieldsException;
 
+  void registerUser(String name, String password);
+
   void update(User user);
 
   List<User> list();

@@ -76,6 +76,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public void registerUser(String name, String password) {
+    User user = new User(name);
+    user.setPassword(this.encoder.encode(password));
+    user.setEnabled(true);
+    user.setOneRole(Role.USER);
+    this.add(user);
+  }
+
+  @Override
   public void update(User user) {
     this.constraintPersist.update(() -> this.userRepository.saveAndFlush(user), user.getConstraintsMap());
   }

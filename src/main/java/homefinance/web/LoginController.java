@@ -1,17 +1,13 @@
 package homefinance.web;
 
-import homefinance.security.Role;
-import homefinance.security.User;
 import homefinance.service.UserService;
+import homefinance.user.UserLoginModel;
 import homefinance.util.PathSelector;
-import homefinance.web.exceptions.DuplicateFieldsException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +32,6 @@ public class LoginController {
   public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
 
   private UserService userService;
-  private PasswordEncoder encoder;
   private PathSelector pathSelector;
 
   @Autowired
@@ -49,19 +44,13 @@ public class LoginController {
     this.userService = userService;
   }
 
-  @Autowired
-  @Qualifier("passwordEncoder")
-  public void setEncoder(PasswordEncoder encoder) {
-    this.encoder = encoder;
-  }
-
   @GetMapping()
   public String login(Model model) {
     if (this.isAuthenticated()) {
       return REDIRECT_ROOT;
     }
     model.addAttribute("listUsers", this.userService.getSimpleUsers());
-    model.addAttribute("user", new User());
+    model.addAttribute("user", new UserLoginModel());
     return URL_PATH;
   }
 
@@ -76,7 +65,7 @@ public class LoginController {
   public String registration(Model model) {
     Object flashModel = model.asMap().get("model");
     if (flashModel == null) {
-      model.addAttribute("user", new User());
+      model.addAttribute("user", new UserLoginModel());
     } else {
       model.mergeAttributes(((Model) flashModel).asMap());
     }
@@ -84,23 +73,20 @@ public class LoginController {
   }
 
   @PostMapping(REGISTRATION)
-  public String registration(@Valid @ModelAttribute("user") User user, BindingResult result,
+  public String registration(@Valid @ModelAttribute("user") UserLoginModel user,
+      BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
+    // TODO: 15.03.2020 RMACARI: test validation
     if (result.hasErrors()) {
       redirectAttributes.addFlashAttribute("model", model);
       return REDIRECT_REGISTRATION;
     }
-    this.pathSelector.setActionOk(() -> this.addUser(user));
-    this.pathSelector.setActionError(() -> redirectAttributes.addFlashAttribute("model", model));
-    return this.pathSelector.setPaths(REDIRECT_URL, REDIRECT_REGISTRATION).setErrors(result)
+    return this.pathSelector
+        .setActionOk(() -> this.userService.registerUser(user.getName(), user.getPassword()))
+        .setActionError(() -> redirectAttributes.addFlashAttribute("model", model))
+        .setPaths(REDIRECT_URL, REDIRECT_REGISTRATION)
+        .setErrors(result)
         .getPath();
-  }
-
-  private void addUser(User user) throws DuplicateFieldsException {
-    user.setPassword(this.encoder.encode(user.getPassword()));
-    user.setEnabled(true);
-    user.setOneRole(Role.USER);
-    this.userService.add(user);
   }
 
 }

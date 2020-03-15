@@ -1,15 +1,14 @@
 package homefinance.web;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import homefinance.security.User;
 import homefinance.service.UserService;
-import homefinance.util.PathSelector;
+import homefinance.user.UserLoginModel;
 import homefinance.util.impl.PathSelectorTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.junit.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,32 +24,28 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginControllerTest {
 
   private LoginController loginController;
-  private UserService userService;
-  private User user;
+  private UserLoginModel user;
   private BindingResult bindingResult;
   private Model model;
-  private PasswordEncoder encoder;
 
   @Before
   public void setUp() {
-    model = mock(Model.class);
-    loginController = new LoginController();
-    userService = mock(UserService.class);
-    loginController.setUserService(userService);
-    user = mock(User.class);
-    bindingResult = mock(BindingResult.class);
-    encoder = mock(PasswordEncoder.class);
-    loginController.setEncoder(encoder);
+    this.model = mock(Model.class);
+    this.loginController = new LoginController();
+    UserService userService = mock(UserService.class);
+    this.loginController.setUserService(userService);
+    this.user = mock(UserLoginModel.class);
+    this.bindingResult = mock(BindingResult.class);
   }
 
   @Test
   public void testAuthorization() {
     SecurityContext contextBefore = SecurityContextHolder.getContext();
-    Authentication auth = getMockAuth();
+    Authentication auth = this.getMockAuth();
     when(auth.isAuthenticated()).thenReturn(true);
-    assertTrue(loginController.login(model).equals(LoginController.REDIRECT_ROOT));
+    assertThat(this.loginController.login(this.model), is(LoginController.REDIRECT_ROOT));
     when(auth.isAuthenticated()).thenReturn(false);
-    assertTrue(loginController.login(model).equals(LoginController.URL_PATH));
+    assertThat(this.loginController.login(this.model), is(LoginController.URL_PATH));
     SecurityContextHolder.setContext(contextBefore);
   }
 
@@ -65,27 +59,30 @@ public class LoginControllerTest {
 
   @Test
   public void testRegistrationGet() {
-    assertTrue(loginController.registration(model).equals(LoginController.REGISTRATION_PATH));
-    verify(model, times(1)).addAttribute("user", new User());
+    assertThat(this.loginController.registration(this.model),
+        is(LoginController.REGISTRATION_PATH));
+    verify(this.model, times(1)).addAttribute("user", new UserLoginModel());
     Map<String, Object> map = new HashMap<>();
-    map.put("model", model);
-    when(model.asMap()).thenReturn(map);
-    loginController.registration(model);
-    verify(model, times(1)).mergeAttributes(map);
+    map.put("model", this.model);
+    when(this.model.asMap()).thenReturn(map);
+    this.loginController.registration(this.model);
+    verify(this.model, times(1)).mergeAttributes(map);
   }
 
   @Test
   public void testRegistrationPost() {
-    when(bindingResult.hasErrors()).thenReturn(true);
+    when(this.bindingResult.hasErrors()).thenReturn(true);
     RedirectAttributes attributes = mock(RedirectAttributes.class);
-    String result = loginController.registration(user, bindingResult, attributes, model);
-    assertTrue(result.equals(LoginController.REDIRECT_REGISTRATION));
-    when(bindingResult.hasErrors()).thenReturn(false);
+    String result = this.loginController
+        .registration(this.user, this.bindingResult, attributes, this.model);
+    assertThat(result, is(LoginController.REDIRECT_REGISTRATION));
+    when(this.bindingResult.hasErrors()).thenReturn(false);
 
-    PathSelector pathSelector = new PathSelectorTest();
-    loginController.setPathSelector(pathSelector);
-    result = loginController.registration(user, bindingResult, attributes, model);
-    assertEquals(result, ((PathSelectorTest) pathSelector).pathIfOk);
+    PathSelectorTest pathSelector = new PathSelectorTest();
+    this.loginController.setPathSelector(pathSelector);
+    result = this.loginController
+        .registration(this.user, this.bindingResult, attributes, this.model);
+    assertThat(result, is(pathSelector.pathIfOk));
   }
 
 }
