@@ -1,5 +1,7 @@
 package homefinance.web;
 
+import static homefinance.web.UsersController.NEW_PATH;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public class UsersControllerTest {
 
@@ -29,48 +32,47 @@ public class UsersControllerTest {
   private PathSelector pathSelector;
 
   public UsersControllerTest() {
-    userService = mock(UserService.class);
-    encoder = mock(PasswordEncoder.class);
-    rootname = "root";
-    validator = mock(Validator.class);
-    usersController = new UsersController();
-    usersController.setUserService(userService);
-    usersController.setEncoder(encoder);
-    usersController.setRootname(rootname);
-    model = mock(Model.class);
-    result = mock(BindingResult.class);
-    user = mock(User.class);
-    pathSelector = new PathSelectorTest();
-    usersController.setPathSelector(pathSelector);
+    this.userService = mock(UserService.class);
+    this.encoder = mock(PasswordEncoder.class);
+    this.rootname = "root";
+    this.validator = mock(Validator.class);
+    this.usersController = new UsersController();
+    this.usersController.setUserService(this.userService);
+    this.usersController.setEncoder(this.encoder);
+    this.usersController.setRootname(this.rootname);
+    this.model = mock(Model.class);
+    this.result = mock(BindingResult.class);
+    this.user = mock(User.class);
+    this.pathSelector = new PathSelectorTest();
+    this.usersController.setPathSelector(this.pathSelector);
   }
 
   @Test
   public void testList() {
-    System.out.println("list");
-    assertTrue(usersController.list(model).equals(UsersController.LIST_PATH));
+    assertEquals(this.usersController.list(this.model), UsersController.LIST_PATH);
   }
 
   @Test
   public void testView() {
     System.out.println("view");
     Integer id = 100;
-    when(user.getName()).thenReturn("test");
-    when(userService.getById(id)).thenReturn(user);
+    when(this.user.getName()).thenReturn("test");
+    when(this.userService.getById(id)).thenReturn(this.user);
     try {
-      assertTrue(usersController.view(id, model).equals(UsersController.VIEW_PATH));
+      assertTrue(this.usersController.view(id, this.model).equals(UsersController.VIEW_PATH));
     } catch (PageNotFoundException e) {
       fail("Exception must not be thrown!");
     }
-    when(userService.getById(id)).thenReturn(null);
+    when(this.userService.getById(id)).thenReturn(null);
     try {
-      usersController.view(id, model);
+      this.usersController.view(id, this.model);
       fail("PageNotFoundException must be thrown!");
     } catch (PageNotFoundException e) {
     }
-    when(userService.getById(id)).thenReturn(user);
-    when(user.getName()).thenReturn(rootname);
+    when(this.userService.getById(id)).thenReturn(this.user);
+    when(this.user.getName()).thenReturn(this.rootname);
     try {
-      usersController.view(id, model);
+      this.usersController.view(id, this.model);
       fail("PageNotFoundException must be thrown!");
     } catch (PageNotFoundException e) {
     }
@@ -78,36 +80,36 @@ public class UsersControllerTest {
 
   @Test
   public void testUpdate() {
-    when(result.hasErrors()).thenReturn(true);
+    when(this.result.hasErrors()).thenReturn(true);
     Integer id = 100;
-    String resultUpdate = usersController.update(user, result, id, true, true);
+    String resultUpdate = this.usersController.update(this.user, this.result, id, true, true);
     assertTrue(resultUpdate.equals(UsersController.VIEW_PATH));
-    when(result.hasErrors()).thenReturn(false);
-    when(userService.getById(id)).thenReturn(user);
+    when(this.result.hasErrors()).thenReturn(false);
+    when(this.userService.getById(id)).thenReturn(this.user);
 
-    resultUpdate = usersController.update(user, result, id, true, true);
-    assertTrue(resultUpdate.equals(((PathSelectorTest) pathSelector).pathIfOk));
+    resultUpdate = this.usersController.update(this.user, this.result, id, true, true);
+    assertTrue(resultUpdate.equals(((PathSelectorTest) this.pathSelector).pathIfOk));
   }
 
   @Test
   public void testNewUser() {
-    System.out.println("newUser");
-    assertTrue(usersController.newUser(model).equals(UsersController.NEW_PATH));
+    assertEquals(this.usersController.newUser(this.model), NEW_PATH);
   }
 
   @Test
-  public void testSave() throws Throwable {
-    System.out.println("save");
-    when(result.hasErrors()).thenReturn(true);
-    assertTrue(usersController.save(user, result, true).equals(UsersController.NEW_PATH));
-    when(result.hasErrors()).thenReturn(false);
-    assertTrue(usersController.save(user, result, true).equals(UsersController.REDIRECT_PATH));
+  public void testSave() {
+    when(this.result.hasErrors()).thenReturn(true);
+    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+    assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
+        CommonController.getRedirectURL(NEW_PATH));
+    when(this.result.hasErrors()).thenReturn(false);
+    assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
+        UsersController.REDIRECT_PATH);
   }
 
   @Test
   public void testDeleteUser() {
-    System.out.println("deleteUser");
-    assertTrue(usersController.deleteUser(1).equals("redirect:/users"));
+    assertEquals("redirect:/users", this.usersController.deleteUser(1));
   }
 
 }

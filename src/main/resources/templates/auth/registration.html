@@ -10,6 +10,7 @@
             <th:block th:insert="fragments/user-name-password"/>
             <input class="form__submit" type="submit" th:value="#{login.register}"/>
         </form>
+        <a class="button button_back" th:href="@{/login}" th:text="#{back}"/>
     </div>
 </div>
 <th:block th:insert="fragments/footer"/>

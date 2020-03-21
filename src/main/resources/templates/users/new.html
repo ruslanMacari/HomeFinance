@@ -5,7 +5,7 @@
 <h1 class="box-header__title" th:text="#{users.new}"/>
 <div class="form">
   <div class="form__wrapper">
-    <form method="post" th:object="${newUser}" th:action="@{/users/new}">
+    <form method="post" th:object="${user}" th:action="@{/users/new}">
       <th:block th:insert="fragments/user-name-password"/>
       <div class="input-group">
         <label class="form__label" for="admin" th:text="#{admin}"/>

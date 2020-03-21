@@ -6,6 +6,7 @@ import homefinance.service.UserService;
 import homefinance.util.Action;
 import homefinance.web.exceptions.PageNotFoundException;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(UsersController.URL)
@@ -55,22 +57,22 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping()
   public String list(Model model) {
-    List<User> users = userService.usersExceptRoot();
+    List<User> users = this.userService.usersExceptRoot();
     model.addAttribute("users", users);
     return LIST_PATH;
   }
 
   @GetMapping(value = "/{id}")
   public String view(@PathVariable("id") Integer id, Model model) {
-    User user = userService.getById(id);
-    testUser(user);
+    User user = this.userService.getById(id);
+    this.testUser(user);
     model.addAttribute("user", user);
     return VIEW_PATH;
   }
 
   private void testUser(User user) {
-    test(user);
-    if (user.getName().equals(rootname)) {
+    this.test(user);
+    if (user.getName().equals(this.rootname)) {
       throw new PageNotFoundException();
     }
   }
@@ -83,48 +85,60 @@ public class UsersController extends CommonController<User> {
     if (result.hasErrors()) {
       return VIEW_PATH;
     }
-    Action action = () -> userService.update(getUser(id, user, changePassword, admin));
-    return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, VIEW_PATH).setErrors(result)
+    Action action = () -> this.userService.update(this.getUser(id, user, changePassword, admin));
+    return this.pathSelector
+        .setActionOk(action)
+        .setPaths(REDIRECT_PATH, VIEW_PATH)
+        .setErrors(result)
         .getPath();
   }
 
   private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
-    User foundUser = userService.getById(id);
+    User foundUser = this.userService.getById(id);
     foundUser.setName(user.getName());
     if (changePassword) {
-      foundUser.setPassword(encoder.encode(user.getPassword()));
+      foundUser.setPassword(this.encoder.encode(user.getPassword()));
     }
     foundUser.setOneRole(admin ? Role.ADMIN : Role.USER);
     return foundUser;
   }
 
-  @GetMapping(value = NEW)
+  @GetMapping(NEW)
   public String newUser(Model model) {
-    model.addAttribute("newUser", new User());
+    Object flashModel = model.asMap().get("model");
+    if (Objects.isNull(flashModel)) {
+      model.addAttribute("user", new User());
+    } else {
+      model.mergeAttributes(((Model) flashModel).asMap());
+    }
     return NEW_PATH;
   }
 
-  @PostMapping(value = "/new")
-  public String save(@Valid @ModelAttribute("newUser") User user, BindingResult result,
-      @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
+  @PostMapping(NEW)
+  public String save(@Valid @ModelAttribute("user") User user, BindingResult result,
+      @RequestParam(value = "admin", defaultValue = "false") boolean admin,
+      RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      return NEW_PATH;
+      redirectAttributes.addFlashAttribute("model", model);
+      return getRedirectURL(NEW_PATH);
     }
-    Action action = () -> add(user, admin);
-    return pathSelector.setActionOk(action).setPaths(REDIRECT_PATH, NEW_PATH).setErrors(result)
+    return this.pathSelector
+        .setActionOk(() -> this.add(user, admin))
+        .setPaths(REDIRECT_PATH, NEW_PATH)
+        .setErrors(result)
         .getPath();
   }
 
   private void add(User user, boolean admin) {
-    user.setPassword(encoder.encode(user.getPassword()));
+    user.setPassword(this.encoder.encode(user.getPassword()));
     user.setEnabled(true);
     user.setOneRole(admin ? Role.ADMIN : Role.USER);
-    userService.add(user);
+    this.userService.add(user);
   }
 
   @DeleteMapping(value = "/{id}")
   public String deleteUser(@PathVariable("id") Integer id) {
-    userService.delete(id);
+    this.userService.delete(id);
     return REDIRECT_PATH;
   }
 

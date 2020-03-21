@@ -10,6 +10,10 @@ public abstract class CommonController<T> {
 
   protected PathSelector pathSelector;
 
+  public static String getRedirectURL(String URL) {
+    return "redirect:" + URL;
+  }
+
   @Autowired
   public void setPathSelector(PathSelector pathSelector) {
     this.pathSelector = pathSelector;

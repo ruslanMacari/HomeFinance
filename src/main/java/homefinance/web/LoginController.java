@@ -74,8 +74,7 @@ public class LoginController {
 
   @PostMapping(REGISTRATION)
   public String registration(@Valid @ModelAttribute("user") UserLoginModel user,
-      BindingResult result,
-      RedirectAttributes redirectAttributes, Model model) {
+      BindingResult result, RedirectAttributes redirectAttributes, Model model) {
     // TODO: 15.03.2020 RMACARI: test validation
     if (result.hasErrors()) {
       redirectAttributes.addFlashAttribute("model", model);
