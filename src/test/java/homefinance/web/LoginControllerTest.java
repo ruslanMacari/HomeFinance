@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import homefinance.service.UserService;
-import homefinance.user.UserLoginModel;
+import homefinance.user.UserLoginDto;
 import homefinance.util.impl.PathSelectorTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginControllerTest {
 
   private LoginController loginController;
-  private UserLoginModel user;
+  private UserLoginDto user;
   private BindingResult bindingResult;
   private Model model;
 
@@ -34,7 +34,7 @@ public class LoginControllerTest {
     this.loginController = new LoginController();
     UserService userService = mock(UserService.class);
     this.loginController.setUserService(userService);
-    this.user = mock(UserLoginModel.class);
+    this.user = mock(UserLoginDto.class);
     this.bindingResult = mock(BindingResult.class);
   }
 
@@ -61,7 +61,7 @@ public class LoginControllerTest {
   public void testRegistrationGet() {
     assertThat(this.loginController.registration(this.model),
         is(LoginController.REGISTRATION_PATH));
-    verify(this.model, times(1)).addAttribute("user", new UserLoginModel());
+    verify(this.model, times(1)).addAttribute("user", new UserLoginDto());
     Map<String, Object> map = new HashMap<>();
     map.put("model", this.model);
     when(this.model.asMap()).thenReturn(map);

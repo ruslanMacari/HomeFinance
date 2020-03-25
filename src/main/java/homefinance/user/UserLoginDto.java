@@ -3,7 +3,7 @@ package homefinance.user;
 import java.util.Objects;
 import javax.validation.constraints.Size;
 
-public class UserLoginModel {
+public class UserLoginDto {
 
   private String name;
   private String password;
@@ -42,7 +42,7 @@ public class UserLoginModel {
     if (o == null || this.getClass() != o.getClass()) {
       return false;
     }
-    UserLoginModel that = (UserLoginModel) o;
+    UserLoginDto that = (UserLoginDto) o;
     return Objects.equals(this.name, that.name) &&
         Objects.equals(this.password, that.password);
   }
