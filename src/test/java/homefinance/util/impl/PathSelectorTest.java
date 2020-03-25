@@ -1,24 +1,23 @@
 package homefinance.util.impl;
 
-import homefinance.util.Action;
 import homefinance.util.PathSelector;
 import org.springframework.validation.Errors;
 
 public class PathSelectorTest implements PathSelector {
 
-  public Action actionOk;
-  public Action actionError;
+  public Runnable actionOk;
+  public Runnable actionError;
   public String pathIfOk, pathIfError;
   public Errors errors;
 
   @Override
-  public PathSelector setActionOk(Action actionOk) {
+  public PathSelector setActionOk(Runnable actionOk) {
     this.actionOk = actionOk;
     return this;
   }
 
   @Override
-  public PathSelector setActionError(Action actionError) {
+  public PathSelector setActionError(Runnable actionError) {
     this.actionError = actionError;
     return this;
   }
@@ -39,10 +38,10 @@ public class PathSelectorTest implements PathSelector {
   @Override
   public String getPath() {
     try {
-      actionOk.execute();
+      actionOk.run();
       return pathIfOk;
     } catch (Exception e) {
-      actionError.execute();
+      actionError.run();
       return pathIfError;
     }
   }

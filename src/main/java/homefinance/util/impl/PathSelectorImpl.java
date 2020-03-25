@@ -1,6 +1,5 @@
 package homefinance.util.impl;
 
-import homefinance.util.Action;
 import homefinance.util.PathSelector;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import org.springframework.stereotype.Component;
@@ -9,20 +8,20 @@ import org.springframework.validation.Errors;
 @Component
 public class PathSelectorImpl implements PathSelector {
 
-  private Action actionOk;
-  private Action actionError;
+  private Runnable actionOk;
+  private Runnable actionError;
   private String pathIfOk;
   private String pathIfError;
   private Errors errors;
 
   @Override
-  public PathSelector setActionOk(Action actionOk) {
+  public PathSelector setActionOk(Runnable actionOk) {
     this.actionOk = actionOk;
     return this;
   }
 
   @Override
-  public PathSelector setActionError(Action actionError) {
+  public PathSelector setActionError(Runnable actionError) {
     this.actionError = actionError;
     return this;
   }
@@ -43,7 +42,7 @@ public class PathSelectorImpl implements PathSelector {
   @Override
   public String getPath() {
     try {
-      this.actionOk.execute();
+      this.actionOk.run();
       return this.pathIfOk;
     } catch (DuplicateFieldsException ex) {
       this.errors.rejectValue(ex.getField(), ex.getErrorCode());
@@ -56,7 +55,7 @@ public class PathSelectorImpl implements PathSelector {
     if (this.actionError == null) {
       return;
     }
-    this.actionError.execute();
+    this.actionError.run();
     this.actionError = null;
   }
 

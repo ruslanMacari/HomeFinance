@@ -3,7 +3,6 @@ package homefinance.web;
 import homefinance.security.Role;
 import homefinance.security.User;
 import homefinance.service.UserService;
-import homefinance.util.Action;
 import homefinance.web.exceptions.PageNotFoundException;
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +84,7 @@ public class UsersController extends CommonController<User> {
     if (result.hasErrors()) {
       return VIEW_PATH;
     }
-    Action action = () -> this.userService.update(this.getUser(id, user, changePassword, admin));
+    Runnable action = () -> this.userService.update(this.getUser(id, user, changePassword, admin));
     return this.pathSelector
         .setActionOk(action)
         .setPaths(REDIRECT_PATH, VIEW_PATH)
