@@ -1,7 +1,6 @@
 package homefinance.util.impl;
 
 import homefinance.entity.ConstraintEntity;
-import homefinance.service.impl.UserServiceImpl;
 import homefinance.util.ConstraintPersist;
 import homefinance.web.exceptions.DuplicateFieldsException;
 import java.util.Map;
@@ -13,24 +12,24 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConstraintPersistImpl implements ConstraintPersist<ConstraintEntity> {
+public class ConstraintPersistImpl implements ConstraintPersist {
 
-  private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(ConstraintPersistImpl.class);
 
   @Override
-  public void update(Supplier<ConstraintEntity> supplier, Map<String, String> constraintsMap)
+  public void update(Supplier<? extends ConstraintEntity> supplier, Map<String, String> constraintsMap)
       throws DuplicateFieldsException {
-    add(supplier, constraintsMap);
+    this.add(supplier, constraintsMap);
   }
 
   @Override
-  public ConstraintEntity add(Supplier<ConstraintEntity> supplier,
+  public ConstraintEntity add(Supplier<? extends ConstraintEntity> supplier,
       Map<String, String> constraintsMap) throws DuplicateFieldsException {
     try {
       return supplier.get();
     } catch (DataIntegrityViolationException exception) {
       logger.error(exception.getMessage(), exception);
-      String rootMsg = getRootCause(exception).getMessage();
+      String rootMsg = this.getRootCause(exception).getMessage();
       if (rootMsg != null) {
         String lowerCaseMsg = rootMsg.toLowerCase();
         Optional<Map.Entry<String, String>> entry = constraintsMap.entrySet().stream()
