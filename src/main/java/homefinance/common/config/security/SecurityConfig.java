@@ -1,6 +1,6 @@
 package homefinance.common.config.security;
 
-import homefinance.common.security.Role;
+import homefinance.user.entity.Role;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

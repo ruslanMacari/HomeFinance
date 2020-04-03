@@ -1,4 +1,4 @@
-package homefinance.common.security;
+package homefinance.user.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 

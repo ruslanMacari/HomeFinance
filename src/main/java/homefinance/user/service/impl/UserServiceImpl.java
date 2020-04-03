@@ -1,7 +1,7 @@
 package homefinance.user.service.impl;
 
-import homefinance.common.security.Role;
-import homefinance.common.security.User;
+import homefinance.user.entity.Role;
+import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.user.service.repository.UserRepository;
 import homefinance.common.util.ConstraintPersist;

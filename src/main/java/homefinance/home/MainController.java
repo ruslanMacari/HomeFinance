@@ -1,6 +1,6 @@
 package homefinance.home;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import java.security.Principal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

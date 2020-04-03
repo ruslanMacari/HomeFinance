@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import homefinance.user.service.repository.UserRepository;
 import homefinance.common.util.ConstraintPersist;
 import org.junit.Before;

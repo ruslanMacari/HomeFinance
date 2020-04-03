@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;

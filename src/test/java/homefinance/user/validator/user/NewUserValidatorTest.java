@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.user.validator.NewUserValidator;
 import org.junit.Test;

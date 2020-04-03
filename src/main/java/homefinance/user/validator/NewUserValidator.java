@@ -1,6 +1,6 @@
 package homefinance.user.validator;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

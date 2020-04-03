@@ -1,4 +1,4 @@
-package homefinance.common.security;
+package homefinance.user.entity;
 
 import homefinance.common.entity.ConstraintEntity;
 import java.util.HashMap;

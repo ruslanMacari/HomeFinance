@@ -1,5 +1,6 @@
-package homefinance.common.security;
+package homefinance.common.config.security;
 
+import homefinance.user.entity.UserRole;
 import homefinance.user.service.UserService;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-    homefinance.common.security.User user = userService.getByName(username);
+    homefinance.user.entity.User user = userService.getByName(username);
     List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
     return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true,
         authorities);

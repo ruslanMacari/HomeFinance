@@ -1,4 +1,4 @@
-package homefinance.common.security;
+package homefinance.user.entity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

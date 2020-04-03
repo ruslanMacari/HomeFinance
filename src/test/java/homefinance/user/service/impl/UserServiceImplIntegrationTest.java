@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import homefinance.common.security.Role;
-import homefinance.common.security.User;
+import homefinance.user.entity.Role;
+import homefinance.user.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;

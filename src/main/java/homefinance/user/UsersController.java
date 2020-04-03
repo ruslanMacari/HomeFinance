@@ -1,7 +1,7 @@
 package homefinance.user;
 
-import homefinance.common.security.Role;
-import homefinance.common.security.User;
+import homefinance.user.entity.Role;
+import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.common.CommonController;
 import homefinance.common.exception.PageNotFoundException;

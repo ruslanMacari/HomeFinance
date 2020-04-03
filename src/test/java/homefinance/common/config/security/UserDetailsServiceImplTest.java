@@ -1,4 +1,4 @@
-package homefinance.common.security;
+package homefinance.common.config.security;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -6,6 +6,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import homefinance.user.entity.Role;
+import homefinance.user.entity.User;
+import homefinance.user.entity.UserRole;
 import homefinance.user.service.UserService;
 import java.util.Collection;
 import java.util.HashSet;

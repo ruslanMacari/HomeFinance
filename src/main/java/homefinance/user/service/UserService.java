@@ -1,6 +1,6 @@
 package homefinance.user.service;
 
-import homefinance.common.security.User;
+import homefinance.user.entity.User;
 import homefinance.common.exception.DuplicateFieldsException;
 import java.util.List;
 

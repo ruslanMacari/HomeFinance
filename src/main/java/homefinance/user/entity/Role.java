@@ -1,4 +1,4 @@
-package homefinance.common.security;
+package homefinance.user.entity;
 
 import java.util.HashSet;
 import java.util.Set;
