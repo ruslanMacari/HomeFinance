@@ -1,7 +1,7 @@
 package homefinance.money.currency;
 
 import homefinance.money.currency.entity.Currency;
-import homefinance.web.exceptions.DuplicateFieldsException;
+import homefinance.common.exception.DuplicateFieldsException;
 import java.util.List;
 
 public interface CurrencyService {

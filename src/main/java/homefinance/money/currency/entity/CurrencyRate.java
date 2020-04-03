@@ -1,6 +1,6 @@
 package homefinance.money.currency.entity;
 
-import homefinance.entity.BaseEntity;
+import homefinance.common.entity.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

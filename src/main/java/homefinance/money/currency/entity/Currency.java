@@ -1,6 +1,6 @@
 package homefinance.money.currency.entity;
 
-import homefinance.entity.ConstraintEntity;
+import homefinance.common.entity.ConstraintEntity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;

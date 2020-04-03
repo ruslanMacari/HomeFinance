@@ -1,7 +1,7 @@
 package homefinance.money.currency;
 
 import homefinance.money.currency.entity.Currency;
-import homefinance.web.CommonController;
+import homefinance.common.CommonController;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
