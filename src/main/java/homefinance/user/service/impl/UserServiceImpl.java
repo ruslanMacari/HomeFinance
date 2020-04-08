@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Autowired
-  @Qualifier("passwordEncoder")
   public void setEncoder(PasswordEncoder encoder) {
     this.encoder = encoder;
   }

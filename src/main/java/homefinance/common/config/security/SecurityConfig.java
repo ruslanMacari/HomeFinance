@@ -1,38 +1,42 @@
 package homefinance.common.config.security;
 
+import homefinance.common.config.CommonBeansConfig;
 import homefinance.user.entity.Role;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
+@Import(CommonBeansConfig.class)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  @Qualifier("userDetailsService")
-  UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
+
+  public SecurityConfig(
+      @Qualifier("userDetailsService") UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
+  }
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder)
       throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder);
   }
 
   @Override
-  public void configure(WebSecurity web) throws Exception {
+  public void configure(WebSecurity web) {
     web.debug(true);
   }
 
@@ -48,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       @Override
       public boolean matches(HttpServletRequest request) {
         // If the request match one url the CSFR protection will be disabled
-        for (AntPathRequestMatcher rm : requestMatchers) {
+        for (AntPathRequestMatcher rm : this.requestMatchers) {
           if (rm.matches(request)) {
             return true;
           }
@@ -76,11 +80,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   }
 
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    PasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder;
-  }
 
 }

@@ -50,7 +50,6 @@ public class UsersController extends CommonController<User> {
   }
 
   @Autowired
-  @Qualifier("passwordEncoder")
   public void setEncoder(PasswordEncoder encoder) {
     this.encoder = encoder;
   }

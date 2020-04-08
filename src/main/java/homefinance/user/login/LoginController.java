@@ -3,6 +3,8 @@ package homefinance.user.login;
 import homefinance.user.service.UserService;
 import homefinance.common.util.PathSelector;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,11 +26,12 @@ public class LoginController {
   public static final String REDIRECT = "redirect:";
   public static final String REDIRECT_ROOT = REDIRECT + "/";
   public static final String REDIRECT_URL = REDIRECT + URL;
-  public static final String DIRECTORY = "/auth";
+  public static final String DIRECTORY = "auth";
   public static final String URL_PATH = DIRECTORY + URL;
   public static final String REGISTRATION = "/registration";
   public static final String REGISTRATION_PATH = DIRECTORY + REGISTRATION;
   public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
+  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
   private UserService userService;
   private PathSelector pathSelector;
@@ -46,8 +49,10 @@ public class LoginController {
   @GetMapping()
   public String login(Model model) {
     if (this.isAuthenticated()) {
+      logger.debug("isAuthenticated = true, REDIRECT_ROOT = {}", REDIRECT_ROOT);
       return REDIRECT_ROOT;
     }
+    logger.debug("isAuthenticated = false, URL_PATH = {}", URL_PATH);
     model.addAttribute("listUsers", this.userService.getSimpleUsers());
     model.addAttribute("user", new UserLoginDto());
     return URL_PATH;
