@@ -19,11 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CurrencyController extends CommonController<Currency> {
 
   public static final String URL = "/currencies";
-  public static final String LIST_PATH = URL + "/list";
-  public static final String NEW = "/new";
-  public static final String NEW_PATH = URL + NEW;
-  public static final String REDIRECT_PATH = "redirect:" + URL;
-  public static final String VIEW_PATH = URL + "/view";
+  public static final String NEW_URL = "/new";
+  public static final String REDIRECT_URL = "redirect:" + URL;
 
   private CurrencyService currencyService;
 
@@ -37,24 +34,24 @@ public class CurrencyController extends CommonController<Currency> {
   public String list(Model model) {
     List<Currency> currencies = this.currencyService.list();
     model.addAttribute("currencies", currencies);
-    return LIST_PATH;
+    return "currencies/list";
   }
 
-  @GetMapping(NEW)
+  @GetMapping(NEW_URL)
   public String newCurrency(Model model) {
     model.addAttribute("newCurrency", new Currency());
-    return NEW_PATH;
+    return "currencies/new";
   }
 
-  @PostMapping(NEW)
+  @PostMapping(NEW_URL)
   public String save(@Valid @ModelAttribute("newCurrency") Currency currency,
       BindingResult result) {
     if (result.hasErrors()) {
-      return NEW_PATH;
+      return "currencies/new";
     }
     return this.pathSelector
         .setActionOk(() -> this.currencyService.add(currency))
-        .setPaths(REDIRECT_PATH, NEW_PATH)
+        .setPaths(REDIRECT_URL, "currencies/new")
         .setErrors(result)
         .getPath();
   }
@@ -64,31 +61,31 @@ public class CurrencyController extends CommonController<Currency> {
     Currency currency = this.currencyService.getByID(id);
     this.test(currency);
     model.addAttribute("currency", currency);
-    return VIEW_PATH;
+    return "currencies/view";
   }
 
   @PostMapping("/update")
   public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result) {
     if (result.hasErrors()) {
-      return VIEW_PATH;
+      return "currencies/view";
     }
     return this.pathSelector
         .setActionOk(() -> this.currencyService.update(currency))
-        .setPaths(REDIRECT_PATH, VIEW_PATH)
+        .setPaths(REDIRECT_URL, "currencies/view")
         .setErrors(result)
         .getPath();
   }
 
-  @DeleteMapping(value = "/{id}")
+  @DeleteMapping("/{id}")
   public String deleteUser(@PathVariable("id") Integer id) {
     this.currencyService.delete(id);
-    return REDIRECT_PATH;
+    return REDIRECT_URL;
   }
 
   @GetMapping("/fill")
   public String fillCurrencies() {
     this.currencyService.fillDistinctCurrencies();
-    return REDIRECT_PATH;
+    return REDIRECT_URL;
   }
 
 }

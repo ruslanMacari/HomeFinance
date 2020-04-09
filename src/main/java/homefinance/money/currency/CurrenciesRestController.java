@@ -112,7 +112,7 @@ public class CurrenciesRestController {
 
   @PostMapping("/fill-currencies")
   public String fillCurrencies() {
-    return CurrencyController.LIST_PATH;
+    return "currencies/list";
   }
 
 }
