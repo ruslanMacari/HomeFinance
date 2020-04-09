@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,8 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
 
-  public SecurityConfig(
-      @Qualifier("userDetailsService") UserDetailsService userDetailsService) {
+  public SecurityConfig(@Qualifier("userDetailsService") UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
   }
 
@@ -36,35 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
-  public void configure(WebSecurity web) {
-    web.debug(true);
-  }
-
-  @Override
   protected void configure(HttpSecurity http) throws Exception {
-    RequestMatcher csrfRequestMatcher = new RequestMatcher() {
-
-      // Disable CSFR protection on the following urls:
-      private AntPathRequestMatcher[] requestMatchers = {
-          new AntPathRequestMatcher("/rest/**")
-      };
-
-      @Override
-      public boolean matches(HttpServletRequest request) {
-        // If the request match one url the CSFR protection will be disabled
-        for (AntPathRequestMatcher rm : this.requestMatchers) {
-          if (rm.matches(request)) {
-            return true;
-          }
-        }
-        return false;
-      }
-    };
-
-    http.csrf().requireCsrfProtectionMatcher(csrfRequestMatcher).disable();
+    http.csrf().requireCsrfProtectionMatcher(this.getCsrfRequestMatcher()).disable();
     http
         .authorizeRequests()
-        .antMatchers("/assets/**", "/login*", "/login/**", "/access-denied.jsp", "/rest/**")
+        .antMatchers("/assets/**", "/login*", "/login/**", "/rest/**")
         .permitAll()
         .antMatchers("/users/**").hasAuthority(Role.ADMIN)
         .anyRequest().authenticated()
@@ -80,5 +54,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   }
 
+  private RequestMatcher getCsrfRequestMatcher() {
+    return new RequestMatcher() {
+
+        // Disable CSFR protection on the following urls:
+        private AntPathRequestMatcher[] requestMatchers = {
+            new AntPathRequestMatcher("/rest/**")
+        };
+
+        @Override
+        public boolean matches(HttpServletRequest request) {
+          // If the request match one url the CSFR protection will be disabled
+          for (AntPathRequestMatcher rm : this.requestMatchers) {
+            if (rm.matches(request)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      };
+  }
 
 }
