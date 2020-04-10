@@ -14,7 +14,7 @@ public interface CurrencyService {
 
   Currency getByID(Integer id);
 
-  List<Currency> list();
+  List<Currency> getAllCurrencies();
 
   Currency getByCode(String code);
 

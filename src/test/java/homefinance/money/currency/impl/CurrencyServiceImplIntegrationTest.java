@@ -37,15 +37,15 @@ public class CurrencyServiceImplIntegrationTest {
 
   @Before
   public void setUp() {
-    this.currencyService.list().forEach(currency -> this.currencyService.delete(currency.getId()));
+    this.currencyService.getAllCurrencies().forEach(currency -> this.currencyService.delete(currency.getId()));
   }
 
   @Test
   public void testAdd() {
-    int size = this.currencyService.list().size();
+    int size = this.currencyService.getAllCurrencies().size();
     Currency currency = new Currency("USD", "840", "usd");
     this.currencyService.add(currency);
-    assertEquals(this.currencyService.list().size(), size + 1);
+    assertEquals(this.currencyService.getAllCurrencies().size(), size + 1);
     try {
       this.currencyService.add(new Currency("USD", "840", "usd"));
       fail("Exception must be thrown");
@@ -69,13 +69,13 @@ public class CurrencyServiceImplIntegrationTest {
 
   @Test
   public void testList() {
-    int size = this.currencyService.list().size();
+    int size = this.currencyService.getAllCurrencies().size();
     List<Currency> list = new ArrayList<>(3);
     list.add(new Currency("test1", "001", "test"));
     list.add(new Currency("test2", "002", "test"));
     list.add(new Currency("test3", "003", "test"));
     list.forEach(currency -> this.currencyService.add(currency));
-    assertEquals(size + 3, this.currencyService.list().size());
+    assertEquals(size + 3, this.currencyService.getAllCurrencies().size());
   }
 
   @Test
@@ -83,11 +83,11 @@ public class CurrencyServiceImplIntegrationTest {
     this.currencyService.setCurrencyRatesService(this.currencyRatesService);
     when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(null);
     this.currencyService.fillDistinctCurrencies();
-    assertTrue(this.currencyService.list().isEmpty());
+    assertTrue(this.currencyService.getAllCurrencies().isEmpty());
 
     when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(new ArrayList<>());
     this.currencyService.fillDistinctCurrencies();
-    assertTrue(this.currencyService.list().isEmpty());
+    assertTrue(this.currencyService.getAllCurrencies().isEmpty());
   }
 
   @Test
@@ -100,7 +100,7 @@ public class CurrencyServiceImplIntegrationTest {
     when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(Arrays.asList(
         currencyRateModel));
     this.currencyService.fillDistinctCurrencies();
-    List<Currency> currencies = this.currencyService.list();
+    List<Currency> currencies = this.currencyService.getAllCurrencies();
     assertThat(currencies.size(), is(1));
     assertThat(currencies.get(0).getCode(), is("test1"));
     assertThat(currencies.get(0).getCharCode(), is("test"));
@@ -108,7 +108,7 @@ public class CurrencyServiceImplIntegrationTest {
 
     // no new currencies must be added
     this.currencyService.fillDistinctCurrencies();
-    currencies = this.currencyService.list();
+    currencies = this.currencyService.getAllCurrencies();
     assertThat(currencies.size(), is(1));
     assertThat(currencies.get(0).getCode(), is("test1"));
     assertThat(currencies.get(0).getCharCode(), is("test"));

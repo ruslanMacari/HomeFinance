@@ -36,21 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().requireCsrfProtectionMatcher(this.getCsrfRequestMatcher()).disable();
-    http
-        .authorizeRequests()
-        .antMatchers("/assets/**", "/login*", "/login/**", "/rest/**")
-        .permitAll()
+    http.authorizeRequests()
+        .antMatchers("/assets/**", "/login*", "/login/**", "/rest/**").permitAll()
         .antMatchers("/users/**").hasAuthority(Role.ADMIN)
         .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login")
-        .defaultSuccessUrl("/")
-        .permitAll()
-        .and()
-        .rememberMe()
-        .and()
-        .exceptionHandling().accessDeniedPage("/access-denied");
+        .and().formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
+        .and().rememberMe()
+        .and().exceptionHandling().accessDeniedPage("/access-denied");
 
   }
 

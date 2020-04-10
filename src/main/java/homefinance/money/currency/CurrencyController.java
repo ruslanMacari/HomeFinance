@@ -32,7 +32,7 @@ public class CurrencyController extends CommonController<Currency> {
 
   @GetMapping()
   public String list(Model model) {
-    List<Currency> currencies = this.currencyService.list();
+    List<Currency> currencies = this.currencyService.getAllCurrencies();
     model.addAttribute("currencies", currencies);
     return "currencies/list";
   }
