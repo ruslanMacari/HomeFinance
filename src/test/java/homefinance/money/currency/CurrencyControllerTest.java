@@ -3,41 +3,63 @@ package homefinance.money.currency;
 import static homefinance.money.currency.CurrencyController.REDIRECT_URL;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
+import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
+import java.util.Arrays;
+import java.util.List;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CurrencyControllerTest {
 
-  private CurrencyService currencyService;
+  @Mock
+  private CurrencyService currencyServiceMock;
   private CurrencyController controller;
+  @Mock
   private Model model;
+  @Mock
   private Currency currency;
+  @Mock
   private BindingResult result;
+  @Mock
+  private CurrencyFacade currencyFacadeMock;
 
   @Before
-  public void initialize() {
-    this.currencyService = mock(CurrencyService.class);
-    this.controller = new CurrencyController(this.currencyService);
-    this.model = mock(Model.class);
-    this.currency = mock(Currency.class);
+  public void setUp() {
+    this.controller = new CurrencyController(this.currencyServiceMock, this.currencyFacadeMock);
     PathSelector pathSelector = new PathSelectorTest();
     this.controller.setPathSelector(pathSelector);
-    this.result = mock(BindingResult.class);
   }
 
   @Test
-  public void testList() {
-    assertThat(this.controller.list(this.model), is("currencies/list"));
+  public void list_shouldReturnListTemplateAndAddCurrenciesAttributeWithFilledCurrencyDtoList() {
+    //given
+    List<CurrencyDto> currencyDtoList = Arrays.asList(mock(CurrencyDto.class), null);
+    given(this.currencyFacadeMock.getAllCurrenciesDto())
+        .willReturn(currencyDtoList);
+    //when
+    String actual = this.controller.list(this.model);
+    //then
+    assertThat(actual, is("currencies/list"));
+    BDDAssertions.then(actual)
+        .isEqualTo("currencies/list");
+    BDDMockito.then(this.model)
+        .should()
+        .addAttribute("currencies", currencyDtoList);
   }
 
   @Test
@@ -57,7 +79,7 @@ public class CurrencyControllerTest {
   @Test
   public void testView() {
     Integer id = 5;
-    when(this.currencyService.getByID(id)).thenReturn(this.currency);
+    when(this.currencyServiceMock.getByID(id)).thenReturn(this.currency);
     assertThat(this.controller.view(id, this.model), is("currencies/view"));
   }
 
@@ -81,7 +103,7 @@ public class CurrencyControllerTest {
     String actual = this.controller.fillCurrencies();
     BDDAssertions.then(actual)
         .isEqualTo(REDIRECT_URL);
-    BDDMockito.then(this.currencyService)
+    BDDMockito.then(this.currencyServiceMock)
         .should()
         .fillDistinctCurrencies();
   }

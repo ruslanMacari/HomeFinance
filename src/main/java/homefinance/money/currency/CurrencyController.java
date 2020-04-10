@@ -1,8 +1,7 @@
 package homefinance.money.currency;
 
-import homefinance.money.currency.entity.Currency;
 import homefinance.common.CommonController;
-import java.util.List;
+import homefinance.money.currency.entity.Currency;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,18 +21,19 @@ public class CurrencyController extends CommonController<Currency> {
   public static final String NEW_URL = "/new";
   public static final String REDIRECT_URL = "redirect:" + URL;
 
-  private CurrencyService currencyService;
+  private final CurrencyService currencyService;
+  private final CurrencyFacade currencyFacade;
 
-  public CurrencyController(CurrencyService currencyService) {
+  public CurrencyController(CurrencyService currencyService, CurrencyFacade currencyFacade) {
     this.currencyService = currencyService;
+    this.currencyFacade = currencyFacade;
   }
 
   // TODO: 23.02.2020 RMACARI: refactor to avoid using entities on views, use models
 
   @GetMapping()
   public String list(Model model) {
-    List<Currency> currencies = this.currencyService.getAllCurrencies();
-    model.addAttribute("currencies", currencies);
+    model.addAttribute("currencies", this.currencyFacade.getAllCurrenciesDto());
     return "currencies/list";
   }
 
