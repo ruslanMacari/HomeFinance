@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public abstract class CommonController<T> {
 
   protected PathSelector pathSelector;
+  public static final String REDIRECT = "redirect:";
 
   public static String getRedirectURL(String URL) {
     return "redirect:" + URL;

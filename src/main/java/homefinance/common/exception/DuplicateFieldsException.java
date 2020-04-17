@@ -15,10 +15,10 @@ public class DuplicateFieldsException extends RuntimeException {
 
   @Generated
   public String getField() {
-    return field;
+    return this.field;
   }
 
   public String getErrorCode() {
-    return errorCode;
+    return this.errorCode;
   }
 }
