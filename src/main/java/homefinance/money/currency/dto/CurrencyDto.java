@@ -1,11 +1,16 @@
 package homefinance.money.currency.dto;
 
+import javax.validation.constraints.Size;
+
 public class CurrencyDto {
 
-  public int id;
-  public String name;
-  public String code;
-  public String charCode;
+  private int id;
+  @Size(min = 3, max = 45, message = "{size.error}")
+  private String name;
+  @Size(min = 3, max = 5, message = "{size.error}")
+  private String code;
+  @Size(min = 3, max = 5, message = "{size.error}")
+  private String charCode;
 
   public int getId() {
     return this.id;

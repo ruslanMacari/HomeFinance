@@ -49,6 +49,7 @@ public class CurrencyController extends CommonController<Currency> {
   @PostMapping(NEW_URL)
   public String saveNew(@Valid @ModelAttribute("currency") Currency currency,
       BindingResult result) {
+    // TODO: 18.04.2020 RMACARI: add redirect attributes
     if (result.hasErrors()) {
       return "currencies/new";
     }
