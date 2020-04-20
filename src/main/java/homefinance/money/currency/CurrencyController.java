@@ -21,8 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CurrencyController extends CommonController<Currency> {
 
   public static final String URL = "/currencies";
-  public static final String NEW_URL = "/new";
   public static final String REDIRECT_URL = REDIRECT + URL;
+  public static final String NEW_URL = "/new";
 
   private final CurrencyService currencyService;
   private final CurrencyFacade currencyFacade;
@@ -42,17 +42,20 @@ public class CurrencyController extends CommonController<Currency> {
 
   @GetMapping(NEW_URL)
   public String openNew(Model model) {
-    model.addAttribute("currency", new CurrencyDto());
+    if (this.flashModelNotMerged(model)) {
+      model.addAttribute("currency", new CurrencyDto());
+    }
     return "currencies/new";
   }
 
   @PostMapping(NEW_URL)
-  public String saveNew(@Valid @ModelAttribute("currency") Currency currency,
-      BindingResult result) {
-    // TODO: 18.04.2020 RMACARI: add redirect attributes
+  public String saveNew(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
+      RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      return "currencies/new";
+      this.addModelToRedirectAttributes(model, redirectAttributes);
+      return REDIRECT_URL + NEW_URL;
     }
+    // TODO: 20.04.2020 RMACARI: inline getPath()
     return this.pathSelector
         .setActionOk(() -> this.currencyService.add(currency))
         .setPaths(REDIRECT_URL, "currencies/new")
@@ -64,11 +67,8 @@ public class CurrencyController extends CommonController<Currency> {
   public String view(@PathVariable("id") Integer id, Model model) {
     Currency currency = this.currencyService.getByID(id);
     this.test(currency);
-    Object flashModel = model.asMap().get("flashModel");
-    if (flashModel == null) {
+    if (this.flashModelNotMerged(model)) {
       model.addAttribute("currency", currency);
-    } else {
-      model.mergeAttributes(((Model) flashModel).asMap());
     }
     return "currencies/view";
   }
@@ -77,7 +77,7 @@ public class CurrencyController extends CommonController<Currency> {
   public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      redirectAttributes.addFlashAttribute("flashModel", model);
+      this.addModelToRedirectAttributes(model, redirectAttributes);
       return this.getRedirectToCurrencyView(currency);
     }
     // TODO: 17.04.2020 RMACARI: move this to facade layer
@@ -91,7 +91,7 @@ public class CurrencyController extends CommonController<Currency> {
   }
 
   private String getRedirectToCurrencyView(@ModelAttribute("currency") @Valid Currency currency) {
-    return REDIRECT + "/currencies/" + currency.getId();
+    return REDIRECT_URL + '/' + currency.getId();
   }
 
   @DeleteMapping("/{id}")

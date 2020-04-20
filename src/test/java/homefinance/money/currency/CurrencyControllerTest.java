@@ -1,12 +1,12 @@
 package homefinance.money.currency;
 
+import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static homefinance.money.currency.CurrencyController.REDIRECT_URL;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.util.PathSelector;
@@ -67,7 +67,10 @@ public class CurrencyControllerTest {
   }
 
   @Test
-  public void openNew_shouldReturnNewTemplateAndAddCurrencyAttributeWithNewCurrencyDto() {
+  public void openNew_givenModelHasNoFlashModel_shouldReturnNewTemplateAndAddCurrencyAttributeWithNewCurrencyDto() {
+    // given:
+    Map<String, Object> map = new HashMap<>();
+    given(this.model.asMap()).willReturn(map);
     // when:
     String actual = this.controller.openNew(this.model);
     // then:
@@ -77,12 +80,36 @@ public class CurrencyControllerTest {
   }
 
   @Test
-  public void testSave() {
-    when(this.result.hasErrors()).thenReturn(true);
-    assertThat(this.controller.saveNew(this.currency, this.result), is("currencies/new"));
-    when(this.result.hasErrors()).thenReturn(false);
-    assertThat(this.controller.saveNew(this.currency, this.result),
-        is(REDIRECT_URL));
+  public void openNew_givenModelHasFlashModel_shouldReturnNewTemplateAndMergeAttributesFromFlashModel() {
+    // given:
+    Map<String, Object> map = new HashMap<>();
+    Object flashModel = mock(Model.class);
+    map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
+    given(this.model.asMap()).willReturn(map);
+    // when:
+    String actual = this.controller.openNew(this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("currencies/new");
+    BDDMockito.then(this.model)
+        .should().mergeAttributes(((Model) flashModel).asMap());
+  }
+
+  @Test
+  public void saveNew_givenHasValidationErrors_shouldReturnRedirectToNewUrl() {
+    given(this.result.hasErrors()).willReturn(true);
+    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+    BDDAssertions
+        .then(this.controller.saveNew(this.currency, this.result, redirectAttributes, this.model))
+        .isEqualTo("redirect:/currencies/new");
+    BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
+  }
+
+  @Test
+  public void saveNew_givenHasNoValidationErrors_shouldReturnRedirectUrl() {
+    given(this.result.hasErrors()).willReturn(false);
+    BDDAssertions.then(this.controller
+        .saveNew(this.currency, this.result, mock(RedirectAttributes.class), this.model))
+        .isEqualTo(REDIRECT_URL);
   }
 
   @Test
@@ -105,7 +132,7 @@ public class CurrencyControllerTest {
     given(this.currencyServiceMock.getByID(5)).willReturn(this.currency);
     Map<String, Object> map = new HashMap<>();
     Object flashModel = mock(Model.class);
-    map.put("flashModel", flashModel);
+    map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
     given(this.model.asMap()).willReturn(map);
     // when:
     String actual = this.controller.view(5, this.model);
@@ -127,7 +154,7 @@ public class CurrencyControllerTest {
     // then:
     BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/555");
     BDDMockito.then(redirectAttributes)
-        .should().addFlashAttribute("flashModel", this.model);
+        .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
 
   @Test

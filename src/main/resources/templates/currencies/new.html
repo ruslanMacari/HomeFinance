@@ -8,7 +8,7 @@
     <form method="post" th:object="${currency}" th:action="@{../currencies/new}">
       <div class="form__input-group">
         <label class="form__label" th:name="code" th:text="#{code}"/>
-        <input class="form__text" th:name="code"/>
+        <input class="form__text" th:name="code" th:value="${currency.code}"/>
         <div>
           <div class="form__error" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"
                th:name="code"></div>
@@ -16,7 +16,7 @@
       </div>
       <div class="form__input-group">
         <label class="form__label" th:name="charCode" th:text="#{charCode}"/>
-        <input class="form__text" th:name="charCode"/>
+        <input class="form__text" th:name="charCode" th:value="${currency.charCode}"/>
         <div>
           <div class="form__error" th:if="${#fields.hasErrors('charCode')}" th:errors="*{charCode}"
                th:name="charCode"></div>
@@ -25,7 +25,7 @@
       </div>
       <div class="form__input-group">
         <label class="form__label" th:name="name" th:text="#{description}"/>
-        <input class="form__text" th:name="name"/>
+        <input class="form__text" th:name="name" th:value="${currency.name}"/>
         <div>
           <div class="form__error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                th:name="name"></div>
