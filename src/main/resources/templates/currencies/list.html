@@ -20,7 +20,7 @@
     <div class="table__body">
         <th:block th:each="currency, iterator : ${currencies}">
             <div class="table__row">
-                <div class="table__cell" th:text="${iterator.index}"/>
+                <div class="table__cell" th:text="${iterator.count}"/>
                 <div class="table__cell" th:text="${currency.id}"/>
                 <div class="table__cell" th:text="${currency.code}"/>
                 <div class="table__cell" th:text="${currency.charCode}"/>
@@ -41,6 +41,7 @@
 </div>
 <div/>
 <div/>
+<div class="s_30"></div>
 <form class="form" th:action="@{../currencies/fill}" th:method="get">
     <input class="button" type="submit" value="Fill Currencies"/>
 </form>
