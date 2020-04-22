@@ -1,8 +1,8 @@
 package homefinance.money.currency;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
+import homefinance.common.exception.PageNotFoundException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
 import java.util.Arrays;
@@ -49,16 +49,20 @@ public class CurrencyFacadeTest {
   }
 
   private void initCurrency1And2() {
-    this.currency1 = new Currency();
-    this.currency1.setId(1);
-    this.currency1.setCharCode("char1");
-    this.currency1.setCode("code1");
-    this.currency1.setName("name1");
+    this.initCurrency1();
     this.currency2 = new Currency();
     this.currency2.setId(1);
     this.currency2.setCharCode("char2");
     this.currency2.setCode("code2");
     this.currency2.setName("name2");
+  }
+
+  private void initCurrency1() {
+    this.currency1 = new Currency();
+    this.currency1.setId(1);
+    this.currency1.setCharCode("char1");
+    this.currency1.setCode("code1");
+    this.currency1.setName("name1");
   }
 
   private void testCurrency(Currency currency1, CurrencyDto currencyDto1) {
@@ -73,5 +77,24 @@ public class CurrencyFacadeTest {
     List<CurrencyDto> actualList = this.currencyFacade.getAllCurrenciesDto();
     BDDAssertions.then(actualList.isEmpty())
         .isTrue();
+  }
+
+  @Test(expected = PageNotFoundException.class)
+  public void getCurrencyById_givenCurrencyNotFound_shouldThrowPageNotFoundException() {
+    // given:
+    given(this.currencyServiceMock.getByID(5)).willReturn(null);
+    // when:
+    this.currencyFacade.getCurrencyDtoById(5);
+  }
+
+  @Test
+  public void getCurrencyById_givenCurrencyFound_shouldReturnCurrencyDto() {
+    // given:
+    this.initCurrency1();
+    given(this.currencyServiceMock.getByID(5)).willReturn(this.currency1);
+    // when:
+    CurrencyDto actualValue = this.currencyFacade.getCurrencyDtoById(5);
+    // then:
+    this.testCurrency(this.currency1, actualValue);
   }
 }

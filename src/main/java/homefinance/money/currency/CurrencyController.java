@@ -23,6 +23,7 @@ public class CurrencyController extends CommonController<Currency> {
   public static final String URL = "/currencies";
   public static final String REDIRECT_URL = REDIRECT + URL;
   public static final String NEW_URL = "/new";
+  public static final String CURRENCY_ATTRIBUTE_NAME = "currency";
 
   private final CurrencyService currencyService;
   private final CurrencyFacade currencyFacade;
@@ -43,14 +44,14 @@ public class CurrencyController extends CommonController<Currency> {
   @GetMapping(NEW_URL)
   public String openNew(Model model) {
     if (!this.isRedirectAndFlashModelMerged(model)) {
-      model.addAttribute("currency", new CurrencyDto());
+      model.addAttribute(CURRENCY_ATTRIBUTE_NAME, new CurrencyDto());
     }
     return "currencies/new";
   }
 
   @PostMapping(NEW_URL)
-  public String saveNew(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
-      RedirectAttributes redirectAttributes, Model model) {
+  public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
+      BindingResult result, RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       this.addModelToRedirectAttributes(model, redirectAttributes);
       return REDIRECT_URL + NEW_URL;
@@ -66,16 +67,14 @@ public class CurrencyController extends CommonController<Currency> {
   @GetMapping("/{id}")
   public String view(@PathVariable("id") Integer id, Model model) {
     if (!this.isRedirectAndFlashModelMerged(model)) {
-      Currency currency = this.currencyService.getByID(id);
-      this.test(currency);
-      model.addAttribute("currency", currency);
+      model.addAttribute(CURRENCY_ATTRIBUTE_NAME, this.currencyFacade.getCurrencyDtoById(id));
     }
     return "currencies/view";
   }
 
   @PostMapping("/update")
-  public String update(@Valid @ModelAttribute("currency") Currency currency, BindingResult result,
-      RedirectAttributes redirectAttributes, Model model) {
+  public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
+      BindingResult result, RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       this.addModelToRedirectAttributes(model, redirectAttributes);
       return this.getRedirectToCurrencyView(currency);
@@ -90,7 +89,7 @@ public class CurrencyController extends CommonController<Currency> {
     }
   }
 
-  private String getRedirectToCurrencyView(@ModelAttribute("currency") @Valid Currency currency) {
+  private String getRedirectToCurrencyView(Currency currency) {
     return REDIRECT_URL + '/' + currency.getId();
   }
 

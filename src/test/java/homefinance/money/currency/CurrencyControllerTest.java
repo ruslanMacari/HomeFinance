@@ -111,14 +111,15 @@ public class CurrencyControllerTest {
   @Test
   public void view_givenModelHasNoFlashModel_thenAddAttribute() {
     // given:
-    given(this.currencyServiceMock.getByID(5)).willReturn(this.currency);
+    CurrencyDto currencyDto = mock(CurrencyDto.class);
+    given(this.currencyFacadeMock.getCurrencyDtoById(5)).willReturn(currencyDto);
     Map<String, Object> map = new HashMap<>();
     given(this.model.asMap()).willReturn(map);
     // when:
     String actual = this.controller.view(5, this.model);
     // then:
     BDDAssertions.then(actual).isEqualTo("currencies/view");
-    BDDMockito.then(this.model).should().addAttribute("currency", this.currency);
+    BDDMockito.then(this.model).should().addAttribute("currency", currencyDto);
   }
 
   @Test
@@ -180,4 +181,5 @@ public class CurrencyControllerTest {
     BDDAssertions.then(actual).isEqualTo(REDIRECT_URL);
     BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
   }
+
 }

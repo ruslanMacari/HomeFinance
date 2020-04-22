@@ -1,9 +1,11 @@
 package homefinance.money.currency;
 
+import homefinance.common.exception.PageNotFoundException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -35,7 +37,21 @@ public class CurrencyFacade {
         .collect(Collectors.toList());
   }
 
-  private CurrencyDto currencyToDto(Currency item) {
-    return this.modelMapper.map(item, CurrencyDto.class);
+  private CurrencyDto currencyToDto(Currency currency) {
+    return this.modelMapper.map(currency, CurrencyDto.class);
   }
+
+  public CurrencyDto getCurrencyDtoById(int id) {
+    return this.currencyToDto(this.getCurrencyById(id));
+  }
+
+  private Currency getCurrencyById(int id) {
+    Currency currency = this.currencyService.getByID(id);
+    if (Objects.isNull(currency)) {
+      logger.error("Currency by id={} not found", id);
+      throw new PageNotFoundException();
+    }
+    return currency;
+  }
+
 }
