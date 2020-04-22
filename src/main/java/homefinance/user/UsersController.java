@@ -55,10 +55,10 @@ public class UsersController extends CommonController<User> {
   }
 
   @GetMapping()
-  public String list(Model model) {
+  public String openList(Model model) {
     List<User> users = this.userService.usersExceptRoot();
     model.addAttribute("users", users);
-    return LIST_PATH;
+    return "users/list";
   }
 
   @GetMapping(value = "/{id}")

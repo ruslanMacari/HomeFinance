@@ -13,6 +13,7 @@ import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.CommonController;
+import org.assertj.core.api.BDDAssertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,8 +51,8 @@ public class UsersControllerTest {
   }
 
   @Test
-  public void testList() {
-    assertEquals(this.usersController.list(this.model), UsersController.LIST_PATH);
+  public void openList_shouldReturnUserListTemplate() {
+    BDDAssertions.then(this.usersController.openList(this.model)).isEqualTo("users/list");
   }
 
   @Test
