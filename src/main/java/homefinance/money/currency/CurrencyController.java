@@ -42,7 +42,7 @@ public class CurrencyController extends CommonController<Currency> {
 
   @GetMapping(NEW_URL)
   public String openNew(Model model) {
-    if (this.flashModelNotMerged(model)) {
+    if (!this.isRedirectAndFlashModelMerged(model)) {
       model.addAttribute("currency", new CurrencyDto());
     }
     return "currencies/new";
@@ -65,9 +65,9 @@ public class CurrencyController extends CommonController<Currency> {
 
   @GetMapping("/{id}")
   public String view(@PathVariable("id") Integer id, Model model) {
-    Currency currency = this.currencyService.getByID(id);
-    this.test(currency);
-    if (this.flashModelNotMerged(model)) {
+    if (!this.isRedirectAndFlashModelMerged(model)) {
+      Currency currency = this.currencyService.getByID(id);
+      this.test(currency);
       model.addAttribute("currency", currency);
     }
     return "currencies/view";

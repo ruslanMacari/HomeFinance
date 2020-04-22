@@ -54,16 +54,12 @@ public class CurrencyControllerTest {
   public void list_shouldReturnListTemplateAndAddCurrenciesAttributeWithFilledCurrencyDtoList() {
     //given
     List<CurrencyDto> currencyDtoList = Arrays.asList(mock(CurrencyDto.class), null);
-    given(this.currencyFacadeMock.getAllCurrenciesDto())
-        .willReturn(currencyDtoList);
+    given(this.currencyFacadeMock.getAllCurrenciesDto()).willReturn(currencyDtoList);
     //when
     String actual = this.controller.list(this.model);
     //then
-    BDDAssertions.then(actual)
-        .isEqualTo("currencies/list");
-    BDDMockito.then(this.model)
-        .should()
-        .addAttribute("currencies", currencyDtoList);
+    BDDAssertions.then(actual).isEqualTo("currencies/list");
+    BDDMockito.then(this.model).should().addAttribute("currencies", currencyDtoList);
   }
 
   @Test
@@ -83,15 +79,14 @@ public class CurrencyControllerTest {
   public void openNew_givenModelHasFlashModel_shouldReturnNewTemplateAndMergeAttributesFromFlashModel() {
     // given:
     Map<String, Object> map = new HashMap<>();
-    Object flashModel = mock(Model.class);
+    Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
     given(this.model.asMap()).willReturn(map);
     // when:
     String actual = this.controller.openNew(this.model);
     // then:
     BDDAssertions.then(actual).isEqualTo("currencies/new");
-    BDDMockito.then(this.model)
-        .should().mergeAttributes(((Model) flashModel).asMap());
+    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
@@ -101,7 +96,8 @@ public class CurrencyControllerTest {
     BDDAssertions
         .then(this.controller.saveNew(this.currency, this.result, redirectAttributes, this.model))
         .isEqualTo("redirect:/currencies/new");
-    BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
+    BDDMockito.then(redirectAttributes).should()
+        .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
 
   @Test
@@ -122,24 +118,21 @@ public class CurrencyControllerTest {
     String actual = this.controller.view(5, this.model);
     // then:
     BDDAssertions.then(actual).isEqualTo("currencies/view");
-    BDDMockito.then(this.model)
-        .should().addAttribute("currency", this.currency);
+    BDDMockito.then(this.model).should().addAttribute("currency", this.currency);
   }
 
   @Test
   public void view_givenModelHasFlashModel_thenMergeAttributesFromFlashModel() {
     // given:
-    given(this.currencyServiceMock.getByID(5)).willReturn(this.currency);
     Map<String, Object> map = new HashMap<>();
-    Object flashModel = mock(Model.class);
+    Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
     given(this.model.asMap()).willReturn(map);
     // when:
     String actual = this.controller.view(5, this.model);
     // then:
     BDDAssertions.then(actual).isEqualTo("currencies/view");
-    BDDMockito.then(this.model)
-        .should().mergeAttributes(((Model) flashModel).asMap());
+    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
@@ -184,10 +177,7 @@ public class CurrencyControllerTest {
   @Test
   public void fillCurrencies_shouldReturnRedirectUrl() {
     String actual = this.controller.fillCurrencies();
-    BDDAssertions.then(actual)
-        .isEqualTo(REDIRECT_URL);
-    BDDMockito.then(this.currencyServiceMock)
-        .should()
-        .fillDistinctCurrencies();
+    BDDAssertions.then(actual).isEqualTo(REDIRECT_URL);
+    BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
   }
 }

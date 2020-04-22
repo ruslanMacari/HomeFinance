@@ -35,13 +35,13 @@ public abstract class CommonController<T> {
     redirectAttributes.addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, model);
   }
 
-  public boolean flashModelNotMerged(Model model) {
+  public boolean isRedirectAndFlashModelMerged(Model model) {
     Object flashModel = model.asMap().get(FLASH_MODEL_ATTRIBUTE_NAME);
     if (flashModel == null) {
-      return true;
+      return false;
     } else {
       model.mergeAttributes(((Model) flashModel).asMap());
-      return false;
+      return true;
     }
   }
 }
