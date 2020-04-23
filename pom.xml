@@ -53,6 +53,9 @@
     <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
     <spring-boot-maven-plugin.version>2.0.3.RELEASE</spring-boot-maven-plugin.version>
     <maven-help-pugin-version>3.1.0</maven-help-pugin-version>
+    <h2.version>1.4.197</h2.version>
+    <jsoup.version>1.11.3</jsoup.version>
+    <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
   </properties>
   <dependencies>
 
@@ -118,14 +121,12 @@
       <version>${modelmapper.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${commons-lang3.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.directory.api/api-util -->
     <dependency>
       <groupId>org.apache.directory.api</groupId>
       <artifactId>api-util</artifactId>
@@ -141,29 +142,14 @@
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>6.0.2.Final</version>
+      <version>${hibernate-validator.version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator-annotation-processor</artifactId>
-      <version>6.0.2.Final</version>
+      <version>${hibernate-validator.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache-core -->
-    <!--<dependency>-->
-    <!--<groupId>net.sf.ehcache</groupId>-->
-    <!--<artifactId>ehcache</artifactId>-->
-    <!--<version>${ehcache.version}</version>-->
-    <!--</dependency>-->
-
-    <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache -->
-    <!--<dependency>-->
-    <!--<groupId>org.hibernate</groupId>-->
-    <!--<artifactId>hibernate-ehcache</artifactId>-->
-    <!--<version>${hibernate-ehcache.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 &ndash;&gt;-->
     <dependency>
       <groupId>org.springframework.security.oauth</groupId>
       <artifactId>spring-security-oauth2</artifactId>
@@ -193,7 +179,6 @@
       <version>${kaptcha-version}</version>
     </dependency>
 
-    <!--jackson -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -205,14 +190,11 @@
       <version>${jackson-core-version}</version>
     </dependency>
 
-    <!-- Spring data -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
       <version>${org.aspectj-version}</version>
     </dependency>
-
-    <!-- Servlet -->
 
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -220,6 +202,7 @@
       <version>${hamcrest-library}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path</artifactId>
@@ -227,37 +210,29 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
     <dependency>
       <groupId>org.thymeleaf.extras</groupId>
       <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-      <version>3.0.4.RELEASE</version>
+      <version>${thymeleaf-extras-springsecurity5.version}</version>
     </dependency>
 
-
-    <!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId>
-      <version>1.16.20</version> <type>jar</type> </dependency> -->
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.11.3</version>
+      <version>${jsoup.version}</version>
       <type>jar</type>
     </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+    </dependency>
+
   </dependencies>
   <build>
-    <!--<resources>-->
-    <!--<resource>-->
-    <!--<directory>src/main/webapp/WEB-INF</directory>-->
-    <!--<includes>-->
-    <!--<include>**/*.properties</include>-->
-    <!--<include>**/*.xml</include>-->
-    <!--</includes>-->
-    <!--</resource>-->
-    <!--<resource>-->
-    <!--<directory>src/main/resources</directory>-->
-    <!--</resource>-->
-    <!--</resources>-->
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -267,16 +242,6 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
-      <!--<plugin>-->
-      <!--<groupId>org.apache.maven.plugins</groupId>-->
-      <!--<artifactId>maven-war-plugin</artifactId>-->
-      <!--<version>${maven-war-plugin}</version>-->
-      <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
-      <!--&lt;!&ndash;<warSourceDirectory>src/main/webapp</warSourceDirectory>&ndash;&gt;-->
-      <!--&lt;!&ndash;<warName>HomeFinance</warName>&ndash;&gt;-->
-      <!--&lt;!&ndash;<failOnMissingWebXml>false</failOnMissingWebXml>&ndash;&gt;-->
-      <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
-      <!--</plugin>-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -328,6 +293,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -341,6 +307,7 @@
           </excludes>
         </configuration>
       </plugin>
+
     </plugins>
     <finalName>HomeFinance</finalName>
   </build>

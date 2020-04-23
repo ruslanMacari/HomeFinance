@@ -32,7 +32,6 @@ public class UsersController extends CommonController<User> {
   public static final String NEW = "/new";
   public static final String NEW_PATH = URL + NEW;
   public static final String REDIRECT_PATH = "redirect:" + URL;
-  public static final String LIST_PATH = URL + "/list";
   public static final String VIEW_PATH = URL + "/view";
 
   private UserService userService;
