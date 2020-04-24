@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import homefinance.HomeFinanceApplication;
+import homefinance.common.EmbeddedDataSourceConfiguration;
 import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.entity.Currency;
@@ -20,13 +22,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest()
-@AutoConfigureTestDatabase
+@SpringBootTest(classes = {HomeFinanceApplication.class, EmbeddedDataSourceConfiguration.class})
 public class CurrencyServiceImplIntegrationTest {
 
   @Autowired
