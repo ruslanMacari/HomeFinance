@@ -14,6 +14,7 @@ public class EmbeddedDataSourceConfiguration {
   public DataSource dataSource() throws IOException {
     return EmbeddedPostgres.builder()
         .setPort(54321)
+        .setConnectConfig("sslmode", "disable")
         .setOverrideWorkingDirectory(new File("target/embedded-pg"))
         .start().getPostgresDatabase();
   }
