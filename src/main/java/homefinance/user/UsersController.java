@@ -1,15 +1,14 @@
 package homefinance.user;
 
+import homefinance.common.CommonController;
+import homefinance.common.exception.PageNotFoundException;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
-import homefinance.common.CommonController;
-import homefinance.common.exception.PageNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
