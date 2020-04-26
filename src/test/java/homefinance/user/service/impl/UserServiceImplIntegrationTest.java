@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import homefinance.HomeFinanceApplication;
-import homefinance.common.EmbeddedDataSourceConfiguration;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {HomeFinanceApplication.class, EmbeddedDataSourceConfiguration.class})
+@SpringBootTest
 public class UserServiceImplIntegrationTest {
 
   @Autowired

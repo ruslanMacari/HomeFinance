@@ -9,12 +9,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.HomeFinanceApplication;
-import homefinance.common.EmbeddedDataSourceConfiguration;
+import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.entity.Currency;
-import homefinance.common.exception.DuplicateFieldsException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {HomeFinanceApplication.class, EmbeddedDataSourceConfiguration.class})
+@SpringBootTest
 public class CurrencyServiceImplIntegrationTest {
 
   @Autowired
@@ -39,7 +37,8 @@ public class CurrencyServiceImplIntegrationTest {
 
   @Before
   public void setUp() {
-    this.currencyService.getAllCurrencies().forEach(currency -> this.currencyService.delete(currency.getId()));
+    this.currencyService.getAllCurrencies()
+        .forEach(currency -> this.currencyService.delete(currency.getId()));
   }
 
   @Test
