@@ -27,7 +27,7 @@ public class TestConfiguration {
   @Bean
   public Consumer<Builder> embeddedPostgresCustomizer(
       @Value("${embedded-pg.directory}") String directory) {
-    return builder -> builder.setServerConfig("ssl", "false")
+    return builder -> builder.setConnectConfig("sslMode", "disable")
         .setOverrideWorkingDirectory(new File(directory));
         //.setConnectConfig("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
         //.setServerConfig("sslmode", "disable");
