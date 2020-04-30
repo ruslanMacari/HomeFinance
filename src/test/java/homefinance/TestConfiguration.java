@@ -28,7 +28,8 @@ public class TestConfiguration {
   public Consumer<Builder> embeddedPostgresCustomizer(
       @Value("${embedded-pg.directory}") String directory) {
     return builder -> builder.setOverrideWorkingDirectory(new File(directory))
-        .setConnectConfig("sslmode", "disable");
+        .setConnectConfig("sslmode", "disable")
+        .setPort(54321);
   }
 
 }
