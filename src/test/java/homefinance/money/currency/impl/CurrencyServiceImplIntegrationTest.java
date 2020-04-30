@@ -9,23 +9,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import homefinance.AbstractSpringIntegrationTest;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.entity.Currency;
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CurrencyServiceImplIntegrationTest {
+@AutoConfigureEmbeddedDatabase
+public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired
   private CurrencyServiceImpl currencyService;

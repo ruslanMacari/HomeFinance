@@ -1,11 +1,12 @@
 package homefinance;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres.Builder;
 import java.io.File;
-import java.io.IOException;
+import java.util.function.Consumer;
 import javax.sql.DataSource;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,19 +14,21 @@ import org.springframework.context.annotation.Configuration;
 @Ignore
 public class TestConfiguration {
 
-  @Value("${embedded-pg.port}")
-  private int port;
-
-  @Value("${embedded-pg.directory}")
-  private String directory;
+//  @Bean
+//  public DataSource dataSource() {
+//    return DataSourceBuilder.create()
+//        .driverClassName("org.h2.Driver")
+//        .url("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1")
+//        .username("sa")
+//        .password("")
+//        .build();
+//  }
 
   @Bean
-  public DataSource dataSource() throws IOException {
-    return EmbeddedPostgres.builder()
-        .setPort(this.port)
-        .setConnectConfig("sslmode", "disable")
-        .setOverrideWorkingDirectory(new File(this.directory))
-        .start().getPostgresDatabase();
+  public Consumer<Builder> embeddedPostgresCustomizer(
+      @Value("${embedded-pg.directory}") String directory) {
+    return builder -> builder.setOverrideWorkingDirectory(new File(directory))
+        .setConnectConfig("sslmode", "disable");
   }
 
 }

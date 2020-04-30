@@ -3,19 +3,15 @@ package homefinance.money.currency;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import homefinance.AbstractSpringIntegrationTest;
 import homefinance.money.currency.entity.Currency;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest()
-public class ExchangeRatesApiIntegrationTest {
+public class ExchangeRatesApiIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired
   private ExchangeRatesApi exchangeRatesApi;
