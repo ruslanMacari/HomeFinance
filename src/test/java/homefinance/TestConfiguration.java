@@ -14,23 +14,21 @@ import org.springframework.context.annotation.Configuration;
 @Ignore
 public class TestConfiguration {
 
-//  @Bean
-//  public DataSource dataSource() {
-//    return DataSourceBuilder.create()
-//        .driverClassName("org.h2.Driver")
-//        .url("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1")
-//        .username("sa")
-//        .password("")
-//        .build();
-//  }
+  @Bean
+  public DataSource dataSource() {
+    return DataSourceBuilder.create()
+        .driverClassName("org.h2.Driver")
+        .url("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1")
+        .username("sa")
+        .password("")
+        .build();
+  }
 
   @Bean
   public Consumer<Builder> embeddedPostgresCustomizer(
       @Value("${embedded-pg.directory}") String directory) {
     return builder -> builder.setConnectConfig("sslmode", "disable")
         .setOverrideWorkingDirectory(new File(directory));
-        //.setConnectConfig("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
-        //.setServerConfig("sslmode", "disable");
   }
 
 }
