@@ -43,7 +43,6 @@
     <spring-securiry>3.2.5.RELEASE</spring-securiry>
     <jackson-core-version>2.11.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
-    <kaptcha-version>2.3.2</kaptcha-version>
     <validation-api.version>2.0.1.Final</validation-api.version>
     <modelmapper.version>2.3.2</modelmapper.version>
     <api-util.version>2.0.0.AM2</api-util.version>
@@ -171,12 +170,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.penggle</groupId>
-      <artifactId>kaptcha</artifactId>
-      <version>${kaptcha-version}</version>
     </dependency>
 
     <dependency>
