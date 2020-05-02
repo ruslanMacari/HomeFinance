@@ -60,11 +60,11 @@ public class UsersController extends CommonController<User> {
   }
 
   @GetMapping(value = "/{id}")
-  public String view(@PathVariable("id") Integer id, Model model) {
+  public String openView(@PathVariable("id") Integer id, Model model) {
     User user = this.userService.getById(id);
     this.testUser(user);
     model.addAttribute("user", user);
-    return VIEW_PATH;
+    return "users/view";
   }
 
   private void testUser(User user) {

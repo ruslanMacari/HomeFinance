@@ -3,16 +3,16 @@ package homefinance.user;
 import static homefinance.user.UsersController.NEW_PATH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.user.entity.User;
-import homefinance.user.service.UserService;
+import homefinance.common.CommonController;
+import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
-import homefinance.common.exception.PageNotFoundException;
-import homefinance.common.CommonController;
+import homefinance.user.entity.User;
+import homefinance.user.service.UserService;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,30 +55,32 @@ public class UsersControllerTest {
     BDDAssertions.then(this.usersController.openList(this.model)).isEqualTo("users/list");
   }
 
+  @Test(expected = PageNotFoundException.class)
+  public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
+    // given:
+    given(this.userService.getById(150)).willReturn(this.user);
+    given(this.user.getName()).willReturn(this.rootname);
+    // when:
+    this.usersController.openView(150, this.model);
+  }
+
   @Test
-  public void testView() {
-    System.out.println("view");
-    Integer id = 100;
-    when(this.user.getName()).thenReturn("test");
-    when(this.userService.getById(id)).thenReturn(this.user);
-    try {
-      assertTrue(this.usersController.view(id, this.model).equals(UsersController.VIEW_PATH));
-    } catch (PageNotFoundException e) {
-      fail("Exception must not be thrown!");
-    }
-    when(this.userService.getById(id)).thenReturn(null);
-    try {
-      this.usersController.view(id, this.model);
-      fail("PageNotFoundException must be thrown!");
-    } catch (PageNotFoundException e) {
-    }
-    when(this.userService.getById(id)).thenReturn(this.user);
-    when(this.user.getName()).thenReturn(this.rootname);
-    try {
-      this.usersController.view(id, this.model);
-      fail("PageNotFoundException must be thrown!");
-    } catch (PageNotFoundException e) {
-    }
+  public void openView_givenUserIsNotRoot_thenOpenView() {
+    // given:
+    given(this.user.getName()).willReturn("test");
+    given(this.userService.getById(100)).willReturn(this.user);
+    // when:
+    String actual = this.usersController.openView(100, this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("users/view");
+  }
+
+  @Test(expected = PageNotFoundException.class)
+  public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
+    // given:
+    given(this.userService.getById(100)).willReturn(null);
+    // when:
+    this.usersController.openView(100, this.model);
   }
 
   @Test
@@ -103,7 +105,8 @@ public class UsersControllerTest {
   public void testSave() {
     when(this.result.hasErrors()).thenReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-    Assert.assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
+    Assert.assertEquals(
+        this.usersController.save(this.user, this.result, true, redirectAttributes, null),
         CommonController.getRedirectURL(NEW_PATH));
     when(this.result.hasErrors()).thenReturn(false);
     assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
