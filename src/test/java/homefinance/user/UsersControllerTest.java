@@ -1,13 +1,16 @@
 package homefinance.user;
 
+import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static homefinance.user.UsersController.NEW_PATH;
+import static homefinance.user.UsersController.REDIRECT_URL;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import homefinance.common.CommonController;
+import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
@@ -16,6 +19,7 @@ import homefinance.user.service.UserService;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.BDDMockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,16 +88,47 @@ public class UsersControllerTest {
   }
 
   @Test
-  public void testUpdate() {
-    when(this.result.hasErrors()).thenReturn(true);
-    Integer id = 100;
-    String resultUpdate = this.usersController.update(this.user, this.result, id, true, true);
-    assertTrue(resultUpdate.equals(UsersController.VIEW_PATH));
-    when(this.result.hasErrors()).thenReturn(false);
-    when(this.userService.getById(id)).thenReturn(this.user);
+  public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
+    // given:
+    given(this.result.hasErrors()).willReturn(false);
+    given(this.userService.getById(100)).willReturn(this.user);
+    // when:
+    String actual = this.usersController.update(this.user, this.result, 100, true, true,
+        mock(RedirectAttributes.class), this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo(REDIRECT_URL);
+  }
 
-    resultUpdate = this.usersController.update(this.user, this.result, id, true, true);
-    assertTrue(resultUpdate.equals(((PathSelectorTest) this.pathSelector).pathIfOk));
+  @Test
+  public void update_givenResultHasNoErrorsAndUpdateThrownException_thenRedirectToUsersViewUrl() {
+    // given:
+    given(this.result.hasErrors()).willReturn(false);
+    given(this.userService.getById(100)).willReturn(this.user);
+    doThrow(DuplicateFieldsException.class).when(this.userService).update(this.user);
+    // when:
+    String actual = this.usersController.update(this.user, this.result, 100, true, true,
+        mock(RedirectAttributes.class), this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/users/" + 100);
+  }
+
+  @Test
+  public void update_givenResultHasErrors_thenRedirectToView() {
+    this.update_givenResultHasErrorsAndId_thenRedirectToViewId(100);
+    this.update_givenResultHasErrorsAndId_thenRedirectToViewId(50);
+  }
+
+  private void update_givenResultHasErrorsAndId_thenRedirectToViewId(int id) {
+    // given:
+    given(this.result.hasErrors()).willReturn(true);
+    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+    // when:
+    String actual = this.usersController
+        .update(this.user, this.result, id, true, true, redirectAttributes, this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/users/" + id);
+    BDDMockito.then(redirectAttributes)
+        .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
 
   @Test
@@ -110,7 +145,7 @@ public class UsersControllerTest {
         CommonController.getRedirectURL(NEW_PATH));
     when(this.result.hasErrors()).thenReturn(false);
     assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
-        UsersController.REDIRECT_PATH);
+        REDIRECT_URL);
   }
 
   @Test

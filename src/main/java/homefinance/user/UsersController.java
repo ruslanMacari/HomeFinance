@@ -1,6 +1,7 @@
 package homefinance.user;
 
 import homefinance.common.CommonController;
+import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
@@ -30,8 +31,7 @@ public class UsersController extends CommonController<User> {
   public static final String URL = "/users";
   public static final String NEW = "/new";
   public static final String NEW_PATH = URL + NEW;
-  public static final String REDIRECT_PATH = "redirect:" + URL;
-  public static final String VIEW_PATH = URL + "/view";
+  public static final String REDIRECT_URL = "redirect:" + URL;
 
   private UserService userService;
   private PasswordEncoder encoder;
@@ -59,7 +59,7 @@ public class UsersController extends CommonController<User> {
     return "users/list";
   }
 
-  @GetMapping(value = "/{id}")
+  @GetMapping("/{id}")
   public String openView(@PathVariable("id") Integer id, Model model) {
     User user = this.userService.getById(id);
     this.testUser(user);
@@ -74,29 +74,36 @@ public class UsersController extends CommonController<User> {
     }
   }
 
-  @PostMapping(value = "/{id}")
+  @PostMapping("/{id}")
   public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
-      @PathVariable("id") Integer id,
+      @PathVariable("id") int id,
       @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
-      @RequestParam(value = "admin", defaultValue = "false") boolean admin) {
+      @RequestParam(value = "admin", defaultValue = "false") boolean isAdmin,
+      RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      return VIEW_PATH;
+      this.addModelToRedirectAttributes(model, redirectAttributes);
+      return this.getRedirectToViewUrl(id);
     }
-    Runnable action = () -> this.userService.update(this.getUser(id, user, changePassword, admin));
-    return this.pathSelector
-        .setActionOk(action)
-        .setPaths(REDIRECT_PATH, VIEW_PATH)
-        .setErrors(result)
-        .getPath();
+    try {
+      this.userService.update(this.getUser(id, user, changePassword, isAdmin));
+      return REDIRECT_URL;
+    } catch (DuplicateFieldsException ex) {
+      result.rejectValue(ex.getField(), ex.getErrorCode());
+      return this.getRedirectToViewUrl(id);
+    }
   }
 
-  private User getUser(Integer id, User user, boolean changePassword, boolean admin) {
+  private String getRedirectToViewUrl(int id) {
+    return REDIRECT_URL + '/' + id;
+  }
+
+  private User getUser(Integer id, User user, boolean changePassword, boolean isAdmin) {
     User foundUser = this.userService.getById(id);
     foundUser.setName(user.getName());
     if (changePassword) {
       foundUser.setPassword(this.encoder.encode(user.getPassword()));
     }
-    foundUser.setOneRole(admin ? Role.ADMIN : Role.USER);
+    foundUser.setOneRole(isAdmin ? Role.ADMIN : Role.USER);
     return foundUser;
   }
 
@@ -121,7 +128,7 @@ public class UsersController extends CommonController<User> {
     }
     return this.pathSelector
         .setActionOk(() -> this.add(user, admin))
-        .setPaths(REDIRECT_PATH, NEW_PATH)
+        .setPaths(REDIRECT_URL, NEW_PATH)
         .setErrors(result)
         .getPath();
   }
@@ -136,7 +143,7 @@ public class UsersController extends CommonController<User> {
   @DeleteMapping(value = "/{id}")
   public String deleteUser(@PathVariable("id") Integer id) {
     this.userService.delete(id);
-    return REDIRECT_PATH;
+    return REDIRECT_URL;
   }
 
 }
