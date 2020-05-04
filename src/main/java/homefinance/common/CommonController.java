@@ -19,7 +19,7 @@ public abstract class CommonController<T> {
   protected PathSelector pathSelector;
 
   public static String getRedirectURL(String URL) {
-    return "redirect:" + URL;
+    return REDIRECT + URL;
   }
 
   @Autowired

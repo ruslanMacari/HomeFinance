@@ -1,23 +1,22 @@
 package homefinance.user;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
-import static homefinance.user.UsersController.NEW_PATH;
-import static homefinance.user.UsersController.REDIRECT_URL;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import homefinance.common.CommonController;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
+import java.util.HashMap;
+import java.util.Map;
 import org.assertj.core.api.BDDAssertions;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.BDDMockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,6 +87,20 @@ public class UsersControllerTest {
   }
 
   @Test
+  public void openView_givenIsRedirect_thenMergeAttributesFromFlashModel() {
+    // given:
+    Map<String, Object> map = new HashMap<>();
+    Model flashModel = mock(Model.class);
+    map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
+    given(this.model.asMap()).willReturn(map);
+    // when:
+    String actual = this.usersController.openView(10, this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("users/view");
+    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
+  }
+
+  @Test
   public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
     // given:
     given(this.result.hasErrors()).willReturn(false);
@@ -96,7 +109,7 @@ public class UsersControllerTest {
     String actual = this.usersController.update(this.user, this.result, 100, true, true,
         mock(RedirectAttributes.class), this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo(REDIRECT_URL);
+    BDDAssertions.then(actual).isEqualTo("redirect:/users");
   }
 
   @Test
@@ -133,19 +146,20 @@ public class UsersControllerTest {
 
   @Test
   public void testNewUser() {
-    assertEquals(this.usersController.newUser(this.model), NEW_PATH);
+    assertThat(this.usersController.newUser(this.model)).isEqualTo("users/new");
   }
 
   @Test
   public void testSave() {
+    // TODO: 04.05.2020: split in 2 tests, refactor by BDD
     when(this.result.hasErrors()).thenReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-    Assert.assertEquals(
-        this.usersController.save(this.user, this.result, true, redirectAttributes, null),
-        CommonController.getRedirectURL(NEW_PATH));
+    String actual = this.usersController
+        .save(this.user, this.result, true, redirectAttributes, null);
+    assertThat(actual).isEqualTo("redirect:/users/new");
     when(this.result.hasErrors()).thenReturn(false);
-    assertEquals(this.usersController.save(this.user, this.result, true, redirectAttributes, null),
-        REDIRECT_URL);
+    actual = this.usersController.save(this.user, this.result, true, redirectAttributes, null);
+    assertThat(actual).isEqualTo("redirect:/users");
   }
 
   @Test

@@ -29,9 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsersController extends CommonController<User> {
 
   public static final String URL = "/users";
-  public static final String NEW = "/new";
-  public static final String NEW_PATH = URL + NEW;
-  public static final String REDIRECT_URL = "redirect:" + URL;
 
   private UserService userService;
   private PasswordEncoder encoder;
@@ -61,9 +58,11 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping("/{id}")
   public String openView(@PathVariable("id") Integer id, Model model) {
-    User user = this.userService.getById(id);
-    this.testUser(user);
-    model.addAttribute("user", user);
+    if (!this.isRedirectAndFlashModelMerged(model)) {
+      User user = this.userService.getById(id);
+      this.testUser(user);
+      model.addAttribute("user", user);
+    }
     return "users/view";
   }
 
@@ -82,19 +81,15 @@ public class UsersController extends CommonController<User> {
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       this.addModelToRedirectAttributes(model, redirectAttributes);
-      return this.getRedirectToViewUrl(id);
+      return getRedirectURL(URL + '/' + id);
     }
     try {
       this.userService.update(this.getUser(id, user, changePassword, isAdmin));
-      return REDIRECT_URL;
+      return getRedirectURL(URL);
     } catch (DuplicateFieldsException ex) {
       result.rejectValue(ex.getField(), ex.getErrorCode());
-      return this.getRedirectToViewUrl(id);
+      return getRedirectURL(URL + '/' + id);
     }
-  }
-
-  private String getRedirectToViewUrl(int id) {
-    return REDIRECT_URL + '/' + id;
   }
 
   private User getUser(Integer id, User user, boolean changePassword, boolean isAdmin) {
@@ -107,28 +102,29 @@ public class UsersController extends CommonController<User> {
     return foundUser;
   }
 
-  @GetMapping(NEW)
+  @GetMapping("/new")
   public String newUser(Model model) {
+    // TODO: 04.05.2020: use  if (!this.isRedirectAndFlashModelMerged(model)) {...
     Object flashModel = model.asMap().get("model");
     if (Objects.isNull(flashModel)) {
       model.addAttribute("user", new User());
     } else {
       model.mergeAttributes(((Model) flashModel).asMap());
     }
-    return NEW_PATH;
+    return "users/new";
   }
 
-  @PostMapping(NEW)
+  @PostMapping("/new")
   public String save(@Valid @ModelAttribute("user") User user, BindingResult result,
       @RequestParam(value = "admin", defaultValue = "false") boolean admin,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       redirectAttributes.addFlashAttribute("model", model);
-      return getRedirectURL(NEW_PATH);
+      return getRedirectURL("/users/new");
     }
     return this.pathSelector
         .setActionOk(() -> this.add(user, admin))
-        .setPaths(REDIRECT_URL, NEW_PATH)
+        .setPaths(getRedirectURL(URL), "/users/new")
         .setErrors(result)
         .getPath();
   }
@@ -140,10 +136,10 @@ public class UsersController extends CommonController<User> {
     this.userService.add(user);
   }
 
-  @DeleteMapping(value = "/{id}")
+  @DeleteMapping("/{id}")
   public String deleteUser(@PathVariable("id") Integer id) {
     this.userService.delete(id);
-    return REDIRECT_URL;
+    return getRedirectURL(URL);
   }
 
 }
