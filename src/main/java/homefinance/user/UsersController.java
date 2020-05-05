@@ -57,7 +57,7 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping("/{id}")
   public String openView(@PathVariable("id") Integer id, Model model) {
-    if (!this.isRedirectAndFlashModelMerged(model)) {
+    if (!isRedirectAndFlashModelMerged(model)) {
       User user = this.userService.getById(id);
       this.testUser(user);
       model.addAttribute("user", user);
@@ -79,7 +79,7 @@ public class UsersController extends CommonController<User> {
       @RequestParam(value = "admin", defaultValue = "false") boolean isAdmin,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      this.addModelToRedirectAttributes(model, redirectAttributes);
+      addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL(URL + '/' + id);
     }
     try {
@@ -103,7 +103,7 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping("/new")
   public String newUser(Model model) {
-    if (!this.isRedirectAndFlashModelMerged(model)) {
+    if (!isRedirectAndFlashModelMerged(model)) {
       model.addAttribute("user", new User());
     }
     return "users/new";
@@ -114,7 +114,7 @@ public class UsersController extends CommonController<User> {
       @RequestParam(value = "admin", defaultValue = "false") boolean admin,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      this.addModelToRedirectAttributes(model, redirectAttributes);
+      addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/users/new");
     }
     return this.pathSelector

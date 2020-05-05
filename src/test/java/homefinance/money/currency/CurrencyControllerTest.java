@@ -1,7 +1,6 @@
 package homefinance.money.currency;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
-import static homefinance.money.currency.CurrencyController.REDIRECT_URL;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -105,7 +104,7 @@ public class CurrencyControllerTest {
     given(this.result.hasErrors()).willReturn(false);
     BDDAssertions.then(this.controller
         .saveNew(this.currency, this.result, mock(RedirectAttributes.class), this.model))
-        .isEqualTo(REDIRECT_URL);
+        .isEqualTo("redirect:/currencies");
   }
 
   @Test
@@ -155,7 +154,7 @@ public class CurrencyControllerTest {
   public void update_givenValidationHasNoErrorsAndGetPathWorkedOk_thenShouldBeEqualToRedirectUrl() {
     given(this.result.hasErrors()).willReturn(false);
     String actualResult = this.controller.update(this.currency, this.result, null, this.model);
-    BDDAssertions.then(actualResult).isEqualTo(REDIRECT_URL);
+    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies");
   }
 
   @Test
@@ -172,13 +171,15 @@ public class CurrencyControllerTest {
 
   @Test
   public void testDeleteUser() {
-    assertThat(this.controller.deleteUser(1), is(REDIRECT_URL));
+    assertThat(this.controller.deleteUser(1), is("redirect:/currencies"));
   }
 
   @Test
   public void fillCurrencies_shouldReturnRedirectUrl() {
+    // when:
     String actual = this.controller.fillCurrencies();
-    BDDAssertions.then(actual).isEqualTo(REDIRECT_URL);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/currencies");
     BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
   }
 

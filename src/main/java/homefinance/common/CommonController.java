@@ -34,12 +34,12 @@ public abstract class CommonController<T> {
   }
 
   // TODO: 20.04.2020 RMACARI: move to a separate class? ex: FlashModel
-  public void addModelToRedirectAttributes(Model model, RedirectAttributes redirectAttributes) {
+  public static void addModelToRedirectAttributes(Model model, RedirectAttributes redirectAttributes) {
     logger.debug("addModelToRedirectAttributes invoked");
     redirectAttributes.addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, model);
   }
 
-  public boolean isRedirectAndFlashModelMerged(Model model) {
+  public static boolean isRedirectAndFlashModelMerged(Model model) {
     Object flashModel = model.asMap().get(FLASH_MODEL_ATTRIBUTE_NAME);
     if (flashModel == null) {
       return false;
