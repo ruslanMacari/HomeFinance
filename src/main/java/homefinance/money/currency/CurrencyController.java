@@ -49,17 +49,18 @@ public class CurrencyController extends CommonController<Currency> {
 
   @PostMapping("/new")
   public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
-      BindingResult result, RedirectAttributes redirectAttributes, Model model) {
-    if (result.hasErrors()) {
+      BindingResult error, RedirectAttributes redirectAttributes, Model model) {
+    if (error.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/currencies/new");
     }
-    // TODO: 20.04.2020 RMACARI: inline getPath()
-    return this.pathSelector
-        .setActionOk(() -> this.currencyService.add(currency))
-        .setPaths(getRedirectURL(URL), "currencies/new")
-        .setErrors(result)
-        .getPath();
+    try {
+      this.currencyService.add(currency);
+      return getRedirectURL(URL);
+    } catch (DuplicateFieldsException ex) {
+      error.rejectValue(ex.getField(), ex.getErrorCode());
+      return "currencies/new";
+    }
   }
 
   @GetMapping("/{id}")
