@@ -1,12 +1,12 @@
 package homefinance.user;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
@@ -145,21 +145,51 @@ public class UsersControllerTest {
   }
 
   @Test
-  public void testNewUser() {
-    assertThat(this.usersController.newUser(this.model)).isEqualTo("users/new");
+  public void newUser_givenIsRedirect_thenMergeAttributesFromFlashModel() {
+    // given:
+    Map<String, Object> map = new HashMap<>();
+    Model flashModel = mock(Model.class);
+    map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
+    given(this.model.asMap()).willReturn(map);
+    // when:
+    String actual = this.usersController.newUser(this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("users/new");
+    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
-  public void testSave() {
-    // TODO: 04.05.2020: split in 2 tests, refactor by BDD
-    when(this.result.hasErrors()).thenReturn(true);
+  public void newUser_givenIsNotRedirect_thenAddUserToModel() {
+    // when:
+    String actual = this.usersController.newUser(this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("users/new");
+    BDDMockito.then(this.model).should().addAttribute(eq("user"), refEq(new User()));
+  }
+
+  @Test
+  public void save_givenResultHasNoErrors_thenRedirectToUsers() {
+    // given:
+    given(this.result.hasErrors()).willReturn(false);
+    // when:
+    String actual = this.usersController
+        .save(this.user, this.result, true, mock(RedirectAttributes.class), null);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/users");
+  }
+
+  @Test
+  public void save_givenResultHasErrors_thenRedirectToNew() {
+    // given:
+    given(this.result.hasErrors()).willReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+    // when:
     String actual = this.usersController
         .save(this.user, this.result, true, redirectAttributes, null);
-    assertThat(actual).isEqualTo("redirect:/users/new");
-    when(this.result.hasErrors()).thenReturn(false);
-    actual = this.usersController.save(this.user, this.result, true, redirectAttributes, null);
-    assertThat(actual).isEqualTo("redirect:/users");
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/users/new");
+    BDDMockito.then(redirectAttributes).should()
+        .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, null);
   }
 
   @Test

@@ -7,7 +7,6 @@ import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,12 +103,8 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping("/new")
   public String newUser(Model model) {
-    // TODO: 04.05.2020: use  if (!this.isRedirectAndFlashModelMerged(model)) {...
-    Object flashModel = model.asMap().get("model");
-    if (Objects.isNull(flashModel)) {
+    if (!this.isRedirectAndFlashModelMerged(model)) {
       model.addAttribute("user", new User());
-    } else {
-      model.mergeAttributes(((Model) flashModel).asMap());
     }
     return "users/new";
   }
@@ -119,7 +114,7 @@ public class UsersController extends CommonController<User> {
       @RequestParam(value = "admin", defaultValue = "false") boolean admin,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
-      redirectAttributes.addFlashAttribute("model", model);
+      this.addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/users/new");
     }
     return this.pathSelector
