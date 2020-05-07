@@ -1,10 +1,12 @@
 package homefinance.money.currency;
 
 import homefinance.common.CommonController;
+import homefinance.common.RequestBuffer;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,10 +27,14 @@ public class CurrencyController extends CommonController<Currency> {
 
   private final CurrencyService currencyService;
   private final CurrencyFacade currencyFacade;
+  private final RequestBuffer requestBuffer;
 
-  public CurrencyController(CurrencyService currencyService, CurrencyFacade currencyFacade) {
+  @Autowired
+  public CurrencyController(CurrencyService currencyService, CurrencyFacade currencyFacade,
+      RequestBuffer request) {
     this.currencyService = currencyService;
     this.currencyFacade = currencyFacade;
+    this.requestBuffer = request;
   }
 
   // TODO: 23.02.2020 RMACARI: refactor to avoid using entities on views, use models
@@ -54,13 +60,9 @@ public class CurrencyController extends CommonController<Currency> {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/currencies/new");
     }
-    try {
-      this.currencyService.add(currency);
-      return getRedirectURL(URL);
-    } catch (DuplicateFieldsException ex) {
-      error.rejectValue(ex.getField(), ex.getErrorCode());
-      return "currencies/new";
-    }
+    this.requestBuffer.setViewNameAndErrors("currencies/new", error);
+    this.currencyService.add(currency);
+    return getRedirectURL(URL);
   }
 
   @GetMapping("/{id}")

@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 @Service
@@ -54,4 +55,9 @@ public class CurrencyFacade {
     return currency;
   }
 
+  public void saveNew(CurrencyDto currencyDto) {
+    Assert.notNull(currencyDto, "currencyDto must be filled");
+    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
+    this.currencyService.add(currency);
+  }
 }

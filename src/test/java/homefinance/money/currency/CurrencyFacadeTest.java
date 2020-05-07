@@ -1,5 +1,6 @@
 package homefinance.money.currency;
 
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 
 import homefinance.common.exception.PageNotFoundException;
@@ -24,10 +25,12 @@ public class CurrencyFacadeTest {
   private Currency currency1;
   private Currency currency2;
   private CurrencyFacade currencyFacade;
+  private ModelMapper modelMapper;
 
   @Before
   public void setUp() {
-    this.currencyFacade = new CurrencyFacade(this.currencyServiceMock, new ModelMapper());
+    this.modelMapper = new ModelMapper();
+    this.currencyFacade = new CurrencyFacade(this.currencyServiceMock, this.modelMapper);
   }
 
   @Test
@@ -39,11 +42,8 @@ public class CurrencyFacadeTest {
     //when
     List<CurrencyDto> actualCurrenciesDto = this.currencyFacade.getAllCurrenciesDto();
     //then
-    BDDMockito.then(this.currencyServiceMock)
-        .should()
-        .getAllCurrencies();
-    BDDAssertions.then(actualCurrenciesDto.size())
-        .isEqualTo(2);
+    BDDMockito.then(this.currencyServiceMock).should().getAllCurrencies();
+    BDDAssertions.then(actualCurrenciesDto.size()).isEqualTo(2);
     this.testCurrency(this.currency1, actualCurrenciesDto.get(0));
     this.testCurrency(this.currency2, actualCurrenciesDto.get(1));
   }
@@ -72,11 +72,9 @@ public class CurrencyFacadeTest {
 
   @Test
   public void getAllCurrenciesDto_givenCurrencyServiceWillReturnNull_shouldReturnEmptyList() {
-    given(this.currencyServiceMock.getAllCurrencies())
-        .willReturn(null);
+    given(this.currencyServiceMock.getAllCurrencies()).willReturn(null);
     List<CurrencyDto> actualList = this.currencyFacade.getAllCurrenciesDto();
-    BDDAssertions.then(actualList.isEmpty())
-        .isTrue();
+    BDDAssertions.then(actualList.isEmpty()).isTrue();
   }
 
   @Test(expected = PageNotFoundException.class)
@@ -97,4 +95,25 @@ public class CurrencyFacadeTest {
     // then:
     this.testCurrency(this.currency1, actualValue);
   }
+
+  @Test
+  public void saveNew_givenCurrencyDtoIsFilled_shouldAddCurrency() {
+    // given:
+    CurrencyDto currencyDto = new CurrencyDto();
+    currencyDto.setName("name");
+    currencyDto.setCharCode("char-code");
+    currencyDto.setCode("code");
+    currencyDto.setId(1);
+    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
+    // when:
+    this.currencyFacade.saveNew(currencyDto);
+    // then:
+    BDDMockito.then(this.currencyServiceMock).should().add(refEq(currency));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void saveNew_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
+    this.currencyFacade.saveNew(null);
+  }
+
 }

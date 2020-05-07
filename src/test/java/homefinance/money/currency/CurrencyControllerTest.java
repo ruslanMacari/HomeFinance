@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
+import homefinance.common.RequestBuffer;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
@@ -44,7 +45,8 @@ public class CurrencyControllerTest {
 
   @Before
   public void setUp() {
-    this.controller = new CurrencyController(this.currencyServiceMock, this.currencyFacadeMock);
+    this.controller = new CurrencyController(this.currencyServiceMock, this.currencyFacadeMock,
+        mock(RequestBuffer.class));
     PathSelector pathSelector = new PathSelectorTest();
     this.controller.setPathSelector(pathSelector);
   }

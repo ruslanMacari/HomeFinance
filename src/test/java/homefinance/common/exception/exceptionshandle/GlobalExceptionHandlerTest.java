@@ -3,17 +3,18 @@ package homefinance.common.exception.exceptionshandle;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
+import homefinance.common.RequestBuffer;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GlobalAdviceTest {
+public class GlobalExceptionHandlerTest {
 
-  private GlobalAdvice advice;
+  private GlobalExceptionHandler advice;
   private Exception e;
 
   @Before
   public void init() {
-    advice = new GlobalAdvice();
+    advice = new GlobalExceptionHandler(mock(RequestBuffer.class));
     e = mock(Exception.class);
   }
 

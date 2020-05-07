@@ -1,5 +1,6 @@
 package homefinance.common.exception;
 
+import java.text.MessageFormat;
 import java.util.Map;
 import lombok.Generated;
 
@@ -8,9 +9,11 @@ public class DuplicateFieldsException extends RuntimeException {
   private String field;
   private String errorCode;
 
-  public DuplicateFieldsException(Map.Entry<String, String> duplicatedFieldsEntry) {
-    this.field = duplicatedFieldsEntry.getKey();
-    this.errorCode = duplicatedFieldsEntry.getValue();
+  public DuplicateFieldsException(Map.Entry<String, String> entry) {
+    super(MessageFormat
+        .format("Field: {0} is duplicated. ErrorCode: {1}", entry.getKey(), entry.getValue()));
+    this.field = entry.getKey();
+    this.errorCode = entry.getValue();
   }
 
   @Generated

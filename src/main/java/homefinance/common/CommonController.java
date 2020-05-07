@@ -22,19 +22,9 @@ public abstract class CommonController<T> {
     return REDIRECT + URL;
   }
 
-  @Autowired
-  public void setPathSelector(PathSelector pathSelector) {
-    this.pathSelector = pathSelector;
-  }
-
-  public void test(T t) {
-    if (t == null) {
-      throw new PageNotFoundException();
-    }
-  }
-
   // TODO: 20.04.2020 RMACARI: move to a separate class? ex: FlashModel
-  public static void addModelToRedirectAttributes(Model model, RedirectAttributes redirectAttributes) {
+  public static void addModelToRedirectAttributes(Model model,
+      RedirectAttributes redirectAttributes) {
     logger.debug("addModelToRedirectAttributes invoked");
     redirectAttributes.addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, model);
   }
@@ -48,4 +38,16 @@ public abstract class CommonController<T> {
       return true;
     }
   }
+
+  @Autowired
+  public void setPathSelector(PathSelector pathSelector) {
+    this.pathSelector = pathSelector;
+  }
+
+  public void test(T t) {
+    if (t == null) {
+      throw new PageNotFoundException();
+    }
+  }
+
 }
