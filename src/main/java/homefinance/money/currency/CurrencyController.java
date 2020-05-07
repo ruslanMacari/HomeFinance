@@ -54,14 +54,14 @@ public class CurrencyController extends CommonController<Currency> {
   }
 
   @PostMapping("/new")
-  public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
-      BindingResult error, RedirectAttributes redirectAttributes, Model model) {
-    if (error.hasErrors()) {
+  public String saveNew(@ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
+      BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
+    if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/currencies/new");
     }
-    this.requestBuffer.setViewNameAndErrors("currencies/new", error);
-    this.currencyService.add(currency);
+    this.requestBuffer.setViewNameAndErrors("currencies/new", errors);
+    this.currencyFacade.saveNew(currencyDto);
     return getRedirectURL(URL);
   }
 

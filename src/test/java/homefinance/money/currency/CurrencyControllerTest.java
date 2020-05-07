@@ -39,14 +39,20 @@ public class CurrencyControllerTest {
   @Mock
   private Currency currency;
   @Mock
-  private BindingResult result;
+  private CurrencyDto currencyDto;
+  @Mock
+  private BindingResult errors;
   @Mock
   private CurrencyFacade currencyFacadeMock;
+  @Mock
+  private RedirectAttributes redirectAttributesMock;
+  @Mock
+  private RequestBuffer requestBufferMock;
 
   @Before
   public void setUp() {
     this.controller = new CurrencyController(this.currencyServiceMock, this.currencyFacadeMock,
-        mock(RequestBuffer.class));
+        this.requestBufferMock);
     PathSelector pathSelector = new PathSelectorTest();
     this.controller.setPathSelector(pathSelector);
   }
@@ -92,21 +98,28 @@ public class CurrencyControllerTest {
 
   @Test
   public void saveNew_givenHasValidationErrors_shouldReturnRedirectToNewUrl() {
-    given(this.result.hasErrors()).willReturn(true);
-    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-    BDDAssertions
-        .then(this.controller.saveNew(this.currency, this.result, redirectAttributes, this.model))
-        .isEqualTo("redirect:/currencies/new");
-    BDDMockito.then(redirectAttributes).should()
+    // given:
+    given(this.errors.hasErrors()).willReturn(true);
+    // when:
+    String actual = this.controller
+        .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/currencies/new");
+    BDDMockito.then(this.redirectAttributesMock).should()
         .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
 
   @Test
   public void saveNew_givenHasNoValidationErrors_shouldReturnRedirectUrl() {
-    given(this.result.hasErrors()).willReturn(false);
-    BDDAssertions.then(this.controller
-        .saveNew(this.currency, this.result, mock(RedirectAttributes.class), this.model))
-        .isEqualTo("redirect:/currencies");
+    given(this.errors.hasErrors()).willReturn(false);
+    // when:
+    String actual = this.controller
+        .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
+    // then:
+    BDDAssertions.then(actual).isEqualTo("redirect:/currencies");
+    BDDMockito.then(this.currencyFacadeMock).should().saveNew(this.currencyDto);
+    BDDMockito.then(this.requestBufferMock).should().setViewNameAndErrors("currencies/new",
+        this.errors);
   }
 
   @Test
@@ -140,11 +153,11 @@ public class CurrencyControllerTest {
   @Test
   public void update_givenValidationHasErrors_thenShouldBeEqualToRedirectCurrenciesView() {
     // given:
-    given(this.result.hasErrors()).willReturn(true);
+    given(this.errors.hasErrors()).willReturn(true);
     given(this.currency.getId()).willReturn(555);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actualResult = this.controller.update(this.currency, this.result, redirectAttributes,
+    String actualResult = this.controller.update(this.currency, this.errors, redirectAttributes,
         this.model);
     // then:
     BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/555");
@@ -154,19 +167,19 @@ public class CurrencyControllerTest {
 
   @Test
   public void update_givenValidationHasNoErrorsAndGetPathWorkedOk_thenShouldBeEqualToRedirectUrl() {
-    given(this.result.hasErrors()).willReturn(false);
-    String actualResult = this.controller.update(this.currency, this.result, null, this.model);
+    given(this.errors.hasErrors()).willReturn(false);
+    String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
     BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies");
   }
 
   @Test
   public void update_givenValidationHasNoErrorsAndUpdateThrownDuplicateFieldsException_thenShouldBeEqualToRedirectCurrenciesView() {
     // given:
-    given(this.result.hasErrors()).willReturn(false);
+    given(this.errors.hasErrors()).willReturn(false);
     given(this.currency.getId()).willReturn(556);
     doThrow(DuplicateFieldsException.class).when(this.currencyServiceMock).update(this.currency);
     // when:
-    String actualResult = this.controller.update(this.currency, this.result, null, this.model);
+    String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
     // then:
     BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/556");
   }
