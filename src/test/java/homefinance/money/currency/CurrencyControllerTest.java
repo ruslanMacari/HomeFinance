@@ -166,22 +166,10 @@ public class CurrencyControllerTest {
   }
 
   @Test
-  public void update_givenValidationHasNoErrorsAndGetPathWorkedOk_thenShouldBeEqualToRedirectUrl() {
+  public void update_givenValidationHasNoErrors_thenReturnRedirectToCurrencies() {
     given(this.errors.hasErrors()).willReturn(false);
     String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
     BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies");
-  }
-
-  @Test
-  public void update_givenValidationHasNoErrorsAndUpdateThrownDuplicateFieldsException_thenShouldBeEqualToRedirectCurrenciesView() {
-    // given:
-    given(this.errors.hasErrors()).willReturn(false);
-    given(this.currency.getId()).willReturn(556);
-    doThrow(DuplicateFieldsException.class).when(this.currencyServiceMock).update(this.currency);
-    // when:
-    String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
-    // then:
-    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/556");
   }
 
   @Test

@@ -2,7 +2,6 @@ package homefinance.money.currency;
 
 import homefinance.common.CommonController;
 import homefinance.common.RequestBuffer;
-import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
 import javax.validation.Valid;
@@ -75,19 +74,15 @@ public class CurrencyController extends CommonController<Currency> {
 
   @PostMapping("/update")
   public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
-      BindingResult result, RedirectAttributes redirectAttributes, Model model) {
-    if (result.hasErrors()) {
+      BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
+    if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
       return this.getRedirectToCurrencyView(currency);
     }
+    this.requestBuffer.setViewNameAndErrors("currencies/view", errors);
     // TODO: 17.04.2020 RMACARI: move this to facade layer
-    try {
-      this.currencyService.update(currency);
-      return getRedirectURL(URL);
-    } catch (DuplicateFieldsException ex) {
-      result.rejectValue(ex.getField(), ex.getErrorCode());
-      return this.getRedirectToCurrencyView(currency);
-    }
+    this.currencyService.update(currency);
+    return getRedirectURL(URL);
   }
 
   private String getRedirectToCurrencyView(Currency currency) {
