@@ -1,6 +1,10 @@
 package homefinance.common;
 
 import homefinance.common.exception.DuplicateFieldsException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,45 +28,67 @@ public class HandleDuplicationExceptionAspect {
   private final RequestBuffer requestBuffer;
 
   @Autowired
-  public HandleDuplicationExceptionAspect(
-      RequestBuffer requestBuffer) {
+  public HandleDuplicationExceptionAspect(RequestBuffer requestBuffer) {
     this.requestBuffer = requestBuffer;
   }
 
   @Around("@annotation(homefinance.common.HandleDuplicationException)")
   public Object handleDuplication(ProceedingJoinPoint joinPoint) throws Throwable {
-
+    logger.debug("handleDuplication()");
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
-      Object[] args = joinPoint.getArgs();
-      Assert.notNull(args, "method must have arguments");
-      RedirectAttributes redirectAttributes = null;
-      Model model = null;
-      BindingResult bindingResult = null;
-      for (Object arg : args) {
-        if (arg instanceof BindingResult) {
-          bindingResult = (BindingResult) arg;
-        } else if (arg instanceof RedirectAttributes) {
-          redirectAttributes = (RedirectAttributes) arg;
-        } else if (arg instanceof Model) {
-          model = (Model) arg;
-        }
-      }
-      Assert.notNull(bindingResult, "Missing argument of type: " + BindingResult.class);
-      Assert.notNull(model, "Missing argument of type: " + Model.class);
-      Assert.notNull(redirectAttributes, "Missing argument of type: " + RedirectAttributes.class);
-      bindingResult.rejectValue(e.getField(), e.getErrorCode());
-      CommonController.addModelToRedirectAttributes(model, redirectAttributes);
-      MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-      HandleDuplicationException annotation = signature.getMethod()
-          .getAnnotation(HandleDuplicationException.class);
-      if (annotation.url().isEmpty()) {
-        return CommonController.getRedirectURL(this.requestBuffer.getUrl());
-      }
-      return CommonController.getRedirectURL(annotation.url());
-
+      List<Object> args = this.getArgs(joinPoint);
+      this.registerError(e, args);
+      this.addModelToRedirectAttributes(args);
+      return this.getRedirectUrl(joinPoint);
     }
+  }
+
+  private List<Object> getArgs(ProceedingJoinPoint joinPoint) {
+    Object[] args = joinPoint.getArgs();
+    Assert.notNull(args, "method must have arguments");
+    return Arrays.stream(args)
+        .collect(Collectors.toList());
+  }
+
+  private void registerError(DuplicateFieldsException e, List<Object> args) {
+    BindingResult errors = this
+        .getArgument(args, arg -> arg instanceof BindingResult, BindingResult.class);
+    errors.rejectValue(e.getField(), e.getErrorCode());
+  }
+
+  private <T> T getArgument(List<Object> args, Predicate<? super Object> condition, Class<T> type) {
+    T arg = type.cast(args.stream()
+        .filter(condition)
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Missing argument of type: " + type)));
+    this.secureFromReFinding(args, arg);
+    return arg;
+  }
+
+  private <T> void secureFromReFinding(List<Object> args, T arg) {
+    args.remove(arg);
+  }
+
+  private void addModelToRedirectAttributes(List<Object> args) {
+    RedirectAttributes redirectAttributes = this
+        .getArgument(args, arg -> arg instanceof RedirectAttributes, RedirectAttributes.class);
+    Model model = this.getArgument(args, arg -> arg instanceof Model, Model.class);
+    CommonController.addModelToRedirectAttributes(model, redirectAttributes);
+  }
+
+  private String getRedirectUrl(ProceedingJoinPoint joinPoint) {
+    String url = this.getAnnotationUrl(joinPoint);
+    return url.isEmpty() ? CommonController.getRedirectURL(this.requestBuffer.getUrl())
+        : CommonController.getRedirectURL(url);
+  }
+
+  private String getAnnotationUrl(ProceedingJoinPoint joinPoint) {
+    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    HandleDuplicationException annotation = signature.getMethod()
+        .getAnnotation(HandleDuplicationException.class);
+    return annotation.url();
   }
 
 }
