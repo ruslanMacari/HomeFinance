@@ -16,6 +16,12 @@ public class DuplicateFieldsException extends RuntimeException {
     this.errorCode = entry.getValue();
   }
 
+  public DuplicateFieldsException(String field, String errorCode) {
+    super(MessageFormat.format("Field: {0} is duplicated. ErrorCode: {1}", field, errorCode));
+    this.field = field;
+    this.errorCode = errorCode;
+  }
+
   @Generated
   public String getField() {
     return this.field;

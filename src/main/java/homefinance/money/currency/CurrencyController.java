@@ -2,6 +2,7 @@ package homefinance.money.currency;
 
 import homefinance.common.CommonController;
 import homefinance.common.RequestBuffer;
+import homefinance.common.HandleDuplicationException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
 import javax.validation.Valid;
@@ -52,6 +53,7 @@ public class CurrencyController extends CommonController<Currency> {
     return "currencies/new";
   }
 
+  @HandleDuplicationException(url = "/currencies/new")
   @PostMapping("/new")
   public String saveNew(@ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
@@ -59,7 +61,6 @@ public class CurrencyController extends CommonController<Currency> {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/currencies/new");
     }
-    this.requestBuffer.setViewNameAndErrors("currencies/new", errors);
     this.currencyFacade.saveNew(currencyDto);
     return getRedirectURL(URL);
   }
@@ -72,21 +73,22 @@ public class CurrencyController extends CommonController<Currency> {
     return "currencies/view";
   }
 
+  @HandleDuplicationException
   @PostMapping("/update")
   public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return this.getRedirectToCurrencyView(currency);
+      return getRedirectURL(this.getCurrencyViewUrl(currency));
     }
-    this.requestBuffer.setViewNameAndErrors("currencies/view", errors);
+    this.requestBuffer.setUrl(this.getCurrencyViewUrl(currency));
     // TODO: 17.04.2020 RMACARI: move this to facade layer
     this.currencyService.update(currency);
-    return getRedirectURL(URL);
+    return getRedirectURL(this.getCurrencyViewUrl(currency));
   }
 
-  private String getRedirectToCurrencyView(Currency currency) {
-    return getRedirectURL(URL + '/' + currency.getId());
+  private String getCurrencyViewUrl(Currency currency) {
+    return URL + '/' + currency.getId();
   }
 
   @DeleteMapping("/{id}")

@@ -118,8 +118,6 @@ public class CurrencyControllerTest {
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/currencies");
     BDDMockito.then(this.currencyFacadeMock).should().saveNew(this.currencyDto);
-    BDDMockito.then(this.requestBufferMock).should().setViewNameAndErrors("currencies/new",
-        this.errors);
   }
 
   @Test
@@ -168,8 +166,9 @@ public class CurrencyControllerTest {
   @Test
   public void update_givenValidationHasNoErrors_thenReturnRedirectToCurrencies() {
     given(this.errors.hasErrors()).willReturn(false);
+    given(this.currency.getId()).willReturn(78);
     String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
-    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies");
+    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/78");
   }
 
   @Test
