@@ -40,6 +40,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public void update(Currency currency) throws DuplicateFieldsException {
+    logger.debug("update({})", currency);
       this.constraintPersist
         .update(() -> this.currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
   }

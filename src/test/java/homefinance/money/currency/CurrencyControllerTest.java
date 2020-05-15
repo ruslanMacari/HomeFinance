@@ -1,14 +1,13 @@
 package homefinance.money.currency;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 import homefinance.common.RequestBuffer;
-import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.util.PathSelector;
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.money.currency.dto.CurrencyDto;
@@ -17,7 +16,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,7 +63,7 @@ public class CurrencyControllerTest {
     //when
     String actual = this.controller.list(this.model);
     //then
-    BDDAssertions.then(actual).isEqualTo("currencies/list");
+    then(actual).isEqualTo("currencies/list");
     BDDMockito.then(this.model).should().addAttribute("currencies", currencyDtoList);
   }
 
@@ -77,7 +75,7 @@ public class CurrencyControllerTest {
     // when:
     String actual = this.controller.openNew(this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("currencies/new");
+    then(actual).isEqualTo("currencies/new");
     BDDMockito.then(this.model)
         .should().addAttribute(BDDMockito.eq("currency"), BDDMockito.refEq(new CurrencyDto()));
   }
@@ -92,7 +90,7 @@ public class CurrencyControllerTest {
     // when:
     String actual = this.controller.openNew(this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("currencies/new");
+    then(actual).isEqualTo("currencies/new");
     BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
   }
 
@@ -104,7 +102,7 @@ public class CurrencyControllerTest {
     String actual = this.controller
         .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("redirect:/currencies/new");
+    then(actual).isEqualTo("redirect:/currencies/new");
     BDDMockito.then(this.redirectAttributesMock).should()
         .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
@@ -116,7 +114,7 @@ public class CurrencyControllerTest {
     String actual = this.controller
         .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("redirect:/currencies");
+    then(actual).isEqualTo("redirect:/currencies");
     BDDMockito.then(this.currencyFacadeMock).should().saveNew(this.currencyDto);
   }
 
@@ -130,7 +128,7 @@ public class CurrencyControllerTest {
     // when:
     String actual = this.controller.view(5, this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("currencies/view");
+    then(actual).isEqualTo("currencies/view");
     BDDMockito.then(this.model).should().addAttribute("currency", currencyDto);
   }
 
@@ -144,7 +142,7 @@ public class CurrencyControllerTest {
     // when:
     String actual = this.controller.view(5, this.model);
     // then:
-    BDDAssertions.then(actual).isEqualTo("currencies/view");
+    then(actual).isEqualTo("currencies/view");
     BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
   }
 
@@ -152,13 +150,13 @@ public class CurrencyControllerTest {
   public void update_givenValidationHasErrors_thenShouldBeEqualToRedirectCurrenciesView() {
     // given:
     given(this.errors.hasErrors()).willReturn(true);
-    given(this.currency.getId()).willReturn(555);
+    given(this.currencyDto.getId()).willReturn(555);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actualResult = this.controller.update(this.currency, this.errors, redirectAttributes,
+    String actualResult = this.controller.update(this.currencyDto, this.errors, redirectAttributes,
         this.model);
     // then:
-    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/555");
+    then(actualResult).isEqualTo("redirect:/currencies/555");
     BDDMockito.then(redirectAttributes)
         .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
   }
@@ -166,9 +164,9 @@ public class CurrencyControllerTest {
   @Test
   public void update_givenValidationHasNoErrors_thenReturnRedirectToCurrencies() {
     given(this.errors.hasErrors()).willReturn(false);
-    given(this.currency.getId()).willReturn(78);
-    String actualResult = this.controller.update(this.currency, this.errors, null, this.model);
-    BDDAssertions.then(actualResult).isEqualTo("redirect:/currencies/78");
+    given(this.currencyDto.getId()).willReturn(78);
+    String actualResult = this.controller.update(this.currencyDto, this.errors, null, this.model);
+    then(actualResult).isEqualTo("redirect:/currencies/78");
   }
 
   @Test
@@ -181,7 +179,7 @@ public class CurrencyControllerTest {
     // when:
     String actual = this.controller.fillCurrencies();
     // then:
-    BDDAssertions.then(actual).isEqualTo("redirect:/currencies");
+    then(actual).isEqualTo("redirect:/currencies");
     BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
   }
 

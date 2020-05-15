@@ -5,7 +5,6 @@ import homefinance.common.RequestBuffer;
 import homefinance.common.HandleDuplicationException;
 import homefinance.money.currency.dto.CurrencyDto;
 import homefinance.money.currency.entity.Currency;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,20 +74,19 @@ public class CurrencyController extends CommonController<Currency> {
 
   @HandleDuplicationException
   @PostMapping("/update")
-  public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) Currency currency,
+  public String update(@ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(this.getCurrencyViewUrl(currency));
+      return getRedirectURL(this.getCurrencyViewUrl(currencyDto));
     }
-    this.requestBuffer.setUrl(this.getCurrencyViewUrl(currency));
-    // TODO: 17.04.2020 RMACARI: move this to facade layer
-    this.currencyService.update(currency);
-    return getRedirectURL(this.getCurrencyViewUrl(currency));
+    this.requestBuffer.setUrl(this.getCurrencyViewUrl(currencyDto));
+    this.currencyFacade.update(currencyDto);
+    return getRedirectURL(this.getCurrencyViewUrl(currencyDto));
   }
 
-  private String getCurrencyViewUrl(Currency currency) {
-    return URL + '/' + currency.getId();
+  private String getCurrencyViewUrl(CurrencyDto currencyDto) {
+    return URL + '/' + currencyDto.getId();
   }
 
   @DeleteMapping("/{id}")
