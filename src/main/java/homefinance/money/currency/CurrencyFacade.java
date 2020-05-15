@@ -56,8 +56,20 @@ public class CurrencyFacade {
   }
 
   public void saveNew(CurrencyDto currencyDto) {
+    this.checkCurrencyDto(currencyDto);
+    this.currencyService.add(this.mapToCurrency(currencyDto));
+  }
+
+  private Currency mapToCurrency(CurrencyDto currencyDto) {
+    return this.modelMapper.map(currencyDto, Currency.class);
+  }
+
+  private void checkCurrencyDto(CurrencyDto currencyDto) {
     Assert.notNull(currencyDto, "currencyDto must be filled");
-    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
-    this.currencyService.add(currency);
+  }
+
+  public void update(CurrencyDto currencyDto) {
+    this.checkCurrencyDto(currencyDto);
+    this.currencyService.update(this.mapToCurrency(currencyDto));
   }
 }

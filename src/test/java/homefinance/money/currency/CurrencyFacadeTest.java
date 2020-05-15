@@ -99,11 +99,7 @@ public class CurrencyFacadeTest {
   @Test
   public void saveNew_givenCurrencyDtoIsFilled_shouldAddCurrency() {
     // given:
-    CurrencyDto currencyDto = new CurrencyDto();
-    currencyDto.setName("name");
-    currencyDto.setCharCode("char-code");
-    currencyDto.setCode("code");
-    currencyDto.setId(1);
+    CurrencyDto currencyDto = this.getCurrencyDto();
     Currency currency = this.modelMapper.map(currencyDto, Currency.class);
     // when:
     this.currencyFacade.saveNew(currencyDto);
@@ -111,9 +107,33 @@ public class CurrencyFacadeTest {
     BDDMockito.then(this.currencyServiceMock).should().add(refEq(currency));
   }
 
+  private CurrencyDto getCurrencyDto() {
+    CurrencyDto currencyDto = new CurrencyDto();
+    currencyDto.setName("name");
+    currencyDto.setCharCode("char-code");
+    currencyDto.setCode("code");
+    currencyDto.setId(1);
+    return currencyDto;
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void saveNew_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
     this.currencyFacade.saveNew(null);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void update_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
+    this.currencyFacade.update(null);
+  }
+
+  @Test
+  public void update_givenCurrencyDto_shouldUpdateCurrency() {
+    // given:
+    CurrencyDto currencyDto = this.getCurrencyDto();
+    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
+    // when:
+    this.currencyFacade.update(currencyDto);
+    // then:
+    BDDMockito.then(this.currencyServiceMock).should().update(currency);
+  }
 }
