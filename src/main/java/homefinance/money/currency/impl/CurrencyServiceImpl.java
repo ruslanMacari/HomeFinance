@@ -12,6 +12,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -47,7 +49,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public List<Currency> getAllCurrencies() {
-    return this.currencyRepository.findAll();
+    return this.currencyRepository.findAll(Sort.by(Direction.ASC, "charCode"));
   }
 
   @Override

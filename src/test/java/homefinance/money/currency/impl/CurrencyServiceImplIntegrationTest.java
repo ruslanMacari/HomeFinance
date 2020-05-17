@@ -1,5 +1,6 @@
 package homefinance.money.currency.impl;
 
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -18,7 +19,6 @@ import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegratio
   public void testAdd() {
     Currency currency = new Currency("USD", "840", "usd");
     this.currencyService.add(currency);
-    BDDAssertions.then(this.currencyService.getAllCurrencies().size()).isEqualTo(1);
+    then(this.currencyService.getAllCurrencies().size()).isEqualTo(1);
     try {
       this.currencyService.add(new Currency("USD", "840", "usd"));
       fail("Exception must be thrown");
@@ -64,17 +64,26 @@ public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegratio
     currency.setName(newName);
     this.currencyService.update(currency);
     Currency found = this.currencyService.getByID(currency.getId());
-    BDDAssertions.then(found.getName()).isEqualTo(newName);
+    then(found.getName()).isEqualTo(newName);
   }
 
   @Test
-  public void testList() {
+  public void getAllCurrencies_given3Currencies_thenGetAllCurrenciesSortedByCharCode() {
+    // given:
+    Currency currency1 = new Currency("test1", "001", "test1");
+    Currency currency2 = new Currency("test2", "002", "test2");
+    Currency currency3 = new Currency("test3", "003", "test3");
     List<Currency> list = new ArrayList<>(3);
-    list.add(new Currency("test1", "001", "test"));
-    list.add(new Currency("test2", "002", "test"));
-    list.add(new Currency("test3", "003", "test"));
+    list.add(currency2);
+    list.add(currency3);
+    list.add(currency1);
     list.forEach(currency -> this.currencyService.add(currency));
-    BDDAssertions.then(this.currencyService.getAllCurrencies().size()).isEqualTo(3);
+    // when:
+    List<Currency> actual = this.currencyService.getAllCurrencies();
+    then(actual.size()).isEqualTo(3);
+    then(actual.get(0)).isEqualTo(currency1);
+    then(actual.get(1)).isEqualTo(currency2);
+    then(actual.get(2)).isEqualTo(currency3);
   }
 
   @Test
