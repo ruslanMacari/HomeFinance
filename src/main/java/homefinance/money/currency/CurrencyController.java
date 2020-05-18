@@ -7,6 +7,7 @@ import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 import homefinance.common.HandleDuplicationException;
 import homefinance.common.RequestBuffer;
 import homefinance.money.currency.dto.CurrencyDto;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +52,7 @@ public class CurrencyController {
 
   @HandleDuplicationException(url = "/currencies/new")
   @PostMapping("/new")
-  public String saveNew(@ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
+  public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
@@ -71,7 +72,7 @@ public class CurrencyController {
 
   @HandleDuplicationException
   @PostMapping("/update")
-  public String update(@ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
+  public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
