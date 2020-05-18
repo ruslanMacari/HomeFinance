@@ -170,8 +170,12 @@ public class CurrencyControllerTest {
   }
 
   @Test
-  public void delete() {
-    assertThat(this.controller.delete(1), is("redirect:/currencies"));
+  public void delete_shouldReturnRedirectToCurrenciesAndInvokeDelete() {
+    // when:
+    String actual = this.controller.delete(1);
+    // then:
+    then(actual).isEqualTo("redirect:/currencies");
+    BDDMockito.then(this.currencyFacadeMock).should().delete(1);
   }
 
   @Test
