@@ -6,10 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import homefinance.common.RequestBuffer;
-import homefinance.common.util.PathSelector;
-import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.money.currency.dto.CurrencyDto;
-import homefinance.money.currency.entity.Currency;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,17 +24,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RunWith(MockitoJUnitRunner.class)
 public class CurrencyControllerTest {
 
-  @Mock
-  private CurrencyService currencyServiceMock;
   private CurrencyController controller;
   @Mock
-  private Model model;
+  private Model modelMock;
   @Mock
-  private Currency currency;
+  private CurrencyDto currencyDtoMock;
   @Mock
-  private CurrencyDto currencyDto;
-  @Mock
-  private BindingResult errors;
+  private BindingResult errorsMock;
   @Mock
   private CurrencyFacade currencyFacadeMock;
   @Mock
@@ -47,10 +40,7 @@ public class CurrencyControllerTest {
 
   @Before
   public void setUp() {
-    this.controller = new CurrencyController(this.currencyServiceMock, this.currencyFacadeMock,
-        this.requestBufferMock);
-    PathSelector pathSelector = new PathSelectorTest();
-    this.controller.setPathSelector(pathSelector);
+    this.controller = new CurrencyController(this.currencyFacadeMock, this.requestBufferMock);
   }
 
   @Test
@@ -59,22 +49,22 @@ public class CurrencyControllerTest {
     List<CurrencyDto> currencyDtoList = Arrays.asList(mock(CurrencyDto.class), null);
     given(this.currencyFacadeMock.getAllCurrenciesDto()).willReturn(currencyDtoList);
     //when
-    String actual = this.controller.list(this.model);
+    String actual = this.controller.list(this.modelMock);
     //then
     then(actual).isEqualTo("currencies/list");
-    BDDMockito.then(this.model).should().addAttribute("currencies", currencyDtoList);
+    BDDMockito.then(this.modelMock).should().addAttribute("currencies", currencyDtoList);
   }
 
   @Test
   public void openNew_givenModelHasNoFlashModel_shouldReturnNewTemplateAndAddCurrencyAttributeWithNewCurrencyDto() {
     // given:
     Map<String, Object> map = new HashMap<>();
-    given(this.model.asMap()).willReturn(map);
+    given(this.modelMock.asMap()).willReturn(map);
     // when:
-    String actual = this.controller.openNew(this.model);
+    String actual = this.controller.openNew(this.modelMock);
     // then:
     then(actual).isEqualTo("currencies/new");
-    BDDMockito.then(this.model)
+    BDDMockito.then(this.modelMock)
         .should().addAttribute(BDDMockito.eq("currency"), BDDMockito.refEq(new CurrencyDto()));
   }
 
@@ -84,36 +74,38 @@ public class CurrencyControllerTest {
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
-    given(this.model.asMap()).willReturn(map);
+    given(this.modelMock.asMap()).willReturn(map);
     // when:
-    String actual = this.controller.openNew(this.model);
+    String actual = this.controller.openNew(this.modelMock);
     // then:
     then(actual).isEqualTo("currencies/new");
-    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
+    BDDMockito.then(this.modelMock).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
   public void saveNew_givenHasValidationErrors_shouldReturnRedirectToNewUrl() {
     // given:
-    given(this.errors.hasErrors()).willReturn(true);
+    given(this.errorsMock.hasErrors()).willReturn(true);
     // when:
     String actual = this.controller
-        .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
+        .saveNew(this.currencyDtoMock, this.errorsMock, this.redirectAttributesMock,
+            this.modelMock);
     // then:
     then(actual).isEqualTo("redirect:/currencies/new");
     BDDMockito.then(this.redirectAttributesMock).should()
-        .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
+        .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.modelMock);
   }
 
   @Test
   public void saveNew_givenHasNoValidationErrors_shouldReturnRedirectUrl() {
-    given(this.errors.hasErrors()).willReturn(false);
+    given(this.errorsMock.hasErrors()).willReturn(false);
     // when:
     String actual = this.controller
-        .saveNew(this.currencyDto, this.errors, this.redirectAttributesMock, this.model);
+        .saveNew(this.currencyDtoMock, this.errorsMock, this.redirectAttributesMock,
+            this.modelMock);
     // then:
     then(actual).isEqualTo("redirect:/currencies");
-    BDDMockito.then(this.currencyFacadeMock).should().saveNew(this.currencyDto);
+    BDDMockito.then(this.currencyFacadeMock).should().saveNew(this.currencyDtoMock);
   }
 
   @Test
@@ -122,12 +114,12 @@ public class CurrencyControllerTest {
     CurrencyDto currencyDto = mock(CurrencyDto.class);
     given(this.currencyFacadeMock.getCurrencyDtoById(5)).willReturn(currencyDto);
     Map<String, Object> map = new HashMap<>();
-    given(this.model.asMap()).willReturn(map);
+    given(this.modelMock.asMap()).willReturn(map);
     // when:
-    String actual = this.controller.view(5, this.model);
+    String actual = this.controller.view(5, this.modelMock);
     // then:
     then(actual).isEqualTo("currencies/view");
-    BDDMockito.then(this.model).should().addAttribute("currency", currencyDto);
+    BDDMockito.then(this.modelMock).should().addAttribute("currency", currencyDto);
   }
 
   @Test
@@ -136,34 +128,36 @@ public class CurrencyControllerTest {
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
-    given(this.model.asMap()).willReturn(map);
+    given(this.modelMock.asMap()).willReturn(map);
     // when:
-    String actual = this.controller.view(5, this.model);
+    String actual = this.controller.view(5, this.modelMock);
     // then:
     then(actual).isEqualTo("currencies/view");
-    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
+    BDDMockito.then(this.modelMock).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
   public void update_givenValidationHasErrors_thenShouldBeEqualToRedirectCurrenciesView() {
     // given:
-    given(this.errors.hasErrors()).willReturn(true);
-    given(this.currencyDto.getId()).willReturn(555);
+    given(this.errorsMock.hasErrors()).willReturn(true);
+    given(this.currencyDtoMock.getId()).willReturn(555);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actualResult = this.controller.update(this.currencyDto, this.errors, redirectAttributes,
-        this.model);
+    String actualResult = this.controller
+        .update(this.currencyDtoMock, this.errorsMock, redirectAttributes,
+            this.modelMock);
     // then:
     then(actualResult).isEqualTo("redirect:/currencies/555");
     BDDMockito.then(redirectAttributes)
-        .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
+        .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.modelMock);
   }
 
   @Test
   public void update_givenValidationHasNoErrors_thenReturnRedirectToCurrencies() {
-    given(this.errors.hasErrors()).willReturn(false);
-    given(this.currencyDto.getId()).willReturn(78);
-    String actualResult = this.controller.update(this.currencyDto, this.errors, null, this.model);
+    given(this.errorsMock.hasErrors()).willReturn(false);
+    given(this.currencyDtoMock.getId()).willReturn(78);
+    String actualResult = this.controller
+        .update(this.currencyDtoMock, this.errorsMock, null, this.modelMock);
     then(actualResult).isEqualTo("redirect:/currencies/78");
   }
 

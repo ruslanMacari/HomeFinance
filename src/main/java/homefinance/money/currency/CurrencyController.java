@@ -1,10 +1,12 @@
 package homefinance.money.currency;
 
-import homefinance.common.CommonController;
-import homefinance.common.RequestBuffer;
+import static homefinance.common.CommonController.addModelToRedirectAttributes;
+import static homefinance.common.CommonController.getRedirectURL;
+import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
+
 import homefinance.common.HandleDuplicationException;
+import homefinance.common.RequestBuffer;
 import homefinance.money.currency.dto.CurrencyDto;
-import homefinance.money.currency.entity.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,24 +21,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(CurrencyController.URL)
-public class CurrencyController extends CommonController<Currency> {
+public class CurrencyController {
 
   public static final String URL = "/currencies";
   public static final String CURRENCY_ATTRIBUTE_NAME = "currency";
 
-  private final CurrencyService currencyService;
   private final CurrencyFacade currencyFacade;
   private final RequestBuffer requestBuffer;
 
   @Autowired
-  public CurrencyController(CurrencyService currencyService, CurrencyFacade currencyFacade,
-      RequestBuffer request) {
-    this.currencyService = currencyService;
+  public CurrencyController(CurrencyFacade currencyFacade, RequestBuffer request) {
     this.currencyFacade = currencyFacade;
     this.requestBuffer = request;
   }
-
-  // TODO: 23.02.2020 RMACARI: refactor to avoid using entities on views, use models
 
   @GetMapping()
   public String list(Model model) {
