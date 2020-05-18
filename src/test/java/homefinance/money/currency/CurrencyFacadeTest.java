@@ -136,4 +136,12 @@ public class CurrencyFacadeTest {
     // then:
     BDDMockito.then(this.currencyServiceMock).should().update(currency);
   }
+
+  @Test
+  public void delete_givenId_thenShouldDeleteById() {
+    // when:
+    this.currencyFacade.delete(5);
+    // then:
+    BDDMockito.then(this.currencyServiceMock).should().delete(5);
+  }
 }

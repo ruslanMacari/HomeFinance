@@ -170,8 +170,8 @@ public class CurrencyControllerTest {
   }
 
   @Test
-  public void testDeleteUser() {
-    assertThat(this.controller.deleteUser(1), is("redirect:/currencies"));
+  public void delete() {
+    assertThat(this.controller.delete(1), is("redirect:/currencies"));
   }
 
   @Test

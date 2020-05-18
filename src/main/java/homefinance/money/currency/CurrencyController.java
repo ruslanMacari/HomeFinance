@@ -90,7 +90,7 @@ public class CurrencyController extends CommonController<Currency> {
   }
 
   @DeleteMapping("/{id}")
-  public String deleteUser(@PathVariable("id") Integer id) {
+  public String delete(@PathVariable("id") int id) {
     this.currencyService.delete(id);
     return getRedirectURL(URL);
   }

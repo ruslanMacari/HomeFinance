@@ -72,4 +72,8 @@ public class CurrencyFacade {
     this.checkCurrencyDto(currencyDto);
     this.currencyService.update(this.mapToCurrency(currencyDto));
   }
+
+  public void delete(int id) {
+    this.currencyService.delete(id);
+  }
 }
