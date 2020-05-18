@@ -144,4 +144,12 @@ public class CurrencyFacadeTest {
     // then:
     BDDMockito.then(this.currencyServiceMock).should().delete(5);
   }
+
+  @Test
+  public void fillDistinctCurrencies_shouldInvokeFillDistinctCurrencies() {
+    // when:
+    this.currencyFacade.fillDistinctCurrencies();
+    // then:
+    BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
+  }
 }

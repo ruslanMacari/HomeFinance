@@ -2,8 +2,6 @@ package homefinance.money.currency;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -184,7 +182,7 @@ public class CurrencyControllerTest {
     String actual = this.controller.fillCurrencies();
     // then:
     then(actual).isEqualTo("redirect:/currencies");
-    BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
+    BDDMockito.then(this.currencyFacadeMock).should().fillDistinctCurrencies();
   }
 
 }

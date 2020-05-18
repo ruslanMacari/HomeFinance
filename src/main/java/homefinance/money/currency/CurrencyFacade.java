@@ -76,4 +76,8 @@ public class CurrencyFacade {
   public void delete(int id) {
     this.currencyService.delete(id);
   }
+
+  public void fillDistinctCurrencies() {
+    this.currencyService.fillDistinctCurrencies();
+  }
 }

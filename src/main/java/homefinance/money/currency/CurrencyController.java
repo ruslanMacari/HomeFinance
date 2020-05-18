@@ -97,7 +97,7 @@ public class CurrencyController extends CommonController<Currency> {
 
   @GetMapping("/fill")
   public String fillCurrencies() {
-    this.currencyService.fillDistinctCurrencies();
+    this.currencyFacade.fillDistinctCurrencies();
     return getRedirectURL(URL);
   }
 
