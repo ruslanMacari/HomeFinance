@@ -33,18 +33,19 @@ public class LoginController {
   public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-  private UserService userService;
+  private final UserService userService;
   private PathSelector pathSelector;
+
+  @Autowired
+  public LoginController(UserService userService) {
+    this.userService = userService;
+  }
 
   @Autowired
   public void setPathSelector(PathSelector pathSelector) {
     this.pathSelector = pathSelector;
   }
 
-  @Autowired
-  public void setUserService(UserService userService) {
-    this.userService = userService;
-  }
 
   @GetMapping()
   public String login(Model model) {
@@ -58,6 +59,7 @@ public class LoginController {
     return URL_PATH;
   }
 
+  // TODO: 21.05.2020 RMACARI: move to a bean
   private boolean isAuthenticated() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     return auth != null
