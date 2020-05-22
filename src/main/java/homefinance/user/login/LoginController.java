@@ -1,14 +1,12 @@
 package homefinance.user.login;
 
+import homefinance.common.CommonController;
 import homefinance.user.service.UserService;
 import homefinance.common.util.PathSelector;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,21 +22,21 @@ public class LoginController {
 
   public static final String URL = "/login";
   public static final String REDIRECT = "redirect:";
-  public static final String REDIRECT_ROOT = REDIRECT + "/";
   public static final String REDIRECT_URL = REDIRECT + URL;
   public static final String DIRECTORY = "auth";
-  public static final String URL_PATH = DIRECTORY + URL;
   public static final String REGISTRATION = "/registration";
   public static final String REGISTRATION_PATH = DIRECTORY + REGISTRATION;
   public static final String REDIRECT_REGISTRATION = REDIRECT + URL + REGISTRATION;
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
   private final UserService userService;
+  private final LoginFacade loginFacade;
   private PathSelector pathSelector;
 
   @Autowired
-  public LoginController(UserService userService) {
+  public LoginController(UserService userService, LoginFacade loginFacade) {
     this.userService = userService;
+    this.loginFacade = loginFacade;
   }
 
   @Autowired
@@ -46,25 +44,16 @@ public class LoginController {
     this.pathSelector = pathSelector;
   }
 
-
   @GetMapping()
   public String login(Model model) {
-    if (this.isAuthenticated()) {
-      logger.debug("isAuthenticated = true, REDIRECT_ROOT = {}", REDIRECT_ROOT);
-      return REDIRECT_ROOT;
+    if (this.loginFacade.isAuthenticated()) {
+      // TODO: 22.05.2020 RMACARI: move logging to aspect
+      logger.debug("User is authenticated redirect to home");
+      return CommonController.getRedirectURL("/");
     }
-    logger.debug("isAuthenticated = false, URL_PATH = {}", URL_PATH);
     model.addAttribute("listUsers", this.userService.getSimpleUsers());
     model.addAttribute("user", new UserLoginDto());
-    return URL_PATH;
-  }
-
-  // TODO: 21.05.2020 RMACARI: move to a bean
-  private boolean isAuthenticated() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    return auth != null
-        && auth.isAuthenticated()
-        && !(auth instanceof AnonymousAuthenticationToken);
+    return "auth/login";
   }
 
   @GetMapping(REGISTRATION)

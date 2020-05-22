@@ -1,7 +1,9 @@
 package homefinance.user.login;
 
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,9 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,29 +32,32 @@ public class LoginControllerTest {
   private BindingResult bindingResultMock;
   @Mock
   private Model modelMock;
+  @Mock
+  private LoginFacade loginFacadeMock;
 
   @Before
   public void setUp() {
-    this.loginController = new LoginController(mock(UserService.class));
+    this.loginController = new LoginController(mock(UserService.class), this.loginFacadeMock);
   }
 
   @Test
-  public void testAuthorization() {
-    SecurityContext contextBefore = SecurityContextHolder.getContext();
-    Authentication auth = this.getMockAuth();
-    when(auth.isAuthenticated()).thenReturn(true);
-    assertThat(this.loginController.login(this.modelMock), is(LoginController.REDIRECT_ROOT));
-    when(auth.isAuthenticated()).thenReturn(false);
-    assertThat(this.loginController.login(this.modelMock), is(LoginController.URL_PATH));
-    SecurityContextHolder.setContext(contextBefore);
+  public void login_givenIsAuthenticated_thenRedirectToHome() {
+    // given:
+    given(this.loginFacadeMock.isAuthenticated()).willReturn(true);
+    // when:
+    String actual = this.loginController.login(this.modelMock);
+    // then:
+    then(actual).isEqualTo("redirect:/");
   }
 
-  private Authentication getMockAuth() {
-    SecurityContext context = mock(SecurityContext.class);
-    SecurityContextHolder.setContext(context);
-    Authentication auth = mock(Authentication.class);
-    when(context.getAuthentication()).thenReturn(auth);
-    return auth;
+  @Test
+  public void login_givenIsNotAuthenticated_thenReturnLogin() {
+    // given:
+    given(this.loginFacadeMock.isAuthenticated()).willReturn(false);
+    // when:
+    String actual = this.loginController.login(this.modelMock);
+    // then:
+    then(actual).isEqualTo("auth/login");
   }
 
   @Test
