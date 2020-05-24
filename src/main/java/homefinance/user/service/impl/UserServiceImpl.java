@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getSimpleUsers() {
+    // TODO: 24.05.2020 RMACARI: change to return only ordered user names
     return this.userRepository.getSimpleUsers();
   }
 

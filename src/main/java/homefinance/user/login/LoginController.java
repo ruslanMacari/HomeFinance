@@ -51,7 +51,7 @@ public class LoginController {
       logger.debug("User is authenticated redirect to home");
       return CommonController.getRedirectURL("/");
     }
-    model.addAttribute("listUsers", this.userService.getSimpleUsers());
+    model.addAttribute("userNames", this.loginFacade.getSimpleUsersNames());
     model.addAttribute("user", new UserLoginDto());
     return "auth/login";
   }

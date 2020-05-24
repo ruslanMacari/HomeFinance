@@ -11,11 +11,14 @@ import static org.mockito.Mockito.when;
 
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.user.service.UserService;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
@@ -54,10 +57,13 @@ public class LoginControllerTest {
   public void login_givenIsNotAuthenticated_thenReturnLogin() {
     // given:
     given(this.loginFacadeMock.isAuthenticated()).willReturn(false);
+    List<String> userNames = Arrays.asList("user1", "user2");
+    given(this.loginFacadeMock.getSimpleUsersNames()).willReturn(userNames);
     // when:
     String actual = this.loginController.login(this.modelMock);
     // then:
     then(actual).isEqualTo("auth/login");
+    BDDMockito.then(this.modelMock).should().addAttribute("userNames", userNames);
   }
 
   @Test

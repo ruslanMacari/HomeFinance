@@ -4,11 +4,16 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import homefinance.user.entity.User;
+import homefinance.user.service.UserService;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,10 +25,14 @@ public class LoginFacadeTest {
   private LoginFacade loginFacade;
   @Mock
   private Authentication authMock;
+  @Mock
+  private UserService userServiceMock;
+  @Mock
+  private ModelMapper modelMapper;
 
   @Before
   public void setUp() {
-    this.loginFacade = new LoginFacade();
+    this.loginFacade = new LoginFacade(this.userServiceMock, this.modelMapper);
   }
 
   @Test
@@ -71,5 +80,20 @@ public class LoginFacadeTest {
     boolean actual = this.loginFacade.isAuthenticated();
     // then:
     then(actual).isFalse();
+  }
+
+  @Test
+  public void getSimpleUsersNames_givenUser_shouldReturnUserNameList() {
+    // given:
+    User user = mock(User.class);
+    given(user.getName()).willReturn("user1");
+    List<User> simpleUsers = Collections.singletonList(user);
+    given(this.userServiceMock.getSimpleUsers()).willReturn(simpleUsers);
+
+    // when:
+    List<String> actual = this.loginFacade.getSimpleUsersNames();
+    // then:
+    then(actual.size()).isEqualTo(1);
+    then(actual.get(0)).isEqualTo("user1");
   }
 }
