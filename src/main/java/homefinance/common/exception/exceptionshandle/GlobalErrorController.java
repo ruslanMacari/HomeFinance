@@ -22,7 +22,6 @@ public class GlobalErrorController implements ErrorController {
       return "resource-not-found";
     }
     return "exception";
-
   }
 
   @Override

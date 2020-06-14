@@ -1,15 +1,13 @@
 package homefinance.user.login;
 
+import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import homefinance.common.util.impl.PathSelectorTest;
+import homefinance.common.CommonController;
 import homefinance.user.service.UserService;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,18 +35,20 @@ public class LoginControllerTest {
   private Model modelMock;
   @Mock
   private LoginFacade loginFacadeMock;
+  @Mock
+  private RedirectAttributes redirectAttributesMock;
 
   @Before
   public void setUp() {
-    this.loginController = new LoginController(mock(UserService.class), this.loginFacadeMock);
+    loginController = new LoginController(mock(UserService.class), loginFacadeMock);
   }
 
   @Test
   public void login_givenIsAuthenticated_thenRedirectToHome() {
     // given:
-    given(this.loginFacadeMock.isAuthenticated()).willReturn(true);
+    given(loginFacadeMock.isAuthenticated()).willReturn(true);
     // when:
-    String actual = this.loginController.login(this.modelMock);
+    String actual = loginController.login(modelMock);
     // then:
     then(actual).isEqualTo("redirect:/");
   }
@@ -56,42 +56,60 @@ public class LoginControllerTest {
   @Test
   public void login_givenIsNotAuthenticated_thenReturnLogin() {
     // given:
-    given(this.loginFacadeMock.isAuthenticated()).willReturn(false);
+    given(loginFacadeMock.isAuthenticated()).willReturn(false);
     List<String> userNames = Arrays.asList("user1", "user2");
-    given(this.loginFacadeMock.getSimpleUsersNames()).willReturn(userNames);
+    given(loginFacadeMock.getSimpleUsersNames()).willReturn(userNames);
     // when:
-    String actual = this.loginController.login(this.modelMock);
+    String actual = loginController.login(modelMock);
     // then:
     then(actual).isEqualTo("auth/login");
-    BDDMockito.then(this.modelMock).should().addAttribute("userNames", userNames);
+    BDDMockito.then(modelMock).should().addAttribute("userNames", userNames);
   }
 
   @Test
-  public void testRegistrationGet() {
-    assertThat(this.loginController.registration(this.modelMock),
-        is(LoginController.REGISTRATION_PATH));
-    verify(this.modelMock, times(1)).addAttribute("user", new UserLoginDto());
+  public void openRegistration_givenModelHasNoFlashModel_thenAddAttribute() {
+    // given:
+    given(modelMock.asMap()).willReturn(new HashMap<>());
+    // when:
+    String actual = loginController.openRegistration(modelMock);
+    // then:
+    then(actual).isEqualTo("auth/registration");
+    BDDMockito.then(modelMock).should().addAttribute(eq("user"), refEq(new UserLoginDto()));
+  }
+
+  @Test
+  public void openRegistration_givenModelHasFlashModel_thenMergeAttributesFromFlashModel() {
+    // given:
     Map<String, Object> map = new HashMap<>();
-    map.put("model", this.modelMock);
-    when(this.modelMock.asMap()).thenReturn(map);
-    this.loginController.registration(this.modelMock);
-    verify(this.modelMock, times(1)).mergeAttributes(map);
+    Model flashModel = mock(Model.class);
+    map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
+    given(modelMock.asMap()).willReturn(map);
+    // when:
+    String actual = loginController.openRegistration(modelMock);
+    // then:
+    then(actual).isEqualTo("auth/registration");
+    BDDMockito.then(modelMock).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
-  public void testRegistrationPost() {
-    when(this.bindingResultMock.hasErrors()).thenReturn(true);
-    RedirectAttributes attributes = mock(RedirectAttributes.class);
-    String result = this.loginController
-        .registration(this.userMock, this.bindingResultMock, attributes, this.modelMock);
-    assertThat(result, is(LoginController.REDIRECT_REGISTRATION));
-    when(this.bindingResultMock.hasErrors()).thenReturn(false);
+  public void registerUser_givenValidationHasErrors_thenReturnRedirectToRegistration() {
+    // given:
+    given(bindingResultMock.hasErrors()).willReturn(true);
+    // when:
+    String result = loginController.registerUser(userMock, bindingResultMock, redirectAttributesMock, modelMock);
+    // then:
+    then(result).isEqualTo("redirect:/login/registration");
+    BDDMockito.then(redirectAttributesMock).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, modelMock);
+  }
 
-    PathSelectorTest pathSelector = new PathSelectorTest();
-    this.loginController.setPathSelector(pathSelector);
-    result = this.loginController
-        .registration(this.userMock, this.bindingResultMock, attributes, this.modelMock);
-    assertThat(result, is(pathSelector.pathIfOk));
+  @Test
+  public void registerUser_givenValidationHasNoErrors_returnRedirectUrl() {
+    // given:
+    given(bindingResultMock.hasErrors()).willReturn(false);
+    // when:
+    String result = loginController.registerUser(userMock, bindingResultMock, redirectAttributesMock, modelMock);
+    // then:
+    then(result).isEqualTo(CommonController.getRedirectURL(LoginController.URL));
   }
 
 }
