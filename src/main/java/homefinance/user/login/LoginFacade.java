@@ -32,9 +32,12 @@ public class LoginFacade {
   }
 
   public List<String> getSimpleUsersNames() {
-    return this.userService.getSimpleUsers().stream()
+    return userService.getSimpleUsers().stream()
         .map(User::getName)
         .collect(Collectors.toList());
   }
 
+  public void registerUser(UserLoginDto user) {
+    userService.registerUser(user.getName(), user.getPassword());
+  }
 }

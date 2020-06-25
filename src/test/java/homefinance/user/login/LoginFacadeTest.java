@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
@@ -28,27 +29,27 @@ public class LoginFacadeTest {
   @Mock
   private UserService userServiceMock;
   @Mock
-  private ModelMapper modelMapper;
+  private ModelMapper modelMapperMock;
 
   @Before
   public void setUp() {
-    this.loginFacade = new LoginFacade(this.userServiceMock, this.modelMapper);
+    loginFacade = new LoginFacade(userServiceMock, modelMapperMock);
   }
 
   @Test
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsTrue_thenReturnTrue() {
     // given:
-    this.mockAuthContext();
-    given(this.authMock.isAuthenticated()).willReturn(true);
+    mockAuthContext();
+    given(authMock.isAuthenticated()).willReturn(true);
     // when:
-    boolean actual = this.loginFacade.isAuthenticated();
+    boolean actual = loginFacade.isAuthenticated();
     // then:
     then(actual).isTrue();
   }
 
   private void mockAuthContext() {
-    SecurityContext context = this.getSecurityContext();
-    given(context.getAuthentication()).willReturn(this.authMock);
+    SecurityContext context = getSecurityContext();
+    given(context.getAuthentication()).willReturn(authMock);
   }
 
   private SecurityContext getSecurityContext() {
@@ -60,10 +61,10 @@ public class LoginFacadeTest {
   @Test
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsFalse_thenReturnFalse() {
     // given:
-    this.mockAuthContext();
-    given(this.authMock.isAuthenticated()).willReturn(false);
+    mockAuthContext();
+    given(authMock.isAuthenticated()).willReturn(false);
     // when:
-    boolean actual = this.loginFacade.isAuthenticated();
+    boolean actual = loginFacade.isAuthenticated();
     // then:
     then(actual).isFalse();
   }
@@ -71,13 +72,12 @@ public class LoginFacadeTest {
   @Test
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsTrueAndTypeIsAnonymousAuthenticationToken_thenReturnFalse() {
     // given:
-    SecurityContext context = this.getSecurityContext();
-    AnonymousAuthenticationToken anonymousAuthenticationTokenMock = mock(
-        AnonymousAuthenticationToken.class);
+    SecurityContext context = getSecurityContext();
+    AnonymousAuthenticationToken anonymousAuthenticationTokenMock = mock(AnonymousAuthenticationToken.class);
     given(context.getAuthentication()).willReturn(anonymousAuthenticationTokenMock);
     given(anonymousAuthenticationTokenMock.isAuthenticated()).willReturn(true);
     // when:
-    boolean actual = this.loginFacade.isAuthenticated();
+    boolean actual = loginFacade.isAuthenticated();
     // then:
     then(actual).isFalse();
   }
@@ -88,12 +88,24 @@ public class LoginFacadeTest {
     User user = mock(User.class);
     given(user.getName()).willReturn("user1");
     List<User> simpleUsers = Collections.singletonList(user);
-    given(this.userServiceMock.getSimpleUsers()).willReturn(simpleUsers);
+    given(userServiceMock.getSimpleUsers()).willReturn(simpleUsers);
 
     // when:
-    List<String> actual = this.loginFacade.getSimpleUsersNames();
+    List<String> actual = loginFacade.getSimpleUsersNames();
     // then:
     then(actual.size()).isEqualTo(1);
     then(actual.get(0)).isEqualTo("user1");
+  }
+
+  @Test
+  public void registerUser_givenUser_shouldRegisterUserByNameAndPassword() {
+    // given:
+    UserLoginDto userLoginDto = mock(UserLoginDto.class);
+    given(userLoginDto.getName()).willReturn("test name");
+    given(userLoginDto.getPassword()).willReturn("test pass");
+    // when:
+    loginFacade.registerUser(userLoginDto);
+    // then:
+    BDDMockito.then(userServiceMock).should().registerUser("test name", "test pass");
   }
 }
