@@ -10,7 +10,7 @@ public class UserLoginDto {
 
   @Size(min = 3, message = "{MinSize.user.name}")
   public String getName() {
-    return this.name;
+    return name;
   }
 
   public void setName(String name) {
@@ -19,7 +19,7 @@ public class UserLoginDto {
 
   @Size(min = 4, message = "{MinSize.user.password}")
   public String getPassword() {
-    return this.password;
+    return password;
   }
 
   public void setPassword(String password) {
@@ -29,8 +29,8 @@ public class UserLoginDto {
   @Override
   public String toString() {
     return "UserLoginModel{" +
-        "name='" + this.name + '\'' +
-        ", password='" + this.password + '\'' +
+        "name='" + name + '\'' +
+        ", password='" + password + '\'' +
         '}';
   }
 
@@ -39,16 +39,16 @@ public class UserLoginDto {
     if (this == o) {
       return true;
     }
-    if (o == null || this.getClass() != o.getClass()) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
     UserLoginDto that = (UserLoginDto) o;
-    return Objects.equals(this.name, that.name) &&
-        Objects.equals(this.password, that.password);
+    return Objects.equals(name, that.name) &&
+        Objects.equals(password, that.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.name, this.password);
+    return Objects.hash(name, password);
   }
 }

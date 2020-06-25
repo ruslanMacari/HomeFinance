@@ -4,7 +4,6 @@ import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 
 import homefinance.common.CommonController;
 import homefinance.common.HandleDuplicationException;
-import homefinance.user.service.UserService;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +24,10 @@ public class LoginController {
   public static final String URL = "/login";
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-  private final UserService userService;
   private final LoginFacade loginFacade;
 
   @Autowired
-  public LoginController(UserService userService, LoginFacade loginFacade) {
-    this.userService = userService;
+  public LoginController(LoginFacade loginFacade) {
     this.loginFacade = loginFacade;
   }
 
@@ -58,12 +55,11 @@ public class LoginController {
   @PostMapping("/registration")
   public String registerUser(@Valid @ModelAttribute("user") UserLoginDto user, BindingResult errors,
       RedirectAttributes redirectAttributes, Model model) {
-    // TODO: 15.03.2020 RMACARI: test validation
     if (errors.hasErrors()) {
       CommonController.addModelToRedirectAttributes(model, redirectAttributes);
       return CommonController.getRedirectURL(URL + "/registration");
     }
-    userService.registerUser(user.getName(), user.getPassword());
+    loginFacade.registerUser(user);
     return CommonController.getRedirectURL(URL);
   }
 

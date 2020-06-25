@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import homefinance.common.CommonController;
-import homefinance.user.service.UserService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,7 @@ public class LoginControllerTest {
 
   @Before
   public void setUp() {
-    loginController = new LoginController(mock(UserService.class), loginFacadeMock);
+    loginController = new LoginController(loginFacadeMock);
   }
 
   @Test
@@ -110,6 +109,7 @@ public class LoginControllerTest {
     String result = loginController.registerUser(userMock, bindingResultMock, redirectAttributesMock, modelMock);
     // then:
     then(result).isEqualTo(CommonController.getRedirectURL(LoginController.URL));
+    BDDMockito.then(loginFacadeMock).should().registerUser(userMock);
   }
 
 }
