@@ -1,6 +1,7 @@
 package homefinance.common.exception.exceptionshandle;
 
 import java.util.Objects;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -13,15 +14,15 @@ public class GlobalErrorController implements ErrorController {
 
   @RequestMapping("/error")
   public String handleError(HttpServletRequest request, Model model) {
-    Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-    Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-    model.addAttribute("errorMessage", exception);
+    model.addAttribute("errorMessage", request.getAttribute(RequestDispatcher.ERROR_EXCEPTION));
+    Integer statusCode = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
     model.addAttribute("statusCode", statusCode);
-    if (Objects.nonNull(statusCode)
-        && HttpStatus.NOT_FOUND.value() == statusCode) {
-      return "resource-not-found";
-    }
-    return "exception";
+    return isStatusNotFound(statusCode) ? "resource-not-found" : "exception";
+  }
+
+  private boolean isStatusNotFound(Integer statusCode) {
+    return Objects.nonNull(statusCode)
+        && HttpStatus.NOT_FOUND.value() == statusCode;
   }
 
   @Override
