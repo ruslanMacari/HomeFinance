@@ -27,53 +27,53 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public class UsersControllerTest {
 
-  private UsersController usersController;
-  private Model model;
-  private UserService userService;
-  private PasswordEncoder encoder;
-  private String rootname;
-  private BindingResult result;
-  private User user;
-  private Validator validator;
-  private PathSelector pathSelector;
+  private final UsersController usersController;
+  private final Model model;
+  private final UserService userService;
+  private final PasswordEncoder encoder;
+  private final String rootname;
+  private final BindingResult result;
+  private final User user;
+  private final Validator validator;
+  private final PathSelector pathSelector;
 
   public UsersControllerTest() {
-    this.userService = mock(UserService.class);
-    this.encoder = mock(PasswordEncoder.class);
-    this.rootname = "root";
-    this.validator = mock(Validator.class);
-    this.usersController = new UsersController();
-    this.usersController.setUserService(this.userService);
-    this.usersController.setEncoder(this.encoder);
-    this.usersController.setRootname(this.rootname);
-    this.model = mock(Model.class);
-    this.result = mock(BindingResult.class);
-    this.user = mock(User.class);
-    this.pathSelector = new PathSelectorTest();
-    this.usersController.setPathSelector(this.pathSelector);
+    userService = mock(UserService.class);
+    encoder = mock(PasswordEncoder.class);
+    rootname = "root";
+    validator = mock(Validator.class);
+    usersController = new UsersController();
+    usersController.setUserService(userService);
+    usersController.setEncoder(encoder);
+    usersController.setRootname(rootname);
+    model = mock(Model.class);
+    result = mock(BindingResult.class);
+    user = mock(User.class);
+    pathSelector = new PathSelectorTest();
+    usersController.setPathSelector(pathSelector);
   }
 
   @Test
   public void openList_shouldReturnUserListTemplate() {
-    BDDAssertions.then(this.usersController.openList(this.model)).isEqualTo("users/list");
+    BDDAssertions.then(usersController.openList(model)).isEqualTo("users/list");
   }
 
   @Test(expected = PageNotFoundException.class)
   public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
     // given:
-    given(this.userService.getById(150)).willReturn(this.user);
-    given(this.user.getName()).willReturn(this.rootname);
+    given(userService.getById(150)).willReturn(user);
+    given(user.getName()).willReturn(rootname);
     // when:
-    this.usersController.openView(150, this.model);
+    usersController.openView(150, model);
   }
 
   @Test
   public void openView_givenUserIsNotRoot_thenOpenView() {
     // given:
-    given(this.user.getName()).willReturn("test");
-    given(this.userService.getById(100)).willReturn(this.user);
+    given(user.getName()).willReturn("test");
+    given(userService.getById(100)).willReturn(user);
     // when:
-    String actual = this.usersController.openView(100, this.model);
+    String actual = usersController.openView(100, model);
     // then:
     BDDAssertions.then(actual).isEqualTo("users/view");
   }
@@ -81,9 +81,9 @@ public class UsersControllerTest {
   @Test(expected = PageNotFoundException.class)
   public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
     // given:
-    given(this.userService.getById(100)).willReturn(null);
+    given(userService.getById(100)).willReturn(null);
     // when:
-    this.usersController.openView(100, this.model);
+    usersController.openView(100, model);
   }
 
   @Test
@@ -92,22 +92,21 @@ public class UsersControllerTest {
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
-    given(this.model.asMap()).willReturn(map);
+    given(model.asMap()).willReturn(map);
     // when:
-    String actual = this.usersController.openView(10, this.model);
+    String actual = usersController.openView(10, model);
     // then:
     BDDAssertions.then(actual).isEqualTo("users/view");
-    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
+    BDDMockito.then(model).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
   public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
     // given:
-    given(this.result.hasErrors()).willReturn(false);
-    given(this.userService.getById(100)).willReturn(this.user);
+    given(result.hasErrors()).willReturn(false);
+    given(userService.getById(100)).willReturn(user);
     // when:
-    String actual = this.usersController.update(this.user, this.result, 100, true, true,
-        mock(RedirectAttributes.class), this.model);
+    String actual = usersController.update(user, result, 100, true, true, mock(RedirectAttributes.class), model);
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/users");
   }
@@ -115,33 +114,30 @@ public class UsersControllerTest {
   @Test
   public void update_givenResultHasNoErrorsAndUpdateThrownException_thenRedirectToUsersViewUrl() {
     // given:
-    given(this.result.hasErrors()).willReturn(false);
-    given(this.userService.getById(100)).willReturn(this.user);
-    doThrow(DuplicateFieldsException.class).when(this.userService).update(this.user);
+    given(result.hasErrors()).willReturn(false);
+    given(userService.getById(100)).willReturn(user);
+    doThrow(DuplicateFieldsException.class).when(userService).update(user);
     // when:
-    String actual = this.usersController.update(this.user, this.result, 100, true, true,
-        mock(RedirectAttributes.class), this.model);
+    String actual = usersController.update(user, result, 100, true, true, mock(RedirectAttributes.class), model);
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/users/" + 100);
   }
 
   @Test
   public void update_givenResultHasErrors_thenRedirectToView() {
-    this.update_givenResultHasErrorsAndId_thenRedirectToViewId(100);
-    this.update_givenResultHasErrorsAndId_thenRedirectToViewId(50);
+    update_givenResultHasErrorsAndId_thenRedirectToViewId(100);
+    update_givenResultHasErrorsAndId_thenRedirectToViewId(50);
   }
 
   private void update_givenResultHasErrorsAndId_thenRedirectToViewId(int id) {
     // given:
-    given(this.result.hasErrors()).willReturn(true);
+    given(result.hasErrors()).willReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actual = this.usersController
-        .update(this.user, this.result, id, true, true, redirectAttributes, this.model);
+    String actual = usersController.update(user, result, id, true, true, redirectAttributes, model);
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/users/" + id);
-    BDDMockito.then(redirectAttributes)
-        .should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, this.model);
+    BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, model);
   }
 
   @Test
@@ -150,30 +146,29 @@ public class UsersControllerTest {
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
-    given(this.model.asMap()).willReturn(map);
+    given(model.asMap()).willReturn(map);
     // when:
-    String actual = this.usersController.newUser(this.model);
+    String actual = usersController.newUser(model);
     // then:
     BDDAssertions.then(actual).isEqualTo("users/new");
-    BDDMockito.then(this.model).should().mergeAttributes(flashModel.asMap());
+    BDDMockito.then(model).should().mergeAttributes(flashModel.asMap());
   }
 
   @Test
   public void newUser_givenIsNotRedirect_thenAddUserToModel() {
     // when:
-    String actual = this.usersController.newUser(this.model);
+    String actual = usersController.newUser(model);
     // then:
     BDDAssertions.then(actual).isEqualTo("users/new");
-    BDDMockito.then(this.model).should().addAttribute(eq("user"), refEq(new User()));
+    BDDMockito.then(model).should().addAttribute(eq("user"), refEq(new User()));
   }
 
   @Test
   public void save_givenResultHasNoErrors_thenRedirectToUsers() {
     // given:
-    given(this.result.hasErrors()).willReturn(false);
+    given(result.hasErrors()).willReturn(false);
     // when:
-    String actual = this.usersController
-        .save(this.user, this.result, true, mock(RedirectAttributes.class), null);
+    String actual = usersController.save(user, result, true, mock(RedirectAttributes.class), null);
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/users");
   }
@@ -181,20 +176,18 @@ public class UsersControllerTest {
   @Test
   public void save_givenResultHasErrors_thenRedirectToNew() {
     // given:
-    given(this.result.hasErrors()).willReturn(true);
+    given(result.hasErrors()).willReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actual = this.usersController
-        .save(this.user, this.result, true, redirectAttributes, null);
+    String actual = usersController.save(user, result, true, redirectAttributes, null);
     // then:
     BDDAssertions.then(actual).isEqualTo("redirect:/users/new");
-    BDDMockito.then(redirectAttributes).should()
-        .addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, null);
+    BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, null);
   }
 
   @Test
   public void testDeleteUser() {
-    assertEquals("redirect:/users", this.usersController.deleteUser(1));
+    assertEquals("redirect:/users", usersController.deleteUser(1));
   }
 
 }

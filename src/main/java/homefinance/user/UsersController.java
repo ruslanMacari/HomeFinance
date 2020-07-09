@@ -50,7 +50,7 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping()
   public String openList(Model model) {
-    List<User> users = this.userService.usersExceptRoot();
+    List<User> users = userService.usersExceptRoot();
     model.addAttribute("users", users);
     return "users/list";
   }
@@ -58,16 +58,16 @@ public class UsersController extends CommonController<User> {
   @GetMapping("/{id}")
   public String openView(@PathVariable("id") Integer id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
-      User user = this.userService.getById(id);
-      this.testUser(user);
+      User user = userService.getById(id);
+      testUser(user);
       model.addAttribute("user", user);
     }
     return "users/view";
   }
 
   private void testUser(User user) {
-    this.test(user);
-    if (user.getName().equals(this.rootname)) {
+    test(user);
+    if (user.getName().equals(rootname)) {
       throw new PageNotFoundException();
     }
   }
@@ -83,7 +83,7 @@ public class UsersController extends CommonController<User> {
       return getRedirectURL(URL + '/' + id);
     }
     try {
-      this.userService.update(this.getUser(id, user, changePassword, isAdmin));
+      userService.update(getUser(id, user, changePassword, isAdmin));
       return getRedirectURL(URL);
     } catch (DuplicateFieldsException ex) {
       result.rejectValue(ex.getField(), ex.getErrorCode());
@@ -92,10 +92,10 @@ public class UsersController extends CommonController<User> {
   }
 
   private User getUser(Integer id, User user, boolean changePassword, boolean isAdmin) {
-    User foundUser = this.userService.getById(id);
+    User foundUser = userService.getById(id);
     foundUser.setName(user.getName());
     if (changePassword) {
-      foundUser.setPassword(this.encoder.encode(user.getPassword()));
+      foundUser.setPassword(encoder.encode(user.getPassword()));
     }
     foundUser.setOneRole(isAdmin ? Role.ADMIN : Role.USER);
     return foundUser;
@@ -117,23 +117,23 @@ public class UsersController extends CommonController<User> {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/users/new");
     }
-    return this.pathSelector
-        .setActionOk(() -> this.add(user, admin))
+    return pathSelector
+        .setActionOk(() -> add(user, admin))
         .setPaths(getRedirectURL(URL), "/users/new")
         .setErrors(result)
         .getPath();
   }
 
   private void add(User user, boolean admin) {
-    user.setPassword(this.encoder.encode(user.getPassword()));
+    user.setPassword(encoder.encode(user.getPassword()));
     user.setEnabled(true);
     user.setOneRole(admin ? Role.ADMIN : Role.USER);
-    this.userService.add(user);
+    userService.add(user);
   }
 
   @DeleteMapping("/{id}")
   public String deleteUser(@PathVariable("id") Integer id) {
-    this.userService.delete(id);
+    userService.delete(id);
     return getRedirectURL(URL);
   }
 
