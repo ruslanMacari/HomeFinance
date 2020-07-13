@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
   private String rootName;
   private String rootPassword;
   private PasswordEncoder encoder;
+  private ConstraintPersist constraintPersist;
 
   @Value("${db.password}")
   public void setRootPassword(String rootPassword) {
@@ -57,7 +58,15 @@ public class UserServiceImpl implements UserService {
     add(root);
   }
 
-  private ConstraintPersist constraintPersist;
+  @Override
+  public User getByName(String name) {
+    return userRepository.findByName(name);
+  }
+
+  @Override
+  public User add(User user) throws DuplicateFieldsException {
+    return (User) constraintPersist.add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+  }
 
   @Autowired
   public void setConstraintPersist(ConstraintPersist constraintPersist) {
@@ -67,12 +76,6 @@ public class UserServiceImpl implements UserService {
   @Autowired
   public void setUserRepository(UserRepository userRepository) {
     this.userRepository = userRepository;
-  }
-
-  @Override
-  public User add(User user) throws DuplicateFieldsException {
-    return (User) constraintPersist
-        .add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
@@ -97,11 +100,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<User> listLimit(Integer limit) {
     return userRepository.listLimit(new PageRequest(0, limit));
-  }
-
-  @Override
-  public User getByName(String name) {
-    return userRepository.findByName(name);
   }
 
   @Override

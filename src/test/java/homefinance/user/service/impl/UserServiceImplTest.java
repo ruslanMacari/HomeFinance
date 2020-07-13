@@ -8,9 +8,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import homefinance.common.util.ConstraintPersist;
 import homefinance.user.entity.User;
 import homefinance.user.service.repository.UserRepository;
-import homefinance.common.util.ConstraintPersist;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
 
-  private UserServiceImpl userService;
   private final String rootname = "root";
   private final String rootpassword = "pass";
+  private UserServiceImpl userService;
   private PasswordEncoder encoder;
   private User user;
   @Mock
