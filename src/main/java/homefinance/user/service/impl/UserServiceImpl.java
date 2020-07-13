@@ -43,18 +43,18 @@ public class UserServiceImpl implements UserService {
 
   @PostConstruct
   public void init() {
-    this.createRootUserIfNotExist();
+    createRootUserIfNotExist();
   }
 
   private void createRootUserIfNotExist() {
-    if (this.getByName(this.rootName) != null) {
+    if (getByName(rootName) != null) {
       return;
     }
     User root = new User();
-    root.setName(this.rootName);
-    root.setPassword(this.encoder.encode(this.rootPassword));
+    root.setName(rootName);
+    root.setPassword(encoder.encode(rootPassword));
     root.setOneRole(Role.ADMIN);
-    this.add(root);
+    add(root);
   }
 
   private ConstraintPersist constraintPersist;
@@ -71,64 +71,64 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User add(User user) throws DuplicateFieldsException {
-    return (User) this.constraintPersist
-        .add(() -> this.userRepository.saveAndFlush(user), user.getConstraintsMap());
+    return (User) constraintPersist
+        .add(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public void registerUser(String name, String password) {
     User user = new User(name);
-    user.setPassword(this.encoder.encode(password));
+    user.setPassword(encoder.encode(password));
     user.setEnabled(true);
     user.setOneRole(Role.USER);
-    this.add(user);
+    add(user);
   }
 
   @Override
   public void update(User user) {
-    this.constraintPersist.update(() -> this.userRepository.saveAndFlush(user), user.getConstraintsMap());
+    constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public List<User> list() {
-    return this.userRepository.findAll();
+    return userRepository.findAll();
   }
 
   @Override
   public List<User> listLimit(Integer limit) {
-    return this.userRepository.listLimit(new PageRequest(0, limit));
+    return userRepository.listLimit(new PageRequest(0, limit));
   }
 
   @Override
   public User getByName(String name) {
-    return this.userRepository.findByName(name);
+    return userRepository.findByName(name);
   }
 
   @Override
   public void delete(Integer id) {
-    this.userRepository.deleteById(id);
+    userRepository.deleteById(id);
   }
 
   @Override
   public User getByNameAndPassword(String name, String password) {
-    return this.userRepository.findByNameAndPassword(name, password);
+    return userRepository.findByNameAndPassword(name, password);
   }
 
   @Override
   public List<User> getSimpleUsers() {
     // TODO: 24.05.2020 RMACARI: change to return only ordered user names
-    return this.userRepository.getSimpleUsers();
+    return userRepository.getSimpleUsers();
   }
 
   @Override
   public List<User> usersExceptRoot() {
-    List<User> users = this.userRepository.usersExceptRoot(this.rootName);
+    List<User> users = userRepository.usersExceptRoot(rootName);
     return Objects.nonNull(users) ? users : new ArrayList<>();
   }
 
   @Override
   public User getById(Integer id) {
-    return this.userRepository.findById(id).orElse(null);
+    return userRepository.findById(id).orElse(null);
   }
 
 }
