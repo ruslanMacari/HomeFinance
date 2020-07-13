@@ -1,15 +1,16 @@
 package homefinance.user.service.impl;
 
+import homefinance.common.exception.DuplicateFieldsException;
+import homefinance.common.util.ConstraintPersist;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.user.service.repository.UserRepository;
-import homefinance.common.util.ConstraintPersist;
-import homefinance.common.exception.DuplicateFieldsException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -121,7 +122,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> usersExceptRoot() {
-    return this.userRepository.usersExceptRoot(this.rootName);
+    List<User> users = this.userRepository.usersExceptRoot(this.rootName);
+    return Objects.nonNull(users) ? users : new ArrayList<>();
   }
 
   @Override
