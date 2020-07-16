@@ -42,9 +42,7 @@ public class UsersControllerTest {
     encoder = mock(PasswordEncoder.class);
     rootname = "root";
     validator = mock(Validator.class);
-    usersController = new UsersController();
-    usersController.setUserService(userService);
-    usersController.setEncoder(encoder);
+    usersController = new UsersController(userService, encoder);
     usersController.setRootname(rootname);
     model = mock(Model.class);
     result = mock(BindingResult.class);

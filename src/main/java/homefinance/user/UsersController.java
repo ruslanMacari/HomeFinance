@@ -29,23 +29,19 @@ public class UsersController extends CommonController<User> {
 
   public static final String URL = "/users";
 
-  private UserService userService;
-  private PasswordEncoder encoder;
+  private final UserService userService;
+  private final PasswordEncoder encoder;
   private String rootname;
+
+  @Autowired
+  public UsersController(UserService userService, PasswordEncoder encoder) {
+    this.userService = userService;
+    this.encoder = encoder;
+  }
 
   @Value("${db.username}")
   public void setRootname(String rootname) {
     this.rootname = rootname;
-  }
-
-  @Autowired
-  public void setUserService(UserService userService) {
-    this.userService = userService;
-  }
-
-  @Autowired
-  public void setEncoder(PasswordEncoder encoder) {
-    this.encoder = encoder;
   }
 
   @GetMapping()
