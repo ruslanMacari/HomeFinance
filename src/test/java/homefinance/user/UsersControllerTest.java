@@ -14,7 +14,9 @@ import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,17 +44,26 @@ public class UsersControllerTest {
   private BindingResult resultMock;
   @Mock
   private User userMock;
+  @Mock
+  private UserFacade userFacadeMock;
 
   @Before
   public void setUp() {
-    usersController = new UsersController(userServiceMock, encoderMock);
+    usersController = new UsersController(userServiceMock, encoderMock, userFacadeMock);
     usersController.setRootname(rootname);
     usersController.setPathSelector(new PathSelectorTest());
   }
 
   @Test
-  public void openList_shouldReturnUserListTemplate() {
-    then(usersController.openList(modelMock)).isEqualTo("users/list");
+  public void openList_givenUsersWithoutRoot_shouldReturnUserListTemplateAndAddUsersWithoutRoot() {
+    // given:
+    List<UserDto> usersDto = Collections.singletonList(mock(UserDto.class));
+    given(userFacadeMock.getUsersWithoutRoot()).willReturn(usersDto);
+    // when:
+    String actual = usersController.openList(modelMock);
+    // then:
+    then(actual).isEqualTo("users/list");
+    BDDMockito.then(modelMock).should().addAttribute("users", usersDto);
   }
 
   @Test(expected = PageNotFoundException.class)

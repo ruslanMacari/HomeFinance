@@ -4,11 +4,15 @@ import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserFacade {
 
   private final UserService userService;
 
+  @Autowired
   public UserFacade(UserService userService) {
     this.userService = userService;
   }

@@ -31,12 +31,14 @@ public class UsersController extends CommonController<User> {
 
   private final UserService userService;
   private final PasswordEncoder encoder;
+  private final UserFacade userFacade;
   private String rootname;
 
   @Autowired
-  public UsersController(UserService userService, PasswordEncoder encoder) {
+  public UsersController(UserService userService, PasswordEncoder encoder, UserFacade userFacade) {
     this.userService = userService;
     this.encoder = encoder;
+    this.userFacade = userFacade;
   }
 
   @Value("${db.username}")
@@ -46,8 +48,7 @@ public class UsersController extends CommonController<User> {
 
   @GetMapping()
   public String openList(Model model) {
-    List<User> users = userService.usersExceptRoot();
-    model.addAttribute("users", users);
+    model.addAttribute("users", userFacade.getUsersWithoutRoot());
     return "users/list";
   }
 
