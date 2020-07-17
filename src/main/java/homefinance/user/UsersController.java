@@ -116,7 +116,7 @@ public class UsersController extends CommonController<User> {
     }
     return pathSelector
         .setActionOk(() -> add(user, admin))
-        .setPaths(getRedirectURL(URL), "/users/new")
+        .setPaths(getRedirectURL(URL), "users/new")
         .setErrors(result)
         .getPath();
   }
