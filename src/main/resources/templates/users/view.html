@@ -26,8 +26,8 @@
             </div>
             <div class="form__input-group">       
                 <label class="form__label" for="admin" th:text="#{admin} + ':'"/>
-                <input th:if="${user.hasAdmin()}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled checked/>
-                <input th:unless="${user.hasAdmin()}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled/>
+                <input th:if="${user.admin}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled checked/>
+                <input th:unless="${user.admin}" class="form__checkbox disabledJs" id="admin" name="admin" value="true" type="checkbox" disabled/>
             </div>
             <th:block th:insert="fragments/unlock-save"/>
         </form>

@@ -17,12 +17,12 @@
     </div>
     <div class="table__body">
         <th:block th:each="user, iterator : ${users}">
-            <div class="table__row" th:with="admin=${user.hasAdmin()}">
+            <div class="table__row">
                 <div class="table__cell" th:text="${iterator.count}"/>
                 <div class="table__cell" th:text="${user.id}"/>
                 <div class="table__cell" th:text="${user.name}"/>
-                <div th:if="${admin}" class="table__cell" th:text="#{yes}"/>
-                <div th:if="${!admin}" class="table__cell" th:text="#{no}"/>
+                <div th:if="${user.admin}" class="table__cell" th:text="#{yes}"/>
+                <div th:if="${!user.admin}" class="table__cell" th:text="#{no}"/>
                 <div class="table__cell">
                     <a class="button" th:href="@{../users/} + ${user.id}" th:text="#{details}"/>
                 </div>
