@@ -18,7 +18,7 @@ public interface UserService {
 
   User getByName(String name);
 
-  User getById(Integer id);
+  User getById(int id);
 
   void delete(Integer id);
 

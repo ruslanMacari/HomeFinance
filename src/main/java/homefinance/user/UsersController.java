@@ -53,7 +53,7 @@ public class UsersController extends CommonController<User> {
   }
 
   @GetMapping("/{id}")
-  public String openView(@PathVariable("id") Integer id, Model model) {
+  public String openView(@PathVariable("id") int id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
       User user = userService.getById(id);
       testUser(user);

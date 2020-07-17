@@ -3,6 +3,7 @@ package homefinance.user;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,4 +34,8 @@ public class UserFacade {
   }
 
 
+  public UserDto getUserById(int id) {
+    User user = userService.getById(id);
+    return Objects.isNull(user) ? null : userToUserDto(user);
+  }
 }
