@@ -114,10 +114,10 @@ public class UsersControllerTest {
   public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
+    given(userDtoMock.getId()).willReturn(100);
     given(userServiceMock.getById(100)).willReturn(userMock);
     // when:
-    String actual = usersController
-        .update(userMock, resultMock, 100, true, true, mock(RedirectAttributes.class), modelMock);
+    String actual = usersController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
     // then:
     then(actual).isEqualTo("redirect:/users");
   }
@@ -126,11 +126,11 @@ public class UsersControllerTest {
   public void update_givenResultHasNoErrorsAndUpdateThrownException_thenRedirectToUsersViewUrl() {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
+    given(userDtoMock.getId()).willReturn(100);
     given(userServiceMock.getById(100)).willReturn(userMock);
     doThrow(DuplicateFieldsException.class).when(userServiceMock).update(userMock);
     // when:
-    String actual = usersController
-        .update(userMock, resultMock, 100, true, true, mock(RedirectAttributes.class), modelMock);
+    String actual = usersController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
     // then:
     then(actual).isEqualTo("redirect:/users/" + 100);
   }
@@ -144,9 +144,10 @@ public class UsersControllerTest {
   private void update_givenResultHasErrorsAndId_thenRedirectToViewId(int id) {
     // given:
     given(resultMock.hasErrors()).willReturn(true);
+    given(userDtoMock.getId()).willReturn(id);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actual = usersController.update(userMock, resultMock, id, true, true, redirectAttributes, modelMock);
+    String actual = usersController.update(userDtoMock, resultMock, redirectAttributes, modelMock);
     // then:
     then(actual).isEqualTo("redirect:/users/" + id);
     BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, modelMock);

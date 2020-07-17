@@ -70,31 +70,28 @@ public class UsersController extends CommonController<User> {
   }
 
   @PostMapping("/{id}")
-  public String update(@Valid @ModelAttribute("user") User user, BindingResult result,
-      @PathVariable("id") int id,
-      @RequestParam(value = "changePassword", defaultValue = "false") boolean changePassword,
-      @RequestParam(value = "admin", defaultValue = "false") boolean isAdmin,
+  public String update(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(URL + '/' + id);
+      return getRedirectURL(URL + '/' + user.getId());
     }
     try {
-      userService.update(getUser(id, user, changePassword, isAdmin));
+      userService.update(getUser(user));
       return getRedirectURL(URL);
     } catch (DuplicateFieldsException ex) {
       result.rejectValue(ex.getField(), ex.getErrorCode());
-      return getRedirectURL(URL + '/' + id);
+      return getRedirectURL(URL + '/' + user.getId());
     }
   }
 
-  private User getUser(Integer id, User user, boolean changePassword, boolean isAdmin) {
-    User foundUser = userService.getById(id);
+  private User getUser(UserDto user) {
+    User foundUser = userService.getById(user.getId());
     foundUser.setName(user.getName());
-    if (changePassword) {
+    if (user.isPasswordChanged()) {
       foundUser.setPassword(encoder.encode(user.getPassword()));
     }
-    foundUser.setOneRole(isAdmin ? Role.ADMIN : Role.USER);
+    foundUser.setOneRole(user.isAdmin() ? Role.ADMIN : Role.USER);
     return foundUser;
   }
 

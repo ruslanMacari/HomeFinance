@@ -31,7 +31,7 @@
     }
 
     var passwordItem = selector.getElement("#password");
-    var changePassword = selector.getElement("#changePassword");
+    var changePassword = selector.getElement("#passwordChanged");
     var changePasswordEvent = function () {
         if (changePassword.checked) {
             passwordItem.removeAttribute(disabled);
