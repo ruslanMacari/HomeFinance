@@ -6,7 +6,7 @@ import homefinance.common.exception.PageNotFoundException;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
-import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,16 +55,16 @@ public class UsersController extends CommonController<User> {
   @GetMapping("/{id}")
   public String openView(@PathVariable("id") int id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
-      User user = userService.getById(id);
-      testUser(user);
+      UserDto user = userFacade.getUserById(id);
+      checkUserIsNotRoot(user);
       model.addAttribute("user", user);
     }
     return "users/view";
   }
 
-  private void testUser(User user) {
-    test(user);
-    if (user.getName().equals(rootname)) {
+  private void checkUserIsNotRoot(UserDto user) {
+    if (Objects.isNull(user)
+        || user.getName().equals(rootname)) {
       throw new PageNotFoundException();
     }
   }

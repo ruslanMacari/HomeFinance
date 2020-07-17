@@ -45,6 +45,8 @@ public class UsersControllerTest {
   @Mock
   private User userMock;
   @Mock
+  private UserDto userDtoMock;
+  @Mock
   private UserFacade userFacadeMock;
 
   @Before
@@ -69,8 +71,8 @@ public class UsersControllerTest {
   @Test(expected = PageNotFoundException.class)
   public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
     // given:
-    given(userServiceMock.getById(150)).willReturn(userMock);
-    given(userMock.getName()).willReturn(rootname);
+    given(userFacadeMock.getUserById(150)).willReturn(userDtoMock);
+    given(userDtoMock.getName()).willReturn(rootname);
     // when:
     usersController.openView(150, modelMock);
   }
@@ -78,8 +80,8 @@ public class UsersControllerTest {
   @Test
   public void openView_givenUserIsNotRoot_thenOpenView() {
     // given:
-    given(userMock.getName()).willReturn("test");
-    given(userServiceMock.getById(100)).willReturn(userMock);
+    given(userDtoMock.getName()).willReturn("test");
+    given(userFacadeMock.getUserById(100)).willReturn(userDtoMock);
     // when:
     String actual = usersController.openView(100, modelMock);
     // then:
@@ -89,7 +91,7 @@ public class UsersControllerTest {
   @Test(expected = PageNotFoundException.class)
   public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
     // given:
-    given(userServiceMock.getById(100)).willReturn(null);
+    given(userFacadeMock.getUserById(100)).willReturn(null);
     // when:
     usersController.openView(100, modelMock);
   }
