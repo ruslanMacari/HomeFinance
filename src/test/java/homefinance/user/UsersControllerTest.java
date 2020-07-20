@@ -219,7 +219,6 @@ public class UsersControllerTest {
     Principal userPrincipal = mock(Principal.class);
     given(userPrincipal.getName()).willReturn("root user");
     given(userDtoMock.getName()).willReturn("root user");
-    given(userDtoMock.getId()).willReturn(16);
 
     // when:
     String actual = usersController.deleteUser(userDtoMock, userPrincipal);
