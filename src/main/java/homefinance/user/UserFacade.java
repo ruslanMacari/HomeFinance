@@ -38,4 +38,8 @@ public class UserFacade {
     User user = userService.getById(id);
     return Objects.isNull(user) ? null : userToUserDto(user);
   }
+
+  public void deleteUser(int id) {
+    userService.delete(id);
+  }
 }

@@ -6,6 +6,7 @@ import homefinance.common.exception.PageNotFoundException;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
+import java.security.Principal;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,9 +126,11 @@ public class UsersController extends CommonController<User> {
     userService.add(user);
   }
 
-  @DeleteMapping("/{id}")
-  public String deleteUser(@PathVariable("id") Integer id) {
-    userService.delete(id);
+  @DeleteMapping
+  public String deleteUser(@ModelAttribute("user") UserDto user, Principal userPrincipal) {
+    if (!userPrincipal.getName().equals(user.getName())) {
+      userFacade.deleteUser(user.getId());
+    }
     return getRedirectURL(URL);
   }
 

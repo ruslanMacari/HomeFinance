@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -73,5 +74,13 @@ public class UserFacadeTest {
     UserDto actual = userFacade.getUserById(55);
     //then:
     then(actual).isNull();
+  }
+
+  @Test
+  public void deleteUser() {
+    //when:
+    userFacade.deleteUser(15);
+    //then:
+    BDDMockito.then(userServiceMock).should().delete(15);
   }
 }

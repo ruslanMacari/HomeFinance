@@ -27,7 +27,9 @@
                     <a class="button" th:href="@{../users/} + ${user.id}" th:text="#{details}"/>
                 </div>
                 <div class="table__cell">
-                    <form class="form" th:action="@{../users/} + ${user.id}" th:method="delete">
+                    <form class="form" th:action="@{../users}" th:object="${user}" th:method="delete">
+                        <input hidden th:name="id" th:value="${user.id}">
+                        <input hidden th:name="name" th:value="${user.name}">
                         <input th:onclick="return confirm('[[#{delete.confirmation}]]');"
                                class="button button_delete" type="submit" th:value="#{delete}"/>
                     </form>

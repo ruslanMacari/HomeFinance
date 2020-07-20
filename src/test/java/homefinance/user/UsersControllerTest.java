@@ -2,7 +2,6 @@ package homefinance.user;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
@@ -14,6 +13,7 @@ import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.impl.PathSelectorTest;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -199,8 +199,33 @@ public class UsersControllerTest {
   }
 
   @Test
-  public void testDeleteUser() {
-    assertEquals("redirect:/users", usersController.deleteUser(1));
+  public void deleteUser_givenUserPrincipalIsNotUserToDelete_deleteUser() {
+    // given:
+    Principal userPrincipal = mock(Principal.class);
+    given(userPrincipal.getName()).willReturn("root user");
+    given(userDtoMock.getName()).willReturn("test user");
+    given(userDtoMock.getId()).willReturn(16);
+
+    // when:
+    String actual = usersController.deleteUser(userDtoMock, userPrincipal);
+    // then:
+    then(actual).isEqualTo("redirect:/users");
+    BDDMockito.then(userFacadeMock).should().deleteUser(16);
+  }
+
+  @Test
+  public void deleteUser_givenUserPrincipalIsUserToDelete_thenRefuseDeleteUser() {
+    // given:
+    Principal userPrincipal = mock(Principal.class);
+    given(userPrincipal.getName()).willReturn("root user");
+    given(userDtoMock.getName()).willReturn("root user");
+    given(userDtoMock.getId()).willReturn(16);
+
+    // when:
+    String actual = usersController.deleteUser(userDtoMock, userPrincipal);
+    // then:
+    then(actual).isEqualTo("redirect:/users");
+    BDDMockito.then(userFacadeMock).shouldHaveZeroInteractions();
   }
 
 }
