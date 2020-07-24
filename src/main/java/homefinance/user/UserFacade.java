@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 public class UserFacade {
 
   private final UserService userService;
+  private final AuthenticationFacade authenticationFacade;
 
   @Autowired
-  public UserFacade(UserService userService) {
+  public UserFacade(UserService userService, AuthenticationFacade authenticationFacade) {
     this.userService = userService;
+    this.authenticationFacade = authenticationFacade;
   }
 
   public List<UserDto> getUsersWithoutRoot() {
@@ -30,9 +32,13 @@ public class UserFacade {
     userDto.setId(user.getId());
     userDto.setName(user.getName());
     userDto.setPassword(user.getPassword());
+    userDto.setLoggedIn(isLoggedIn(user));
     return userDto;
   }
 
+  private boolean isLoggedIn(User user) {
+    return authenticationFacade.getPrincipalName().map(name -> name.equals(user.getName())).orElse(false);
+  }
 
   public UserDto getUserById(int id) {
     User user = userService.getById(id);

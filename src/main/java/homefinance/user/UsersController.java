@@ -127,9 +127,10 @@ public class UsersController extends CommonController<User> {
   }
 
   @DeleteMapping
-  public String deleteUser(@ModelAttribute("user") UserDto user, Principal userPrincipal) {
-    if (!userPrincipal.getName().equals(user.getName())) {
+  public String deleteUser(@ModelAttribute("user") UserDto user, Principal principal) {
+    if (!principal.getName().equals(user.getName())) {
       userFacade.deleteUser(user.getId());
+      // TODO: 20.07.2020 RMACARI: throw exception
     }
     return getRedirectURL(URL);
   }

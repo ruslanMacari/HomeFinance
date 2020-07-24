@@ -48,6 +48,8 @@ public class UsersControllerTest {
   private UserDto userDtoMock;
   @Mock
   private UserFacade userFacadeMock;
+  @Mock
+  private Principal principalMock;
 
   @Before
   public void setUp() {
@@ -201,13 +203,12 @@ public class UsersControllerTest {
   @Test
   public void deleteUser_givenUserPrincipalIsNotUserToDelete_deleteUser() {
     // given:
-    Principal userPrincipal = mock(Principal.class);
-    given(userPrincipal.getName()).willReturn("root user");
+    given(principalMock.getName()).willReturn("root user");
     given(userDtoMock.getName()).willReturn("test user");
     given(userDtoMock.getId()).willReturn(16);
 
     // when:
-    String actual = usersController.deleteUser(userDtoMock, userPrincipal);
+    String actual = usersController.deleteUser(userDtoMock, principalMock);
     // then:
     then(actual).isEqualTo("redirect:/users");
     BDDMockito.then(userFacadeMock).should().deleteUser(16);

@@ -2,11 +2,13 @@ package homefinance.user;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +24,13 @@ public class UserFacadeTest {
   private UserService userServiceMock;
   @Mock
   private User userMock;
+  @Mock
+  private AuthenticationFacade authenticationFacadeMock;
 
   @Before
   public void setUp() {
-    userFacade = new UserFacade(userServiceMock);
+    userFacade = new UserFacade(userServiceMock, authenticationFacadeMock);
+    given(authenticationFacadeMock.getPrincipalName()).willReturn(Optional.empty());
   }
 
   @Test
@@ -82,5 +87,21 @@ public class UserFacadeTest {
     userFacade.deleteUser(15);
     //then:
     BDDMockito.then(userServiceMock).should().delete(15);
+  }
+
+  @Test
+  public void getUsersWithoutRoot_givenUsersAndPrincipal_returnUsersWithUserLoggedIn() {
+    //given:
+    given(userMock.getName()).willReturn("user 1");
+    User userMockLoggedIn = mock(User.class);
+    given(userMockLoggedIn.getName()).willReturn("user logged in");
+    List<User> users = Arrays.asList(userMock, userMockLoggedIn);
+    given(userServiceMock.usersExceptRoot()).willReturn(users);
+    given(authenticationFacadeMock.getPrincipalName()).willReturn(Optional.of("user logged in"));
+    //when:
+    List<UserDto> actual = userFacade.getUsersWithoutRoot();
+    //then:
+    then(actual.get(0).isLoggedIn()).isFalse();
+    then(actual.get(1).isLoggedIn()).isTrue();
   }
 }

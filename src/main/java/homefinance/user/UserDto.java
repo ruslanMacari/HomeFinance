@@ -7,6 +7,7 @@ public class UserDto extends UserLoginDto {
   private Integer id;
   private boolean admin;
   private boolean passwordChanged;
+  private boolean loggedIn;
 
   public Integer getId() {
     return id;
@@ -30,6 +31,7 @@ public class UserDto extends UserLoginDto {
         "id=" + id +
         ", admin=" + admin +
         ", passwordChanged=" + passwordChanged +
+        ", loggedIn=" + loggedIn +
         "} " + super.toString();
   }
 
@@ -39,5 +41,13 @@ public class UserDto extends UserLoginDto {
 
   public void setPasswordChanged(boolean passwordChanged) {
     this.passwordChanged = passwordChanged;
+  }
+
+  public boolean isLoggedIn() {
+    return loggedIn;
+  }
+
+  public void setLoggedIn(boolean loggedIn) {
+    this.loggedIn = loggedIn;
   }
 }
