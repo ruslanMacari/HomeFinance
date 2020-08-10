@@ -25,12 +25,12 @@ public class UserFacadeTest {
   @Mock
   private User userMock;
   @Mock
-  private AuthenticationFacade authenticationFacadeMock;
+  private AuthenticationService authenticationServiceMock;
 
   @Before
   public void setUp() {
-    userFacade = new UserFacade(userServiceMock, authenticationFacadeMock);
-    given(authenticationFacadeMock.getPrincipalName()).willReturn(Optional.empty());
+    userFacade = new UserFacade(userServiceMock, authenticationServiceMock);
+    given(authenticationServiceMock.getPrincipalName()).willReturn(Optional.empty());
   }
 
   @Test
@@ -97,7 +97,7 @@ public class UserFacadeTest {
     given(userMockLoggedIn.getName()).willReturn("user logged in");
     List<User> users = Arrays.asList(userMock, userMockLoggedIn);
     given(userServiceMock.usersExceptRoot()).willReturn(users);
-    given(authenticationFacadeMock.getPrincipalName()).willReturn(Optional.of("user logged in"));
+    given(authenticationServiceMock.getPrincipalName()).willReturn(Optional.of("user logged in"));
     //when:
     List<UserDto> actual = userFacade.getUsersWithoutRoot();
     //then:

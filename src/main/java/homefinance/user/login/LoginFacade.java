@@ -1,6 +1,6 @@
 package homefinance.user.login;
 
-import homefinance.user.AuthenticationFacade;
+import homefinance.user.AuthenticationService;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.List;
@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 public class LoginFacade {
 
   private final UserService userService;
-  private final AuthenticationFacade authenticationFacade;
+  private final AuthenticationService authenticationService;
 
   @Autowired
-  public LoginFacade(UserService userService, AuthenticationFacade authenticationFacade) {
+  public LoginFacade(UserService userService, AuthenticationService authenticationService) {
     this.userService = userService;
-    this.authenticationFacade = authenticationFacade;
+    this.authenticationService = authenticationService;
   }
 
   public boolean isAuthenticated() {
-    return authenticationFacade.getAuthentication()
+    return authenticationService.getAuthentication()
         .filter(realUserIsAuthenticated())
         .isPresent();
   }

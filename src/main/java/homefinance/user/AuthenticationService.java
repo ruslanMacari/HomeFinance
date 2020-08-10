@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationFacade {
+public class AuthenticationService {
 
   public Optional<Authentication> getAuthentication() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -4,7 +4,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import homefinance.user.AuthenticationFacade;
+import homefinance.user.AuthenticationService;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.Collections;
@@ -28,17 +28,17 @@ public class LoginFacadeTest {
   @Mock
   private UserService userServiceMock;
   @Mock
-  private AuthenticationFacade authenticationFacadeMock;
+  private AuthenticationService authenticationServiceMock;
 
   @Before
   public void setUp() {
-    loginFacade = new LoginFacade(userServiceMock, authenticationFacadeMock);
+    loginFacade = new LoginFacade(userServiceMock, authenticationServiceMock);
   }
 
   @Test
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsTrue_thenReturnTrue() {
     // given:
-    given(authenticationFacadeMock.getAuthentication()).willReturn(Optional.of(authMock));
+    given(authenticationServiceMock.getAuthentication()).willReturn(Optional.of(authMock));
     given(authMock.isAuthenticated()).willReturn(true);
     // when:
     boolean actual = loginFacade.isAuthenticated();
@@ -49,7 +49,7 @@ public class LoginFacadeTest {
   @Test
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsFalse_thenReturnFalse() {
     // given:
-    given(authenticationFacadeMock.getAuthentication()).willReturn(Optional.of(authMock));
+    given(authenticationServiceMock.getAuthentication()).willReturn(Optional.of(authMock));
     given(authMock.isAuthenticated()).willReturn(false);
     // when:
     boolean actual = loginFacade.isAuthenticated();
@@ -61,7 +61,7 @@ public class LoginFacadeTest {
   public void isAuthenticated_givenAuthenticationIsAuthenticatedIsTrueAndTypeIsAnonymousAuthenticationToken_thenReturnFalse() {
     // given:
     AnonymousAuthenticationToken anonymousAuthenticationTokenMock = mock(AnonymousAuthenticationToken.class);
-    given(authenticationFacadeMock.getAuthentication()).willReturn(Optional.of(anonymousAuthenticationTokenMock));
+    given(authenticationServiceMock.getAuthentication()).willReturn(Optional.of(anonymousAuthenticationTokenMock));
     given(anonymousAuthenticationTokenMock.isAuthenticated()).willReturn(true);
     // when:
     boolean actual = loginFacade.isAuthenticated();
