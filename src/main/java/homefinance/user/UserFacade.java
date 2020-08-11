@@ -13,11 +13,14 @@ public class UserFacade {
 
   private final UserService userService;
   private final AuthenticationService authenticationService;
+  private final UserMapper userMapper;
 
   @Autowired
-  public UserFacade(UserService userService, AuthenticationService authenticationService) {
+  public UserFacade(UserService userService, AuthenticationService authenticationService,
+      UserMapper userMapper) {
     this.userService = userService;
     this.authenticationService = authenticationService;
+    this.userMapper = userMapper;
   }
 
   public List<UserDto> getUsersWithoutRoot() {
@@ -47,5 +50,9 @@ public class UserFacade {
 
   public void deleteUser(int id) {
     userService.delete(id);
+  }
+
+  public void addUser(UserDto userDto) {
+    userService.add(userMapper.dtoToUser(userDto));
   }
 }

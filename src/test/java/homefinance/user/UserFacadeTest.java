@@ -26,10 +26,12 @@ public class UserFacadeTest {
   private User userMock;
   @Mock
   private AuthenticationService authenticationServiceMock;
+  @Mock
+  private UserMapper userMapperMock;
 
   @Before
   public void setUp() {
-    userFacade = new UserFacade(userServiceMock, authenticationServiceMock);
+    userFacade = new UserFacade(userServiceMock, authenticationServiceMock, userMapperMock);
     given(authenticationServiceMock.getPrincipalName()).willReturn(Optional.empty());
   }
 
@@ -103,5 +105,16 @@ public class UserFacadeTest {
     //then:
     then(actual.get(0).isLoggedIn()).isFalse();
     then(actual.get(1).isLoggedIn()).isTrue();
+  }
+
+  @Test
+  public void addUser_givenUserDto_addUser() {
+    //given:
+    UserDto userDtoMock = mock(UserDto.class);
+    given(userMapperMock.dtoToUser(userDtoMock)).willReturn(userMock);
+    //when:
+    userFacade.addUser(userDtoMock);
+    //then:
+    BDDMockito.then(userServiceMock).should().add(userMock);
   }
 }
