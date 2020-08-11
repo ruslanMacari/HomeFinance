@@ -7,9 +7,12 @@
   <div class="form__wrapper">
     <form method="post" th:object="${user}" th:action="@{/users/new}">
       <th:block th:insert="fragments/user-name-password"/>
-      <div class="input-group">
-        <label class="form__label" for="admin" th:text="#{admin}"/>
-        <input class="form__checkbox" id="admin" name="admin" type="checkbox"/>
+      <div class="form__input-group">
+        <label class="form__label" for="admin" th:text="#{admin} + ':'"/>
+        <input th:if="${user.admin}" class="form__checkbox" id="admin" name="admin" value="true"
+               type="checkbox" checked/>
+        <input th:unless="${user.admin}" class="form__checkbox" id="admin" name="admin" value="true"
+               type="checkbox"/>
       </div>
       <input class="form__submit" type="submit" th:value="#{save}"/>
     </form>

@@ -175,7 +175,7 @@ public class UsersControllerTest {
     String actual = usersController.newUser(modelMock);
     // then:
     then(actual).isEqualTo("users/new");
-    BDDMockito.then(modelMock).should().addAttribute(eq("user"), refEq(new User()));
+    BDDMockito.then(modelMock).should().addAttribute(eq("user"), refEq(new UserDto()));
   }
 
   @Test
@@ -183,7 +183,7 @@ public class UsersControllerTest {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     // when:
-    String actual = usersController.save(userMock, resultMock, true, mock(RedirectAttributes.class), null);
+    String actual = usersController.save(userDtoMock, resultMock, mock(RedirectAttributes.class), null);
     // then:
     then(actual).isEqualTo("redirect:/users");
   }
@@ -194,7 +194,7 @@ public class UsersControllerTest {
     given(resultMock.hasErrors()).willReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
     // when:
-    String actual = usersController.save(userMock, resultMock, true, redirectAttributes, null);
+    String actual = usersController.save(userDtoMock, resultMock, redirectAttributes, null);
     // then:
     then(actual).isEqualTo("redirect:/users/new");
     BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, null);
@@ -214,7 +214,7 @@ public class UsersControllerTest {
     BDDMockito.then(userFacadeMock).should().deleteUser(16);
   }
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void deleteUser_givenUserPrincipalIsUserToDelete_thenRefuseDeleteUser() {
     // given:
     Principal userPrincipal = mock(Principal.class);
@@ -222,10 +222,7 @@ public class UsersControllerTest {
     given(userDtoMock.getName()).willReturn("root user");
 
     // when:
-    String actual = usersController.deleteUser(userDtoMock, userPrincipal);
-    // then:
-    then(actual).isEqualTo("redirect:/users");
-    BDDMockito.then(userFacadeMock).shouldHaveZeroInteractions();
+    usersController.deleteUser(userDtoMock, userPrincipal);
   }
 
 }

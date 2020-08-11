@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -99,39 +98,32 @@ public class UsersController extends CommonController<User> {
   @GetMapping("/new")
   public String newUser(Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
-      model.addAttribute("user", new User());
+      model.addAttribute("user", new UserDto());
     }
     return "users/new";
   }
 
   @PostMapping("/new")
-  public String save(@Valid @ModelAttribute("user") User user, BindingResult result,
-      @RequestParam(value = "admin", defaultValue = "false") boolean admin,
+  public String save(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/users/new");
     }
     return pathSelector
-        .setActionOk(() -> add(user, admin))
+        .setActionOk(() -> userFacade.addUser(user))
         .setPaths(getRedirectURL(URL), "users/new")
         .setErrors(result)
         .getPath();
   }
 
-  private void add(User user, boolean admin) {
-    user.setPassword(encoder.encode(user.getPassword()));
-    user.setEnabled(true);
-    user.setOneRole(admin ? Role.ADMIN : Role.USER);
-    userService.add(user);
-  }
-
   @DeleteMapping
-  public String deleteUser(@ModelAttribute("user") UserDto user, Principal principal) {
-    if (!principal.getName().equals(user.getName())) {
-      userFacade.deleteUser(user.getId());
-      // TODO: 20.07.2020 RMACARI: throw exception
+  public String deleteUser(@ModelAttribute("user") UserDto userToBeDeleted, Principal principal) {
+    // TODO: 11.08.2020 RMACARI: move to facade
+    if (principal.getName().equals(userToBeDeleted.getName())) {
+      throw new RuntimeException("Can't delete logged in user");
     }
+    userFacade.deleteUser(userToBeDeleted.getId());
     return getRedirectURL(URL);
   }
 
