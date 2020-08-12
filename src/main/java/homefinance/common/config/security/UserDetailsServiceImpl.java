@@ -19,30 +19,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private UserService userService;
+  private final UserService userService;
 
   @Autowired
-  public void setUserService(UserService userService) {
+  public UserDetailsServiceImpl(UserService userService) {
     this.userService = userService;
   }
 
   @Transactional(readOnly = true)
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-
     homefinance.user.entity.User user = userService.getByName(username);
     List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
-    return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true,
-        authorities);
-
+    return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
   }
 
   private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
-
     Set<GrantedAuthority> setAuths = new HashSet<>();
-    userRoles.forEach((userRole) -> {
-      setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
-    });
+    userRoles.forEach((userRole) -> setAuths.add(new SimpleGrantedAuthority(userRole.getRole())));
     return new ArrayList<>(setAuths);
   }
 
