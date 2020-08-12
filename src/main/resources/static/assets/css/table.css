@@ -37,3 +37,13 @@
   border-bottom: 3px solid #000000;
   display: table-header-group;
 }
+
+.table__cell_button_head {
+  border: none;
+}
+
+.table__cell_button {
+  border: none;
+  border-bottom: 1px solid #000000;;
+  text-align: center;
+}

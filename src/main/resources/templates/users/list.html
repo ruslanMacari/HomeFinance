@@ -11,8 +11,8 @@
       <div class="table__cell table__cell_head">ID</div>
       <div class="table__cell table__cell_head" th:text="#{user.name}"/>
       <div class="table__cell table__cell_head" th:text="#{admin}"/>
-      <div class="table__cell table__cell_head" th:text="#{details}"/>
-      <div class="table__cell table__cell_head" th:text="#{delete}"/>
+      <div class="table__cell table__cell_button_head"></div>
+      <div class="table__cell table__cell_button_head"></div>
     </div>
   </div>
   <div class="table__body">
@@ -23,11 +23,11 @@
         <div class="table__cell" th:text="${user.name}"/>
         <div th:if="${user.admin}" class="table__cell" th:text="#{yes}"/>
         <div th:if="${!user.admin}" class="table__cell" th:text="#{no}"/>
-        <div class="table__cell">
+        <div class="table__cell table__cell_button">
           <a class="button" th:href="@{../users/} + ${user.id}" th:text="#{details}"/>
         </div>
-        <div class="table__cell">
-          <form class="form" th:action="@{../users}" th:object="${user}" th:method="delete">
+        <div class="table__cell table__cell_button">
+          <form th:unless="${user.isLoggedIn()}" class="form" th:action="@{../users}" th:object="${user}" th:method="delete">
             <input hidden th:name="id" th:value="${user.id}">
             <input hidden th:name="name" th:value="${user.name}">
             <input th:onclick="return confirm('[[#{delete.confirmation}]]');"
