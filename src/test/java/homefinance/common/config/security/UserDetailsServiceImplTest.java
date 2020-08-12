@@ -16,10 +16,14 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDetailsServiceImplTest {
 
+  private static final String USER_NAME = "user test";
+  private static final String USER_ROLE = "role user";
+  private static final String PASSWORD = "password";
   private UserDetailsServiceImpl userDetailsService;
   @Mock
   private UserService userService;
@@ -30,23 +34,26 @@ public class UserDetailsServiceImplTest {
   }
 
   @Test
-  public void loadUserByUsername() {
+  public void loadUserByUsername_givenUserWithNameAndRole_returnUserDetails() {
     // given:
-    User user = mockUser("test", "role user");
-    given(userService.getByName("test")).willReturn(user);
+    User user = mockUser(USER_NAME, USER_ROLE, PASSWORD, true);
+    given(userService.getByName(USER_NAME)).willReturn(user);
     // when:
-    UserDetails actual = userDetailsService.loadUserByUsername("test");
+    UserDetails actual = userDetailsService.loadUserByUsername(USER_NAME);
     // then:
+    then(actual.getUsername()).isEqualTo(USER_NAME);
+    then(actual.getPassword()).isEqualTo(PASSWORD);
+    then(actual.isEnabled()).isTrue();
     then(actual.getAuthorities().size()).isEqualTo(1);
-    then(((GrantedAuthority)actual.getAuthorities().toArray()[0]).getAuthority()).isEqualTo("role user");
+    then(((GrantedAuthority)actual.getAuthorities().toArray()[0]).getAuthority()).isEqualTo(USER_ROLE);
   }
 
   @SuppressWarnings("SameParameterValue")
-  private User mockUser(String name, String role) {
+  private User mockUser(String name, String role, String password, boolean enabled) {
     User user = mock(User.class);
     given(user.getName()).willReturn(name);
-    given(user.getPassword()).willReturn("pass");
-    given(user.isEnabled()).willReturn(true);
+    given(user.getPassword()).willReturn(password);
+    given(user.isEnabled()).willReturn(enabled);
     Set<UserRole> set = mockUserRoles(role);
     given(user.getUserRole()).willReturn(set);
     return user;
@@ -60,5 +67,11 @@ public class UserDetailsServiceImplTest {
     return set;
   }
 
-
+  @Test(expected = UsernameNotFoundException.class)
+  public void loadUserByUsername_givenUserIsNull_throwUsernameNotFoundException() {
+    //given:
+    given(userService.getByName(USER_NAME)).willReturn(null);
+    //when:
+    userDetailsService.loadUserByUsername(USER_NAME);
+  }
 }

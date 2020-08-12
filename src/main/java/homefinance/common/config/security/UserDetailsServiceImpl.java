@@ -5,6 +5,7 @@ import homefinance.user.service.UserService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,9 +30,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Transactional(readOnly = true)
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    homefinance.user.entity.User user = userService.getByName(username);
+    homefinance.user.entity.User user = getUserBy(username);
     List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
     return new User(user.getName(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
+  }
+
+  private homefinance.user.entity.User getUserBy(String username) {
+    homefinance.user.entity.User user = userService.getByName(username);
+    if (Objects.isNull(user)) {
+      throw new UsernameNotFoundException("user by username: " + username + " not found");
+    }
+    return user;
   }
 
   private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
