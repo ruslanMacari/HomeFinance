@@ -19,13 +19,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsServiceImplTest {
 
-  private String username = "test";
+  private final String username = "test";
 
   @Test
   public void testLoadUserByUsername() {
     UserDetailsServiceImpl serviceImpl = new UserDetailsServiceImpl();
-    serviceImpl.setUserService(this.getUserService());
-    UserDetails details = serviceImpl.loadUserByUsername(this.username);
+    serviceImpl.setUserService(getUserService());
+    UserDetails details = serviceImpl.loadUserByUsername(username);
     Collection<? extends GrantedAuthority> authorities = details.getAuthorities();
     assertEquals(1, authorities.size());
     assertThat(authorities.stream().findFirst().get().getAuthority(), is(Role.USER));
@@ -33,17 +33,17 @@ public class UserDetailsServiceImplTest {
 
   private UserService getUserService() {
     UserService userService = mock(UserService.class);
-    User user = this.getUser();
-    when(userService.getByName(this.username)).thenReturn(user);
+    User user = getUser();
+    when(userService.getByName(username)).thenReturn(user);
     return userService;
   }
 
   private User getUser() {
     User user = mock(User.class);
-    when(user.getName()).thenReturn(this.username);
+    when(user.getName()).thenReturn(username);
     when(user.getPassword()).thenReturn("pass");
     when(user.isEnabled()).thenReturn(true);
-    Set<UserRole> set = this.getUserRoles();
+    Set<UserRole> set = getUserRoles();
     when(user.getUserRole()).thenReturn(set);
     return user;
   }
