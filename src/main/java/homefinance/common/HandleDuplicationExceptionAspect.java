@@ -38,10 +38,10 @@ public class HandleDuplicationExceptionAspect {
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
-      List<Object> args = this.getArgs(joinPoint);
-      this.registerError(e, args);
-      this.addModelToRedirectAttributes(args);
-      return this.getRedirectUrl(joinPoint);
+      List<Object> args = getArgs(joinPoint);
+      registerError(e, args);
+      addModelToRedirectAttributes(args);
+      return getRedirectUrl(joinPoint);
     }
   }
 
@@ -53,8 +53,7 @@ public class HandleDuplicationExceptionAspect {
   }
 
   private void registerError(DuplicateFieldsException e, List<Object> args) {
-    BindingResult errors = this
-        .getArgument(args, arg -> arg instanceof BindingResult, BindingResult.class);
+    BindingResult errors = getArgument(args, arg -> arg instanceof BindingResult, BindingResult.class);
     errors.rejectValue(e.getField(), e.getErrorCode());
   }
 
@@ -63,7 +62,7 @@ public class HandleDuplicationExceptionAspect {
         .filter(condition)
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("Missing argument of type: " + type)));
-    this.secureFromReFinding(args, arg);
+    secureFromReFinding(args, arg);
     return arg;
   }
 
@@ -72,15 +71,14 @@ public class HandleDuplicationExceptionAspect {
   }
 
   private void addModelToRedirectAttributes(List<Object> args) {
-    RedirectAttributes redirectAttributes = this
-        .getArgument(args, arg -> arg instanceof RedirectAttributes, RedirectAttributes.class);
-    Model model = this.getArgument(args, arg -> arg instanceof Model, Model.class);
+    RedirectAttributes redirectAttributes = getArgument(args, arg -> arg instanceof RedirectAttributes, RedirectAttributes.class);
+    Model model = getArgument(args, arg -> arg instanceof Model, Model.class);
     CommonController.addModelToRedirectAttributes(model, redirectAttributes);
   }
 
   private String getRedirectUrl(ProceedingJoinPoint joinPoint) {
-    String url = this.getAnnotationUrlOnException(joinPoint);
-    return url.isEmpty() ? CommonController.getRedirectURL(this.requestBuffer.getUrl())
+    String url = getAnnotationUrlOnException(joinPoint);
+    return url.isEmpty() ? CommonController.getRedirectURL(requestBuffer.getUrl())
         : CommonController.getRedirectURL(url);
   }
 
