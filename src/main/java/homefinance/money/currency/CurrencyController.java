@@ -33,12 +33,12 @@ public class CurrencyController {
   @Autowired
   public CurrencyController(CurrencyFacade currencyFacade, RequestBuffer request) {
     this.currencyFacade = currencyFacade;
-    this.requestBuffer = request;
+    requestBuffer = request;
   }
 
   @GetMapping()
   public String list(Model model) {
-    model.addAttribute("currencies", this.currencyFacade.getAllCurrenciesDto());
+    model.addAttribute("currencies", currencyFacade.getAllCurrenciesDto());
     return "currencies/list";
   }
 
@@ -58,14 +58,14 @@ public class CurrencyController {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/currencies/new");
     }
-    this.currencyFacade.saveNew(currencyDto);
+    currencyFacade.saveNew(currencyDto);
     return getRedirectURL(URL);
   }
 
   @GetMapping("/{id}")
   public String view(@PathVariable("id") Integer id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
-      model.addAttribute(CURRENCY_ATTRIBUTE_NAME, this.currencyFacade.getCurrencyDtoById(id));
+      model.addAttribute(CURRENCY_ATTRIBUTE_NAME, currencyFacade.getCurrencyDtoById(id));
     }
     return "currencies/view";
   }
@@ -76,11 +76,11 @@ public class CurrencyController {
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(this.getCurrencyViewUrl(currencyDto));
+      return getRedirectURL(getCurrencyViewUrl(currencyDto));
     }
-    this.requestBuffer.setUrl(this.getCurrencyViewUrl(currencyDto));
-    this.currencyFacade.update(currencyDto);
-    return getRedirectURL(this.getCurrencyViewUrl(currencyDto));
+    requestBuffer.setUrl(getCurrencyViewUrl(currencyDto));
+    currencyFacade.update(currencyDto);
+    return getRedirectURL(getCurrencyViewUrl(currencyDto));
   }
 
   private String getCurrencyViewUrl(CurrencyDto currencyDto) {
@@ -89,13 +89,13 @@ public class CurrencyController {
 
   @DeleteMapping("/{id}")
   public String delete(@PathVariable("id") int id) {
-    this.currencyFacade.delete(id);
+    currencyFacade.delete(id);
     return getRedirectURL(URL);
   }
 
   @GetMapping("/fill")
   public String fillCurrencies() {
-    this.currencyFacade.fillDistinctCurrencies();
+    currencyFacade.fillDistinctCurrencies();
     return getRedirectURL(URL);
   }
 
