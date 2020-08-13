@@ -36,15 +36,15 @@ public class HandleDuplicationExceptionAspectTest {
 
   @Before
   public void setUp() {
-    this.aspect = new HandleDuplicationExceptionAspect(this.requestBufferMock);
+    aspect = new HandleDuplicationExceptionAspect(requestBufferMock);
   }
 
   @Test
   public void handleDuplication_givenNoExceptionThrown_returnProceed() throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willReturn("/test");
+    given(joinPointMock.proceed()).willReturn("/test");
     // when:
-    Object actual = this.aspect.handleDuplication(this.joinPointMock);
+    Object actual = aspect.handleDuplication(joinPointMock);
     // then:
     then(actual).isEqualTo("/test");
   }
@@ -53,9 +53,9 @@ public class HandleDuplicationExceptionAspectTest {
   public void handleDuplication_givenDuplicateExceptionThrownAndMethodHasNoArgs_expectIllegalArgumentException()
       throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
+    given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
     // when:
-    Throwable throwable = catchThrowable(() -> this.aspect.handleDuplication(this.joinPointMock));
+    Throwable throwable = catchThrowable(() -> aspect.handleDuplication(joinPointMock));
     // then:
     then(throwable).isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("method must have arguments");
@@ -65,11 +65,11 @@ public class HandleDuplicationExceptionAspectTest {
   public void handleDuplication_givenDuplicateExceptionThrownAndMethodHasNoModel_expectIllegalArgumentException()
       throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
-    given(this.joinPointMock.getArgs())
-        .willReturn(this.getArray(this.bindingResultMock, this.redirectAttributesMock));
+    given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
+    given(joinPointMock.getArgs())
+        .willReturn(getArray(bindingResultMock, redirectAttributesMock));
     // when:
-    Throwable throwable = catchThrowable(() -> this.aspect.handleDuplication(this.joinPointMock));
+    Throwable throwable = catchThrowable(() -> aspect.handleDuplication(joinPointMock));
     // then:
     then(throwable).isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(String.valueOf(Model.class));
@@ -83,11 +83,11 @@ public class HandleDuplicationExceptionAspectTest {
   public void handleDuplication_givenDuplicateExceptionThrownAndMethodHasNoErrors_expectIllegalArgumentException()
       throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
-    given(this.joinPointMock.getArgs())
-        .willReturn(this.getArray(this.modelMock, this.redirectAttributesMock));
+    given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
+    given(joinPointMock.getArgs())
+        .willReturn(getArray(modelMock, redirectAttributesMock));
     // when:
-    Throwable throwable = catchThrowable(() -> this.aspect.handleDuplication(this.joinPointMock));
+    Throwable throwable = catchThrowable(() -> aspect.handleDuplication(joinPointMock));
     // then:
     then(throwable).isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(String.valueOf(BindingResult.class));
@@ -97,11 +97,11 @@ public class HandleDuplicationExceptionAspectTest {
   public void handleDuplication_givenDuplicateExceptionThrownAndMethodHasNoRedirectAttributes_expectIllegalArgumentException()
       throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
-    given(this.joinPointMock.getArgs())
-        .willReturn(this.getArray(this.modelMock, this.bindingResultMock));
+    given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
+    given(joinPointMock.getArgs())
+        .willReturn(getArray(modelMock, bindingResultMock));
     // when:
-    Throwable throwable = catchThrowable(() -> this.aspect.handleDuplication(this.joinPointMock));
+    Throwable throwable = catchThrowable(() -> aspect.handleDuplication(joinPointMock));
     // then:
     then(throwable).isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(String.valueOf(RedirectAttributes.class));
@@ -110,28 +110,29 @@ public class HandleDuplicationExceptionAspectTest {
   @Test
   public void handleDuplication_givenDuplicateExceptionThrownAndUrlSetInAnnotation_returnRedirectUrlFromAnnotation() throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(new DuplicateFieldsException("field", "errorCode"));
-    given(this.joinPointMock.getArgs())
-        .willReturn(this.getArray(this.modelMock, this.bindingResultMock,
-            this.redirectAttributesMock));
-    this.mockJoinPointMethod("testMethod");
+    given(joinPointMock.proceed()).willThrow(new DuplicateFieldsException("field", "errorCode"));
+    given(joinPointMock.getArgs())
+        .willReturn(getArray(modelMock, bindingResultMock,
+            redirectAttributesMock));
+    mockJoinPointMethod("testMethod");
     // when:
-    Object actual = this.aspect.handleDuplication(this.joinPointMock);
+    Object actual = aspect.handleDuplication(joinPointMock);
     // then:
     then(actual).isEqualTo("redirect:/urlAnnotation");
-    BDDMockito.then(this.redirectAttributesMock).should()
-        .addFlashAttribute(CommonController.FLASH_MODEL_ATTRIBUTE_NAME, this.modelMock);
-    BDDMockito.then(this.bindingResultMock).should().rejectValue("field", "errorCode");
+    BDDMockito.then(redirectAttributesMock).should()
+        .addFlashAttribute(CommonController.FLASH_MODEL_ATTRIBUTE_NAME, modelMock);
+    BDDMockito.then(bindingResultMock).should().rejectValue("field", "errorCode");
   }
 
   private void mockJoinPointMethod(String methodName) throws NoSuchMethodException {
     MethodSignature signature = mock(MethodSignature.class);
-    Method method = this.getClass().getMethod(methodName, BindingResult.class,
+    Method method = getClass().getMethod(methodName, BindingResult.class,
         RedirectAttributes.class, Model.class);
     given(signature.getMethod()).willReturn(method);
-    given(this.joinPointMock.getSignature()).willReturn(signature);
+    given(joinPointMock.getSignature()).willReturn(signature);
   }
 
+  @SuppressWarnings("unused")
   @HandleDuplicationException(url = "/urlAnnotation")
   public String testMethod(BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     return "test";
@@ -140,14 +141,14 @@ public class HandleDuplicationExceptionAspectTest {
   @Test
   public void handleDuplication_givenDuplicateExceptionThrownAndUrlNotSetInAnnotation_returnRedirectUrlFromRequestBuffer() throws Throwable {
     // given:
-    given(this.joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
-    given(this.joinPointMock.getArgs())
-        .willReturn(this.getArray(this.modelMock, this.bindingResultMock,
-            this.redirectAttributesMock));
-    given(this.requestBufferMock.getUrl()).willReturn("/urlFromRequestBuffer");
-    this.mockJoinPointMethod("testMethodUrlMissing");
+    given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
+    given(joinPointMock.getArgs())
+        .willReturn(getArray(modelMock, bindingResultMock,
+            redirectAttributesMock));
+    given(requestBufferMock.getUrl()).willReturn("/urlFromRequestBuffer");
+    mockJoinPointMethod("testMethodUrlMissing");
     // when:
-    Object actual = this.aspect.handleDuplication(this.joinPointMock);
+    Object actual = aspect.handleDuplication(joinPointMock);
     // then:
     then(actual).isEqualTo("redirect:/urlFromRequestBuffer");
   }

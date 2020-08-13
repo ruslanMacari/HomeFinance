@@ -12,7 +12,7 @@ public @interface HandleDuplicationException {
 
   /**
    * Redirect url in case of {@link DuplicateFieldsException}
-   * if url is not set url mus be set in {@link RequestBuffer}
+   * if url is not set url must be set in {@link RequestBuffer}
    */
   String url() default "";
 }
