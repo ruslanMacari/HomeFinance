@@ -37,11 +37,15 @@ public class HandleDuplicationExceptionAspect {
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
-      List<Object> args = getArgs(joinPoint);
-      registerError(e, args);
-      addModelToRedirectAttributes(args);
-      return getRedirectUrl(joinPoint);
+      handleDuplicateFieldsException(joinPoint, e);
+      return CommonController.getRedirectURL(getAnnotationUrlOnException(joinPoint));
     }
+  }
+
+  private void handleDuplicateFieldsException(ProceedingJoinPoint joinPoint, DuplicateFieldsException e) {
+    List<Object> args = getArgs(joinPoint);
+    registerError(e, args);
+    addModelToRedirectAttributes(args);
   }
 
   private List<Object> getArgs(ProceedingJoinPoint joinPoint) {
@@ -75,16 +79,19 @@ public class HandleDuplicationExceptionAspect {
     CommonController.addModelToRedirectAttributes(model, redirectAttributes);
   }
 
-  private String getRedirectUrl(ProceedingJoinPoint joinPoint) {
-    String url = getAnnotationUrlOnException(joinPoint);
-    return url.isEmpty()
-        ? CommonController.getRedirectURL(requestBuffer.getUrl())
-        : CommonController.getRedirectURL(url);
-  }
-
   private String getAnnotationUrlOnException(ProceedingJoinPoint joinPoint) {
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
     return signature.getMethod().getAnnotation(HandleDuplicationException.class).urlOnException();
   }
 
+  @Around("@annotation(homefinance.common.HandleDuplicationExceptionUrlFromRequestBuffer)")
+  public Object handleDuplicationUrlFromRequestBuffer(ProceedingJoinPoint joinPoint) throws Throwable {
+    logger.debug("handleDuplicationUrlFromRequestBuffer()");
+    try {
+      return joinPoint.proceed();
+    } catch (DuplicateFieldsException e) {
+      handleDuplicateFieldsException(joinPoint, e);
+      return CommonController.getRedirectURL(requestBuffer.getUrl());
+    }
+  }
 }

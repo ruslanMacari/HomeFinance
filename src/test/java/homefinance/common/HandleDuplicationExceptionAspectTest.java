@@ -126,20 +126,20 @@ public class HandleDuplicationExceptionAspectTest {
   }
 
   @Test
-  public void handleDuplication_givenDuplicateExceptionThrownAndUrlNotSetInAnnotation_returnRedirectUrlFromRequestBuffer() throws Throwable {
+  public void handleDuplicationUrlFromRequestBuffer_givenDuplicateExceptionThrown_returnRedirectUrlFromRequestBuffer() throws Throwable {
     // given:
     given(joinPointMock.proceed()).willThrow(DuplicateFieldsException.class);
     given(joinPointMock.getArgs()).willReturn(getArray(modelMock, bindingResultMock, redirectAttributesMock));
     given(requestBufferMock.getUrl()).willReturn("/urlFromRequestBuffer");
     mockJoinPointMethod("testMethodUrlMissing");
     // when:
-    Object actual = aspect.handleDuplication(joinPointMock);
+    Object actual = aspect.handleDuplicationUrlFromRequestBuffer(joinPointMock);
     // then:
     then(actual).isEqualTo("redirect:/urlFromRequestBuffer");
   }
 
   @SuppressWarnings("unused")
-  @HandleDuplicationException()
+  @HandleDuplicationExceptionUrlFromRequestBuffer()
   public String testMethodUrlMissing(BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     return "test";
   }

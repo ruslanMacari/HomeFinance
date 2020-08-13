@@ -6,14 +6,13 @@ import lombok.Generated;
 
 public class DuplicateFieldsException extends RuntimeException {
 
-  private String field;
-  private String errorCode;
+  private final String field;
+  private final String errorCode;
 
   public DuplicateFieldsException(Map.Entry<String, String> entry) {
-    super(MessageFormat
-        .format("Field: {0} is duplicated. ErrorCode: {1}", entry.getKey(), entry.getValue()));
-    this.field = entry.getKey();
-    this.errorCode = entry.getValue();
+    super(MessageFormat.format("Field: {0} is duplicated. ErrorCode: {1}", entry.getKey(), entry.getValue()));
+    field = entry.getKey();
+    errorCode = entry.getValue();
   }
 
   public DuplicateFieldsException(String field, String errorCode) {
@@ -24,10 +23,10 @@ public class DuplicateFieldsException extends RuntimeException {
 
   @Generated
   public String getField() {
-    return this.field;
+    return field;
   }
 
   public String getErrorCode() {
-    return this.errorCode;
+    return errorCode;
   }
 }

@@ -5,6 +5,7 @@ import static homefinance.common.CommonController.getRedirectURL;
 import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 
 import homefinance.common.HandleDuplicationException;
+import homefinance.common.HandleDuplicationExceptionUrlFromRequestBuffer;
 import homefinance.common.RequestBuffer;
 import homefinance.money.currency.dto.CurrencyDto;
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class CurrencyController {
     return "currencies/view";
   }
 
-  @HandleDuplicationException
+  @HandleDuplicationExceptionUrlFromRequestBuffer
   @PostMapping("/update")
   public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
