@@ -22,8 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Component
 public class HandleDuplicationExceptionAspect {
 
-  private static final Logger logger = LoggerFactory
-      .getLogger(HandleDuplicationExceptionAspect.class);
+  private static final Logger logger = LoggerFactory.getLogger(HandleDuplicationExceptionAspect.class);
 
   private final RequestBuffer requestBuffer;
 
@@ -78,15 +77,14 @@ public class HandleDuplicationExceptionAspect {
 
   private String getRedirectUrl(ProceedingJoinPoint joinPoint) {
     String url = getAnnotationUrlOnException(joinPoint);
-    return url.isEmpty() ? CommonController.getRedirectURL(requestBuffer.getUrl())
+    return url.isEmpty()
+        ? CommonController.getRedirectURL(requestBuffer.getUrl())
         : CommonController.getRedirectURL(url);
   }
 
   private String getAnnotationUrlOnException(ProceedingJoinPoint joinPoint) {
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    HandleDuplicationException annotation = signature.getMethod()
-        .getAnnotation(HandleDuplicationException.class);
-    return annotation.urlOnException();
+    return signature.getMethod().getAnnotation(HandleDuplicationException.class).urlOnException();
   }
 
 }
