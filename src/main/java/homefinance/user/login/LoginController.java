@@ -51,7 +51,7 @@ public class LoginController {
     return "auth/registration";
   }
 
-  @HandleDuplicationException(url = URL + "/registration")
+  @HandleDuplicationException(urlOnException = URL + "/registration")
   @PostMapping("/registration")
   public String registerUser(@Valid @ModelAttribute("user") UserLoginDto user, BindingResult errors,
       RedirectAttributes redirectAttributes, Model model) {

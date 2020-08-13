@@ -120,7 +120,7 @@ public class HandleDuplicationExceptionAspectTest {
   }
 
   @SuppressWarnings("unused")
-  @HandleDuplicationException(url = "/urlAnnotation")
+  @HandleDuplicationException(urlOnException = "/urlAnnotation")
   public String testMethod(BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     return "test";
   }

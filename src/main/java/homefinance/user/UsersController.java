@@ -55,11 +55,15 @@ public class UsersController extends CommonController<User> {
   @GetMapping("/{id}")
   public String openView(@PathVariable("id") int id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
-      UserDto user = userFacade.getUserById(id);
-      checkUserIsNotRoot(user);
-      model.addAttribute("user", user);
+      model.addAttribute("user", getUserBy(id));
     }
     return "users/view";
+  }
+
+  private UserDto getUserBy(int id) {
+    UserDto user = userFacade.getUserById(id);
+    checkUserIsNotRoot(user);
+    return user;
   }
 
   private void checkUserIsNotRoot(UserDto user) {
@@ -69,6 +73,7 @@ public class UsersController extends CommonController<User> {
     }
   }
 
+  // TODO: 11.08.2020 RMACARI: refactor
   @PostMapping("/{id}")
   public String update(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {

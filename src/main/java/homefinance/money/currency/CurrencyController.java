@@ -50,7 +50,7 @@ public class CurrencyController {
     return "currencies/new";
   }
 
-  @HandleDuplicationException(url = "/currencies/new")
+  @HandleDuplicationException(urlOnException = "/currencies/new")
   @PostMapping("/new")
   public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {

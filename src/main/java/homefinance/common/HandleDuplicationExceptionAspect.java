@@ -79,16 +79,16 @@ public class HandleDuplicationExceptionAspect {
   }
 
   private String getRedirectUrl(ProceedingJoinPoint joinPoint) {
-    String url = this.getAnnotationUrl(joinPoint);
+    String url = this.getAnnotationUrlOnException(joinPoint);
     return url.isEmpty() ? CommonController.getRedirectURL(this.requestBuffer.getUrl())
         : CommonController.getRedirectURL(url);
   }
 
-  private String getAnnotationUrl(ProceedingJoinPoint joinPoint) {
+  private String getAnnotationUrlOnException(ProceedingJoinPoint joinPoint) {
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
     HandleDuplicationException annotation = signature.getMethod()
         .getAnnotation(HandleDuplicationException.class);
-    return annotation.url();
+    return annotation.urlOnException();
   }
 
 }
