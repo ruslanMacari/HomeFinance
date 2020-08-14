@@ -38,7 +38,7 @@ public class UserMapperTest {
     then(actual.getName()).isEqualTo("user");
     then(actual.isEnabled()).isTrue();
     then(actual.getUserRole().size()).isEqualTo(1);
-    then(actual.hasAdmin()).isTrue();
+    then(actual.isAdmin()).isTrue();
   }
 
   @Test
@@ -49,7 +49,7 @@ public class UserMapperTest {
     User actual = userMapper.dtoToUser(userDtoMock);
     //then:
     then(actual.getUserRole().size()).isEqualTo(1);
-    then(actual.hasAdmin()).isFalse();
+    then(actual.isAdmin()).isFalse();
   }
 
   @Test(expected = IllegalArgumentException.class)

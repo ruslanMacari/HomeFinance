@@ -20,14 +20,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class UserFacadeTest {
 
   private UserFacade userFacade;
-  @Mock
-  private UserService userServiceMock;
-  @Mock
-  private User userMock;
-  @Mock
-  private AuthenticationService authenticationServiceMock;
-  @Mock
-  private UserMapper userMapperMock;
+  @Mock private UserService userServiceMock;
+  @Mock private User userMock;
+  @Mock private AuthenticationService authenticationServiceMock;
+  @Mock private UserMapper userMapperMock;
+  @Mock private UserDto userDtoMock;
 
   @Before
   public void setUp() {
@@ -56,7 +53,7 @@ public class UserFacadeTest {
     given(userMock.getName()).willReturn(name);
     given(userMock.getId()).willReturn(id);
     given(userMock.getPassword()).willReturn(pass);
-    given(userMock.hasAdmin()).willReturn(isAdmin);
+    given(userMock.isAdmin()).willReturn(isAdmin);
   }
 
   @Test
@@ -110,11 +107,30 @@ public class UserFacadeTest {
   @Test
   public void addUser_givenUserDto_addUser() {
     //given:
-    UserDto userDtoMock = mock(UserDto.class);
     given(userMapperMock.dtoToUser(userDtoMock)).willReturn(userMock);
     //when:
     userFacade.addUser(userDtoMock);
     //then:
     BDDMockito.then(userServiceMock).should().add(userMock);
+  }
+
+  @Test
+  public void update_givenUserDtoIsPasswordChanged_shouldUpdateUser() {
+    //given:
+    given(userDtoMock.isPasswordChanged()).willReturn(true);
+    //when:
+    userFacade.update(userDtoMock);
+    //then:
+    BDDMockito.then(userServiceMock).should().update(userDtoMock);
+  }
+
+  @Test
+  public void update_givenUserDtoIsNotPasswordChanged_shouldUpdateWithoutPassword() {
+    //given:
+    given(userDtoMock.isPasswordChanged()).willReturn(false);
+    //when:
+    userFacade.update(userDtoMock);
+    //then:
+    BDDMockito.then(userServiceMock).should().updateWithoutPassword(userDtoMock);
   }
 }

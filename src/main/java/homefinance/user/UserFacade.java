@@ -31,7 +31,7 @@ public class UserFacade {
 
   private UserDto userToUserDto(User user) {
     UserDto userDto = new UserDto();
-    userDto.setAdmin(user.hasAdmin());
+    userDto.setAdmin(user.isAdmin());
     userDto.setId(user.getId());
     userDto.setName(user.getName());
     userDto.setPassword(user.getPassword());
@@ -54,5 +54,13 @@ public class UserFacade {
 
   public void addUser(UserDto userDto) {
     userService.add(userMapper.dtoToUser(userDto));
+  }
+
+  public void update(UserDto userDto) {
+    if (userDto.isPasswordChanged()) {
+      userService.update(userDto);
+    } else {
+      userService.updateWithoutPassword(userDto);
+    }
   }
 }

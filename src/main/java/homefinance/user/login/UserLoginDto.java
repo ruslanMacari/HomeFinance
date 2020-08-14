@@ -1,9 +1,10 @@
 package homefinance.user.login;
 
+import homefinance.user.UserFields;
 import java.util.Objects;
 import javax.validation.constraints.Size;
 
-public class UserLoginDto {
+public class UserLoginDto implements UserFields {
 
   private String name;
   private String password;

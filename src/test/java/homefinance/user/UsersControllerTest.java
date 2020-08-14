@@ -11,8 +11,6 @@ import static org.mockito.Mockito.mock;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.impl.PathSelectorTest;
-import homefinance.user.entity.User;
-import homefinance.user.service.UserService;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,26 +31,15 @@ public class UsersControllerTest {
 
   private final String rootname = "root";
   private UsersController usersController;
-  @Mock
-  private Model modelMock;
-  @Mock
-  private UserService userServiceMock;
-  @Mock
-  private PasswordEncoder encoderMock;
-  @Mock
-  private BindingResult resultMock;
-  @Mock
-  private User userMock;
-  @Mock
-  private UserDto userDtoMock;
-  @Mock
-  private UserFacade userFacadeMock;
-  @Mock
-  private Principal principalMock;
+  @Mock private Model modelMock;
+  @Mock private BindingResult resultMock;
+  @Mock private UserDto userDtoMock;
+  @Mock private UserFacade userFacadeMock;
+  @Mock private Principal principalMock;
 
   @Before
   public void setUp() {
-    usersController = new UsersController(userServiceMock, encoderMock, userFacadeMock);
+    usersController = new UsersController(userFacadeMock);
     usersController.setRootname(rootname);
     usersController.setPathSelector(new PathSelectorTest());
   }
@@ -116,12 +102,11 @@ public class UsersControllerTest {
   public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
-    given(userDtoMock.getId()).willReturn(100);
-    given(userServiceMock.getById(100)).willReturn(userMock);
     // when:
     String actual = usersController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
     // then:
     then(actual).isEqualTo("redirect:/users");
+    BDDMockito.then(userFacadeMock).should().update(userDtoMock);
   }
 
   @Test
@@ -129,8 +114,7 @@ public class UsersControllerTest {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     given(userDtoMock.getId()).willReturn(100);
-    given(userServiceMock.getById(100)).willReturn(userMock);
-    doThrow(DuplicateFieldsException.class).when(userServiceMock).update(userMock);
+    doThrow(DuplicateFieldsException.class).when(userFacadeMock).update(userDtoMock);
     // when:
     String actual = usersController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
     // then:

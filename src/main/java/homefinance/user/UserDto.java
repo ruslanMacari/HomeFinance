@@ -9,6 +9,7 @@ public class UserDto extends UserLoginDto {
   private boolean passwordChanged;
   private boolean loggedIn;
 
+  @Override
   public Integer getId() {
     return id;
   }
@@ -17,6 +18,7 @@ public class UserDto extends UserLoginDto {
     this.id = id;
   }
 
+  @Override
   public boolean isAdmin() {
     return admin;
   }

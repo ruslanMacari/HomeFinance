@@ -1,5 +1,6 @@
 package homefinance.user.entity;
 
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -39,14 +40,44 @@ public class UserTest {
   }
 
   @Test
-  public void testHasAdmin() {
+  public void testIsAdmin() {
     UserRole userRole = mock(UserRole.class);
     when(userRole.getRole()).thenReturn(Role.ADMIN);
     Set<UserRole> userRoles = new HashSet<>();
     userRoles.add(userRole);
     this.user.setUserRole(userRoles);
-    assertTrue(this.user.hasAdmin());
+    assertTrue(this.user.isAdmin());
     when(userRole.getRole()).thenReturn("test");
-    assertFalse(this.user.hasAdmin());
+    assertFalse(this.user.isAdmin());
+  }
+
+  @Test
+  public void isInRole_givenUserHasRole_returnTrue() {
+    //given:
+    user.addRole("role1");
+    //when:
+    boolean actual = user.isInRole("role1");
+    //then:
+    then(actual).isTrue();
+  }
+
+  @Test
+  public void isInRole_givenUserDoesNotHaveRole_returnFalse() {
+    //when:
+    boolean actual = user.isInRole("role1");
+    //then:
+    then(actual).isFalse();
+  }
+
+  @Test
+  public void addRole_givenRole_shouldAddRole() {
+    //when:
+    user.addRole("role1");
+    user.addRole("role1");
+    user.addRole("role2");
+    //then:
+    then(user.getUserRole().size()).isEqualTo(2);
+    then(user.isInRole("role1")).isTrue();
+    then(user.isInRole("role2")).isTrue();
   }
 }

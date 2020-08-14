@@ -1,6 +1,7 @@
 package homefinance.user.entity;
 
 import homefinance.common.entity.ConstraintEntity;
+import homefinance.user.UserFields;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import lombok.Generated;
@@ -21,7 +23,7 @@ import lombok.Generated;
 @Entity
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})
-public class User extends ConstraintEntity {
+public class User extends ConstraintEntity implements UserFields {
 
   public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_user_name";
   private Integer id;
@@ -36,7 +38,6 @@ public class User extends ConstraintEntity {
   }
 
   public User() {
-
   }
 
   public User(String name) {
@@ -48,6 +49,7 @@ public class User extends ConstraintEntity {
     this.password = password;
   }
 
+  @Override
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
@@ -59,6 +61,7 @@ public class User extends ConstraintEntity {
     this.id = id;
   }
 
+  @Override
   @Size(min = 3, message = "{MinSize.user.name}")
   @Column(name = "name", nullable = false, length = 45)
   public String getName() {
@@ -69,6 +72,7 @@ public class User extends ConstraintEntity {
     this.name = name;
   }
 
+  @Override
   @Size(min = 4, message = "{MinSize.user.password}")
   @Column(name = "password", nullable = false, length = 60)
   public String getPassword() {
@@ -100,8 +104,7 @@ public class User extends ConstraintEntity {
 
   public void setOneRole(String role) {
     if (userRole.isEmpty()) {
-      UserRole roleUser = new UserRole(this, role);
-      userRole.add(roleUser);
+      addRole(role);
     } else {
       boolean first = true;
       for (UserRole userRoleItem : userRole) {
@@ -115,8 +118,10 @@ public class User extends ConstraintEntity {
     }
   }
 
-  public boolean hasAdmin() {
-    return userRole.stream().anyMatch((role) -> (role.getRole().equals(Role.ADMIN)));
+  @Override
+  @Transient
+  public boolean isAdmin() {
+    return isInRole(Role.ADMIN);
   }
 
   @Override
@@ -164,4 +169,12 @@ public class User extends ConstraintEntity {
     return Objects.equals(id, other.id);
   }
 
+  public void addRole(String role) {
+    UserRole roleUser = new UserRole(this, role);
+    userRole.add(roleUser);
+  }
+
+  public boolean isInRole(String role) {
+    return userRole.stream().anyMatch((roleItem) -> (roleItem.getRole().equals(role)));
+  }
 }

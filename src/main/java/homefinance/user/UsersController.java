@@ -3,15 +3,12 @@ package homefinance.user;
 import homefinance.common.CommonController;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.exception.PageNotFoundException;
-import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
-import homefinance.user.service.UserService;
 import java.security.Principal;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,15 +26,11 @@ public class UsersController extends CommonController<User> {
 
   public static final String URL = "/users";
 
-  private final UserService userService;
-  private final PasswordEncoder encoder;
   private final UserFacade userFacade;
   private String rootname;
 
   @Autowired
-  public UsersController(UserService userService, PasswordEncoder encoder, UserFacade userFacade) {
-    this.userService = userService;
-    this.encoder = encoder;
+  public UsersController(UserFacade userFacade) {
     this.userFacade = userFacade;
   }
 
@@ -62,11 +55,11 @@ public class UsersController extends CommonController<User> {
 
   private UserDto getUserBy(int id) {
     UserDto user = userFacade.getUserById(id);
-    checkUserIsNotRoot(user);
+    checkUser(user);
     return user;
   }
 
-  private void checkUserIsNotRoot(UserDto user) {
+  private void checkUser(UserDto user) {
     if (Objects.isNull(user)
         || user.getName().equals(rootname)) {
       throw new PageNotFoundException();
@@ -82,22 +75,12 @@ public class UsersController extends CommonController<User> {
       return getRedirectURL(URL + '/' + user.getId());
     }
     try {
-      userService.update(getUser(user));
+      userFacade.update(user);
       return getRedirectURL(URL);
     } catch (DuplicateFieldsException ex) {
       result.rejectValue(ex.getField(), ex.getErrorCode());
       return getRedirectURL(URL + '/' + user.getId());
     }
-  }
-
-  private User getUser(UserDto user) {
-    User foundUser = userService.getById(user.getId());
-    foundUser.setName(user.getName());
-    if (user.isPasswordChanged()) {
-      foundUser.setPassword(encoder.encode(user.getPassword()));
-    }
-    foundUser.setOneRole(user.isAdmin() ? Role.ADMIN : Role.USER);
-    return foundUser;
   }
 
   @GetMapping("/new")
