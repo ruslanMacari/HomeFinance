@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(UsersController.URL)
-public class UsersController extends CommonController<User> {
+@RequestMapping(UserController.URL)
+public class UserController extends CommonController<User> {
 
   public static final String URL = "/users";
 
@@ -30,7 +30,7 @@ public class UsersController extends CommonController<User> {
   private String rootname;
 
   @Autowired
-  public UsersController(UserFacade userFacade) {
+  public UserController(UserFacade userFacade) {
     this.userFacade = userFacade;
   }
 
