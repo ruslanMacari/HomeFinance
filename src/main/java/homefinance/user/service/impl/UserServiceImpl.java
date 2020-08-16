@@ -82,32 +82,37 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void update(User user) {
+    updateUser(user);
+  }
+
+  private void updateUser(User user) {
     constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public void update(UserFields userFields) {
-    Optional<User> userOptional = userRepository.findById(userFields.getId());
-    if (!userOptional.isPresent()) {
+    Optional<User> user = userRepository.findById(userFields.getId());
+    if (!user.isPresent()) {
       return;
     }
-    User user = userOptional.get();
+    setUserNameAndRole(user.get(), userFields);
+    user.get().setPassword(encoder.encode(userFields.getPassword()));
+    updateUser(user.get());
+  }
+
+  private void setUserNameAndRole(User user, UserFields userFields) {
     user.setName(userFields.getName());
-    user.setPassword(encoder.encode(userFields.getPassword()));
     user.setOneRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
-    constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public void updateWithoutPassword(UserFields userFields) {
-    Optional<User> userOptional = userRepository.findById(userFields.getId());
-    if (!userOptional.isPresent()) {
+    Optional<User> user = userRepository.findById(userFields.getId());
+    if (!user.isPresent()) {
       return;
     }
-    User user = userOptional.get();
-    user.setName(userFields.getName());
-    user.setOneRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
-    constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
+    setUserNameAndRole(user.get(), userFields);
+    updateUser(user.get());
   }
 
   @Override
