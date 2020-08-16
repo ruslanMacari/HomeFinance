@@ -20,6 +20,7 @@ import homefinance.user.service.repository.UserRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +81,7 @@ public class UserServiceImplTest {
     given(userFieldsMock.getName()).willReturn("name");
     given(userFieldsMock.getPassword()).willReturn("pass");
     given(userFieldsMock.isAdmin()).willReturn(true);
-    given(userRepositoryMock.getOne(50)).willReturn(userMock);
+    given(userRepositoryMock.findById(50)).willReturn(Optional.of(userMock));
     Map<String, String> constraintsMap = new HashMap<>();
     given(userMock.getConstraintsMap()).willReturn(constraintsMap);
     given(encoderMock.encode("pass")).willReturn("pass encoded");
@@ -89,7 +90,7 @@ public class UserServiceImplTest {
     //then:
     BDDMockito.then(userMock).should().setName("name");
     BDDMockito.then(userMock).should().setPassword("pass encoded");
-    BDDMockito.then(userMock).should().addRole(Role.ADMIN);
+    BDDMockito.then(userMock).should().setOneRole(Role.ADMIN);
     BDDMockito.then(constraintPersistMock).should().update(supplierArgumentCaptor.capture(), eq(constraintsMap));
     Supplier<? extends ConstraintEntity> lambda = supplierArgumentCaptor.getValue();
     lambda.get();
@@ -103,7 +104,7 @@ public class UserServiceImplTest {
     given(userFieldsMock.getId()).willReturn(60);
     given(userFieldsMock.getName()).willReturn("name1");
     given(userFieldsMock.isAdmin()).willReturn(false);
-    given(userRepositoryMock.getOne(60)).willReturn(userMock);
+    given(userRepositoryMock.findById(60)).willReturn(Optional.of(userMock));
     Map<String, String> constraintsMap = new HashMap<>();
     given(userMock.getConstraintsMap()).willReturn(constraintsMap);
     //when:
@@ -111,7 +112,7 @@ public class UserServiceImplTest {
     //then:
     BDDMockito.then(userMock).should().setName("name1");
     BDDMockito.then(userMock).should(never()).setPassword(anyString());
-    BDDMockito.then(userMock).should().addRole(Role.USER);
+    BDDMockito.then(userMock).should().setOneRole(Role.USER);
     BDDMockito.then(constraintPersistMock).should().update(supplierArgumentCaptor.capture(), eq(constraintsMap));
     Supplier<? extends ConstraintEntity> lambda = supplierArgumentCaptor.getValue();
     lambda.get();

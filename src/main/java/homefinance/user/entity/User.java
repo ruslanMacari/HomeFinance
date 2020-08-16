@@ -102,7 +102,7 @@ public class User extends ConstraintEntity implements UserFields {
     this.userRole = userRole;
   }
 
-  public void setOneRole(String role) {
+  public void setOneRole(Role role) {
     if (userRole.isEmpty()) {
       addRole(role);
     } else {
@@ -169,12 +169,12 @@ public class User extends ConstraintEntity implements UserFields {
     return Objects.equals(id, other.id);
   }
 
-  public void addRole(String role) {
+  public void addRole(Role role) {
     UserRole roleUser = new UserRole(this, role);
     userRole.add(roleUser);
   }
 
-  public boolean isInRole(String role) {
+  public boolean isInRole(Role role) {
     return userRole.stream().anyMatch((roleItem) -> (roleItem.getRole().equals(role)));
   }
 }

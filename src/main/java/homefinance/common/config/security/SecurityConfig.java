@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.csrf().requireCsrfProtectionMatcher(this.getCsrfRequestMatcher()).disable();
     http.authorizeRequests()
         .antMatchers("/assets/**", "/login*", "/login/**", "/rest/**").permitAll()
-        .antMatchers("/users/**").hasAuthority(Role.ADMIN)
+        .antMatchers("/users/**").hasAuthority(Role.ADMIN.name())
         .anyRequest().authenticated()
         .and().formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
         .and().rememberMe()

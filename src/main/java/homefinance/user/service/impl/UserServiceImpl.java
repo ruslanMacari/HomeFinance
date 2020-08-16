@@ -10,6 +10,7 @@ import homefinance.user.service.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -86,18 +87,26 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void update(UserFields userFields) {
-    User user = userRepository.getOne(userFields.getId());
+    Optional<User> userOptional = userRepository.findById(userFields.getId());
+    if (!userOptional.isPresent()) {
+      return;
+    }
+    User user = userOptional.get();
     user.setName(userFields.getName());
     user.setPassword(encoder.encode(userFields.getPassword()));
-    user.addRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
+    user.setOneRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
     constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 
   @Override
   public void updateWithoutPassword(UserFields userFields) {
-    User user = userRepository.getOne(userFields.getId());
+    Optional<User> userOptional = userRepository.findById(userFields.getId());
+    if (!userOptional.isPresent()) {
+      return;
+    }
+    User user = userOptional.get();
     user.setName(userFields.getName());
-    user.addRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
+    user.setOneRole(userFields.isAdmin() ? Role.ADMIN : Role.USER);
     constraintPersist.update(() -> userRepository.saveAndFlush(user), user.getConstraintsMap());
   }
 

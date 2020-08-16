@@ -4,6 +4,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import homefinance.user.entity.UserRole;
 import homefinance.user.service.UserService;
@@ -22,7 +23,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class UserDetailsServiceImplTest {
 
   private static final String USER_NAME = "user test";
-  private static final String USER_ROLE = "role user";
   private static final String PASSWORD = "password";
   private UserDetailsServiceImpl userDetailsService;
   @Mock
@@ -36,7 +36,7 @@ public class UserDetailsServiceImplTest {
   @Test
   public void loadUserByUsername_givenUserWithNameAndRole_returnUserDetails() {
     // given:
-    User user = mockUser(USER_NAME, USER_ROLE, PASSWORD, true);
+    User user = mockUser(USER_NAME, Role.ADMIN, PASSWORD, true);
     given(userService.getByName(USER_NAME)).willReturn(user);
     // when:
     UserDetails actual = userDetailsService.loadUserByUsername(USER_NAME);
@@ -45,11 +45,11 @@ public class UserDetailsServiceImplTest {
     then(actual.getPassword()).isEqualTo(PASSWORD);
     then(actual.isEnabled()).isTrue();
     then(actual.getAuthorities().size()).isEqualTo(1);
-    then(((GrantedAuthority)actual.getAuthorities().toArray()[0]).getAuthority()).isEqualTo(USER_ROLE);
+    then(((GrantedAuthority)actual.getAuthorities().toArray()[0]).getAuthority()).isEqualTo(Role.ADMIN.name());
   }
 
   @SuppressWarnings("SameParameterValue")
-  private User mockUser(String name, String role, String password, boolean enabled) {
+  private User mockUser(String name, Role role, String password, boolean enabled) {
     User user = mock(User.class);
     given(user.getName()).willReturn(name);
     given(user.getPassword()).willReturn(password);
@@ -59,7 +59,7 @@ public class UserDetailsServiceImplTest {
     return user;
   }
 
-  private Set<UserRole> mockUserRoles(String role) {
+  private Set<UserRole> mockUserRoles(Role role) {
     Set<UserRole> set = new HashSet<>();
     UserRole userRole = mock(UserRole.class);
     given(userRole.getRole()).willReturn(role);

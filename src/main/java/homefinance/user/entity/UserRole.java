@@ -5,6 +5,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,12 +23,12 @@ public class UserRole {
 
   private Integer id;
   private User user;
-  private String role;
+  private Role role;
 
   public UserRole() {
   }
 
-  public UserRole(User user, String role) {
+  public UserRole(User user, Role role) {
     this.user = user;
     this.role = role;
   }
@@ -52,12 +54,13 @@ public class UserRole {
     this.user = user;
   }
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "role", nullable = false, length = 45)
-  public String getRole() {
+  public Role getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 
@@ -65,9 +68,9 @@ public class UserRole {
   @Generated
   public int hashCode() {
     int hash = 7;
-    hash = 59 * hash + Objects.hashCode(this.id);
-    hash = 59 * hash + Objects.hashCode(this.user);
-    hash = 59 * hash + Objects.hashCode(this.role);
+    hash = 59 * hash + Objects.hashCode(id);
+    hash = 59 * hash + Objects.hashCode(user);
+    hash = 59 * hash + Objects.hashCode(role);
     return hash;
   }
 
@@ -84,10 +87,10 @@ public class UserRole {
       return false;
     }
     final UserRole other = (UserRole) obj;
-    if (!Objects.equals(this.role, other.role)) {
+    if (!Objects.equals(role, other.role)) {
       return false;
     }
-    return Objects.equals(this.id, other.id);
+    return Objects.equals(id, other.id);
   }
 
 }
