@@ -4,8 +4,8 @@ import static homefinance.common.CommonController.addModelToRedirectAttributes;
 import static homefinance.common.CommonController.getRedirectURL;
 import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 
-import homefinance.common.HandleDuplicationException;
-import homefinance.common.HandleDuplicationExceptionUrlFromRequestBuffer;
+import homefinance.common.PossibleDuplicationException;
+import homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer;
 import homefinance.common.RequestBuffer;
 import homefinance.money.currency.dto.CurrencyDto;
 import javax.validation.Valid;
@@ -51,7 +51,7 @@ public class CurrencyController {
     return "currencies/new";
   }
 
-  @HandleDuplicationException(urlOnException = "/currencies/new")
+  @PossibleDuplicationException(viewName = "/currencies/new")
   @PostMapping("/new")
   public String saveNew(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
@@ -71,20 +71,20 @@ public class CurrencyController {
     return "currencies/view";
   }
 
-  @HandleDuplicationExceptionUrlFromRequestBuffer
+  @PossibleDuplicationExceptionViewNameInRequestBuffer
   @PostMapping("/update")
   public String update(@Valid @ModelAttribute(CURRENCY_ATTRIBUTE_NAME) CurrencyDto currencyDto,
       BindingResult errors, RedirectAttributes redirectAttributes, Model model) {
     if (errors.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(getCurrencyViewUrl(currencyDto));
+      return getRedirectURL(getCurrencyViewName(currencyDto));
     }
-    requestBuffer.setUrl(getCurrencyViewUrl(currencyDto));
+    requestBuffer.setViewName(getCurrencyViewName(currencyDto));
     currencyFacade.update(currencyDto);
-    return getRedirectURL(getCurrencyViewUrl(currencyDto));
+    return getRedirectURL(getCurrencyViewName(currencyDto));
   }
 
-  private String getCurrencyViewUrl(CurrencyDto currencyDto) {
+  private String getCurrencyViewName(CurrencyDto currencyDto) {
     return URL + '/' + currencyDto.getId();
   }
 

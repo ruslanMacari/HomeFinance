@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 @RequestScoped
 public class RequestBuffer {
 
-  private String url;
+  private String viewName;
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setViewName(String viewName) {
+    this.viewName = viewName;
   }
 
-  public String getUrl() {
-    return this.url;
+  public String getViewName() {
+    return viewName;
   }
 }

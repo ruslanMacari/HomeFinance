@@ -31,14 +31,14 @@ public class HandleDuplicationExceptionAspect {
     this.requestBuffer = requestBuffer;
   }
 
-  @Around("@annotation(homefinance.common.HandleDuplicationException)")
+  @Around("@annotation(homefinance.common.PossibleDuplicationException)")
   public Object handleDuplication(ProceedingJoinPoint joinPoint) throws Throwable {
     logger.debug("handleDuplication()");
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
       handleDuplicateFieldsException(joinPoint, e);
-      return CommonController.getRedirectURL(getAnnotationUrlOnException(joinPoint));
+      return CommonController.getRedirectURL(getAnnotationViewName(joinPoint));
     }
   }
 
@@ -79,19 +79,19 @@ public class HandleDuplicationExceptionAspect {
     CommonController.addModelToRedirectAttributes(model, redirectAttributes);
   }
 
-  private String getAnnotationUrlOnException(ProceedingJoinPoint joinPoint) {
+  private String getAnnotationViewName(ProceedingJoinPoint joinPoint) {
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    return signature.getMethod().getAnnotation(HandleDuplicationException.class).urlOnException();
+    return signature.getMethod().getAnnotation(PossibleDuplicationException.class).viewName();
   }
 
-  @Around("@annotation(homefinance.common.HandleDuplicationExceptionUrlFromRequestBuffer)")
-  public Object handleDuplicationUrlFromRequestBuffer(ProceedingJoinPoint joinPoint) throws Throwable {
-    logger.debug("handleDuplicationUrlFromRequestBuffer()");
+  @Around("@annotation(homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer)")
+  public Object handleDuplicationViewNameRequestBuffer(ProceedingJoinPoint joinPoint) throws Throwable {
+    logger.debug("handleDuplicationViewNameRequestBuffer()");
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
       handleDuplicateFieldsException(joinPoint, e);
-      return CommonController.getRedirectURL(requestBuffer.getUrl());
+      return CommonController.getRedirectURL(requestBuffer.getViewName());
     }
   }
 }

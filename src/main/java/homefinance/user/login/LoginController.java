@@ -3,7 +3,7 @@ package homefinance.user.login;
 import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 
 import homefinance.common.CommonController;
-import homefinance.common.HandleDuplicationException;
+import homefinance.common.PossibleDuplicationException;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class LoginController {
     return "auth/registration";
   }
 
-  @HandleDuplicationException(urlOnException = URL + "/registration")
+  @PossibleDuplicationException(viewName = URL + "/registration")
   @PostMapping("/registration")
   public String registerUser(@Valid @ModelAttribute("user") UserLoginDto user, BindingResult errors,
       RedirectAttributes redirectAttributes, Model model) {
