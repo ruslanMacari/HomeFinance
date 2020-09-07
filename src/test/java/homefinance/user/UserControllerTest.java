@@ -5,12 +5,13 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-import homefinance.common.exception.DuplicateFieldsException;
+import homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer;
+import homefinance.common.RequestBuffer;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.common.util.impl.PathSelectorTest;
+import java.lang.reflect.Method;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
@@ -36,10 +38,12 @@ public class UserControllerTest {
   @Mock private UserDto userDtoMock;
   @Mock private UserFacade userFacadeMock;
   @Mock private Principal principalMock;
+  @Mock private RedirectAttributes redirectAttributesMock;
+  @Mock private RequestBuffer requestBufferMock;
 
   @Before
   public void setUp() {
-    userController = new UserController(userFacadeMock);
+    userController = new UserController(userFacadeMock, requestBufferMock);
     userController.setRootname(rootname);
     userController.setPathSelector(new PathSelectorTest());
   }
@@ -99,44 +103,36 @@ public class UserControllerTest {
   }
 
   @Test
-  public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() {
+  public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() throws NoSuchMethodException {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
+    UserDto userDto = new UserDto();
+    userDto.setId(1);
     // when:
-    String actual = userController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
+    String actual = userController.update(userDto, resultMock, redirectAttributesMock, modelMock);
     // then:
+    Method update = userController.getClass().getMethod("update", UserDto.class, BindingResult.class,
+        RedirectAttributes.class, Model.class);
+    then(update.getAnnotation(PossibleDuplicationExceptionViewNameInRequestBuffer.class)).isNotNull();
     then(actual).isEqualTo("redirect:/users");
-    BDDMockito.then(userFacadeMock).should().update(userDtoMock);
-  }
-
-  @Test
-  public void update_givenResultHasNoErrorsAndUpdateThrownException_thenRedirectToUsersViewUrl() {
-    // given:
-    given(resultMock.hasErrors()).willReturn(false);
-    given(userDtoMock.getId()).willReturn(100);
-    doThrow(DuplicateFieldsException.class).when(userFacadeMock).update(userDtoMock);
-    // when:
-    String actual = userController.update(userDtoMock, resultMock, mock(RedirectAttributes.class), modelMock);
-    // then:
-    then(actual).isEqualTo("redirect:/users/" + 100);
+    InOrder inOrder = BDDMockito.inOrder(requestBufferMock, userFacadeMock);
+    inOrder.verify(requestBufferMock).setViewName(UserController.URL + "/1");
+    inOrder.verify(userFacadeMock).update(userDto);
   }
 
   @Test
   public void update_givenResultHasErrors_thenRedirectToView() {
-    update_givenResultHasErrorsAndId_thenRedirectToViewId(100);
-    update_givenResultHasErrorsAndId_thenRedirectToViewId(50);
-  }
-
-  private void update_givenResultHasErrorsAndId_thenRedirectToViewId(int id) {
-    // given:
-    given(resultMock.hasErrors()).willReturn(true);
-    given(userDtoMock.getId()).willReturn(id);
-    RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-    // when:
-    String actual = userController.update(userDtoMock, resultMock, redirectAttributes, modelMock);
-    // then:
-    then(actual).isEqualTo("redirect:/users/" + id);
-    BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, modelMock);
+    for (int id : new int[] {100, 50}) {
+      // given:
+      given(resultMock.hasErrors()).willReturn(true);
+      given(userDtoMock.getId()).willReturn(id);
+      RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+      // when:
+      String actual = userController.update(userDtoMock, resultMock, redirectAttributes, modelMock);
+      // then:
+      then(actual).as("for id " + id + " result must be:").isEqualTo("redirect:/users/" + id);
+      BDDMockito.then(redirectAttributes).should().addFlashAttribute(FLASH_MODEL_ATTRIBUTE_NAME, modelMock);
+    }
   }
 
   @Test

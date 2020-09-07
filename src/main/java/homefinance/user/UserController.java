@@ -1,7 +1,8 @@
 package homefinance.user;
 
 import homefinance.common.CommonController;
-import homefinance.common.exception.DuplicateFieldsException;
+import homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer;
+import homefinance.common.RequestBuffer;
 import homefinance.common.exception.PageNotFoundException;
 import homefinance.user.entity.User;
 import java.security.Principal;
@@ -27,11 +28,13 @@ public class UserController extends CommonController<User> {
   public static final String URL = "/users";
 
   private final UserFacade userFacade;
+  private final RequestBuffer requestBuffer;
   private String rootname;
 
   @Autowired
-  public UserController(UserFacade userFacade) {
+  public UserController(UserFacade userFacade, RequestBuffer requestBuffer) {
     this.userFacade = userFacade;
+    this.requestBuffer = requestBuffer;
   }
 
   @Value("${db.username}")
@@ -66,21 +69,21 @@ public class UserController extends CommonController<User> {
     }
   }
 
-  // TODO: 11.08.2020 RMACARI: refactor
+  @PossibleDuplicationExceptionViewNameInRequestBuffer
   @PostMapping("/{id}")
   public String update(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(URL + '/' + user.getId());
+      return getRedirectURL(getUserViewName(user));
     }
-    try {
-      userFacade.update(user);
-      return getRedirectURL(URL);
-    } catch (DuplicateFieldsException ex) {
-      result.rejectValue(ex.getField(), ex.getErrorCode());
-      return getRedirectURL(URL + '/' + user.getId());
-    }
+    requestBuffer.setViewName(getUserViewName(user));
+    userFacade.update(user);
+    return getRedirectURL(URL);
+  }
+
+  private String getUserViewName(UserDto user) {
+    return URL + '/' + user.getId();
   }
 
   @GetMapping("/new")
