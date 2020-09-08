@@ -7,10 +7,10 @@ import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import homefinance.common.PossibleDuplicationException;
 import homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer;
 import homefinance.common.RequestBuffer;
 import homefinance.common.exception.PageNotFoundException;
-import homefinance.common.util.impl.PathSelectorTest;
 import java.lang.reflect.Method;
 import java.security.Principal;
 import java.util.Collections;
@@ -45,7 +45,6 @@ public class UserControllerTest {
   public void setUp() {
     userController = new UserController(userFacadeMock, requestBufferMock);
     userController.setRootname(rootname);
-    userController.setPathSelector(new PathSelectorTest());
   }
 
   @Test
@@ -159,13 +158,18 @@ public class UserControllerTest {
   }
 
   @Test
-  public void save_givenResultHasNoErrors_thenRedirectToUsers() {
+  public void save_givenResultHasNoErrors_thenRedirectToUsers() throws NoSuchMethodException {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     // when:
-    String actual = userController.save(userDtoMock, resultMock, mock(RedirectAttributes.class), null);
+    String viewName = userController.save(userDtoMock, resultMock, mock(RedirectAttributes.class), null);
     // then:
-    then(actual).isEqualTo("redirect:/users");
+    Method save = userController.getClass().getMethod("save", UserDto.class, BindingResult.class,
+        RedirectAttributes.class, Model.class);
+    then(save.getAnnotation(PossibleDuplicationException.class)).isNotNull();
+    then(save.getAnnotation(PossibleDuplicationException.class).viewName()).isEqualTo("/users/new");
+    BDDMockito.then(userFacadeMock).should().addUser(userDtoMock);
+    then(viewName).isEqualTo("redirect:/users");
   }
 
   @Test

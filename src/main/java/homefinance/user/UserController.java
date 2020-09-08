@@ -1,10 +1,13 @@
 package homefinance.user;
 
-import homefinance.common.CommonController;
+import static homefinance.common.CommonController.addModelToRedirectAttributes;
+import static homefinance.common.CommonController.getRedirectURL;
+import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
+
+import homefinance.common.PossibleDuplicationException;
 import homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer;
 import homefinance.common.RequestBuffer;
 import homefinance.common.exception.PageNotFoundException;
-import homefinance.user.entity.User;
 import java.security.Principal;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -23,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(UserController.URL)
-public class UserController extends CommonController<User> {
+public class UserController {
 
   public static final String URL = "/users";
 
@@ -69,20 +72,20 @@ public class UserController extends CommonController<User> {
     }
   }
 
-  @PossibleDuplicationExceptionViewNameInRequestBuffer
   @PostMapping("/{id}")
+  @PossibleDuplicationExceptionViewNameInRequestBuffer
   public String update(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
-      return getRedirectURL(getUserViewName(user));
+      return getRedirectURL(viewPathOf(user));
     }
-    requestBuffer.setViewName(getUserViewName(user));
+    requestBuffer.setViewName(viewPathOf(user));
     userFacade.update(user);
     return getRedirectURL(URL);
   }
 
-  private String getUserViewName(UserDto user) {
+  private String viewPathOf(UserDto user) {
     return URL + '/' + user.getId();
   }
 
@@ -95,17 +98,15 @@ public class UserController extends CommonController<User> {
   }
 
   @PostMapping("/new")
+  @PossibleDuplicationException(viewName = "/users/new")
   public String save(@Valid @ModelAttribute("user") UserDto user, BindingResult result,
       RedirectAttributes redirectAttributes, Model model) {
     if (result.hasErrors()) {
       addModelToRedirectAttributes(model, redirectAttributes);
       return getRedirectURL("/users/new");
     }
-    return pathSelector
-        .setActionOk(() -> userFacade.addUser(user))
-        .setPaths(getRedirectURL(URL), "users/new")
-        .setErrors(result)
-        .getPath();
+    userFacade.addUser(user);
+    return getRedirectURL(URL);
   }
 
   @DeleteMapping
