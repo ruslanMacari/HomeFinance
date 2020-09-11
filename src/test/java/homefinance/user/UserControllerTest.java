@@ -115,14 +115,14 @@ public class UserControllerTest {
     then(update.getAnnotation(PossibleDuplicationExceptionViewNameInRequestBuffer.class)).isNotNull();
     then(actual).isEqualTo("redirect:/users");
     InOrder inOrder = BDDMockito.inOrder(requestBufferMock, userFacadeMock);
-    inOrder.verify(requestBufferMock).setViewName(UserController.URL + "/1");
-    inOrder.verify(userFacadeMock).update(userDto);
+    BDDMockito.then(requestBufferMock).should(inOrder).setViewName(UserController.URL + "/1");
+    BDDMockito.then(userFacadeMock).should(inOrder).update(userDto);
   }
 
   @Test
   public void update_givenResultHasErrors_thenRedirectToView() {
+    // given:
     for (int id : new int[] {100, 50}) {
-      // given:
       given(resultMock.hasErrors()).willReturn(true);
       given(userDtoMock.getId()).willReturn(id);
       RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
