@@ -303,7 +303,6 @@
           <skipTests>false</skipTests>
           <excludes>
             <exclude>**/ExchangeRatesApiIntegrationTest.java</exclude>
-            <exclude>**/PathSelectorTest.java</exclude>
             <exclude>**/CurrenciesRestControllerIntegrationTest.java</exclude>
           </excludes>
         </configuration>
