@@ -18,11 +18,12 @@ public class ExchangeRatesApiIntegrationTest extends AbstractSpringIntegrationTe
 
   @Test
   public void test_getCurrencyRatesByDate() {
+    LocalDate date = LocalDate.of(2020, 2, 19);
     List<CurrencyRateModel> currencyRateByDate = this.exchangeRatesApi
-        .getCurrencyRatesByDate(LocalDate.of(2020, 2, 19));
+        .getCurrencyRatesByDate(date);
     assertThat(currencyRateByDate.size(), is(42));
-    this.assertValues(currencyRateByDate.get(5), new CurrencyRateModel("784", "AED", 4.8031));
-    this.assertValues(currencyRateByDate.get(41), new CurrencyRateModel("960", "XDR", 24.1134));
+    this.assertValues(currencyRateByDate.get(5), new CurrencyRateModel("784", "AED", 4.8031, date));
+    this.assertValues(currencyRateByDate.get(41), new CurrencyRateModel("960", "XDR", 24.1134, date));
     currencyRateByDate.forEach(System.out::println);
   }
 
@@ -30,6 +31,7 @@ public class ExchangeRatesApiIntegrationTest extends AbstractSpringIntegrationTe
     assertThat(source.getNumCode(), is(destination.getNumCode()));
     assertThat(source.getCharCode(), is(destination.getCharCode()));
     assertThat(source.getRate(), is(destination.getRate()));
+    assertThat(source.getDate(), is(destination.getDate()));
   }
 
   @Test

@@ -1,6 +1,7 @@
 package homefinance.money.currency;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class CurrencyRateModel {
@@ -9,14 +10,16 @@ public class CurrencyRateModel {
   private String charCode;
   private String currency;
   private BigDecimal rate;
+  private LocalDate date;
 
   public CurrencyRateModel() {
   }
 
-  public CurrencyRateModel(String numCode, String charCode, double rate) {
+  public CurrencyRateModel(String numCode, String charCode, double rate, LocalDate date) {
     this.numCode = numCode;
     this.charCode = charCode;
     this.rate = BigDecimal.valueOf(rate);
+    this.date = date;
   }
 
   public String getCurrency() {
@@ -83,6 +86,15 @@ public class CurrencyRateModel {
         ", charCode='" + this.charCode + '\'' +
         ", currency='" + this.currency + '\'' +
         ", rate=" + this.rate +
+        ", date=" + date +
         '}';
+  }
+
+  public LocalDate getDate() {
+    return date;
+  }
+
+  public void setDate(LocalDate date) {
+    this.date = date;
   }
 }

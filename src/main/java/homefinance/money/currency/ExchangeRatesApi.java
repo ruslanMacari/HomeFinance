@@ -49,7 +49,7 @@ public class ExchangeRatesApi {
     if (Objects.isNull(document)) {
       return new ArrayList<>();
     }
-    return this.getCurrencyRate(document);
+    return this.getCurrencyRate(document, date);
   }
 
   private void checkDate(LocalDate date) {
@@ -109,14 +109,14 @@ public class ExchangeRatesApi {
     return xml;
   }
 
-  private List<CurrencyRateModel> getCurrencyRate(Document document) {
+  private List<CurrencyRateModel> getCurrencyRate(Document document, LocalDate date) {
     document.getDocumentElement().normalize();
     NodeList nodeList = document.getElementsByTagName(TAG_NAME_VALUTE);
     List<CurrencyRateModel> list = new ArrayList<>();
     for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
       if (this.nodeIsElement(node)) {
-        list.add(this.getCurrencyRate((Element) node));
+        list.add(this.getCurrencyRate((Element) node, date));
       }
     }
     return list;
@@ -126,12 +126,13 @@ public class ExchangeRatesApi {
     return ELEMENT_NODE == node.getNodeType();
   }
 
-  private CurrencyRateModel getCurrencyRate(Element element) {
+  private CurrencyRateModel getCurrencyRate(Element element, LocalDate date) {
     CurrencyRateModel currencyRateModel = new CurrencyRateModel();
     currencyRateModel.setNumCode(this.getText(element, TAG_NAME_NUM_CODE));
     currencyRateModel.setCharCode(this.getText(element, TAG_NAME_CHAR_CODE));
     currencyRateModel.setCurrency(this.getText(element, TAG_NAME_NAME));
     currencyRateModel.setRate(new BigDecimal(this.getText(element, TAG_NAME_VALUE)));
+    currencyRateModel.setDate(date);
     return currencyRateModel;
   }
 
