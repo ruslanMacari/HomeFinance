@@ -1,21 +1,91 @@
 package homefinance.money.currency.entity;
 
-import homefinance.common.entity.BaseEntity;
+import java.time.LocalDate;
+import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "currency_rate")
-public class CurrencyRate extends BaseEntity {
+public class CurrencyRate {
 
-  private int currencyId;
+  private LocalDate date;
+  private int rate;
+  private int id;
 
-  public int getCurrencyId() {
-    return this.currencyId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  public int getId() {
+    return id;
   }
 
-  public CurrencyRate setCurrencyId(int currencyId) {
-    this.currencyId = currencyId;
-    return this;
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public CurrencyRate(Currency currency, int rate, LocalDate date) {
+    this.currency = currency;
+    this.rate = rate;
+    this.date = date;
+  }
+
+  public CurrencyRate() {
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "currency_id", nullable = false)
+  private Currency currency;
+
+  @Column(name = "rate", nullable = false)
+  public int getRate() {
+    return rate;
+  }
+
+  public void setRate(int rate) {
+    this.rate = rate;
+  }
+
+  @Column(name = "date", nullable = false)
+  public LocalDate getDate() {
+    return date;
+  }
+
+  public void setDate(LocalDate date) {
+    this.date = date;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CurrencyRate that = (CurrencyRate) o;
+    return rate == that.rate && id == that.id && date.equals(that.date) && currency
+        .equals(that.currency);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(date, rate, id, currency);
+  }
+
+  @Override
+  public String toString() {
+    return "CurrencyRate{" +
+        "date=" + date +
+        ", rate=" + rate +
+        ", id=" + id +
+        ", currency=" + currency +
+        '}';
   }
 }

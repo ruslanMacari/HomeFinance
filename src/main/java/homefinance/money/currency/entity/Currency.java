@@ -4,11 +4,13 @@ import homefinance.common.entity.ConstraintEntity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
@@ -46,6 +48,9 @@ public class Currency extends ConstraintEntity implements Serializable {
     this.code = code;
     this.charCode = charCode;
   }
+
+  @OneToMany(mappedBy="cart")
+  private Set<CurrencyRate> rates;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
