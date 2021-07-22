@@ -1,5 +1,6 @@
 package homefinance.money.currency.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 public class CurrencyRate {
 
   private LocalDate date;
-  private int rate;
+  private BigDecimal rate;
   private int id;
 
   @Id
@@ -30,7 +31,7 @@ public class CurrencyRate {
     this.id = id;
   }
 
-  public CurrencyRate(Currency currency, int rate, LocalDate date) {
+  public CurrencyRate(Currency currency, BigDecimal rate, LocalDate date) {
     this.currency = currency;
     this.rate = rate;
     this.date = date;
@@ -44,11 +45,11 @@ public class CurrencyRate {
   private Currency currency;
 
   @Column(name = "rate", nullable = false)
-  public int getRate() {
+  public BigDecimal getRate() {
     return rate;
   }
 
-  public void setRate(int rate) {
+  public void setRate(BigDecimal rate) {
     this.rate = rate;
   }
 
@@ -70,7 +71,7 @@ public class CurrencyRate {
       return false;
     }
     CurrencyRate that = (CurrencyRate) o;
-    return rate == that.rate && id == that.id && date.equals(that.date) && currency
+    return rate.equals(that.rate) && id == that.id && date.equals(that.date) && currency
         .equals(that.currency);
   }
 

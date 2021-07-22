@@ -75,8 +75,7 @@ public class CurrencyServiceImpl implements CurrencyService {
           currency.setCharCode(currencyRateModel.getCharCode());
           add(currency);
           currencyRateRepository.saveAndFlush(
-              new CurrencyRate(currency, currencyRateModel.getRate().intValue(),
-                  currencyRateModel.getDate()));
+              new CurrencyRate(currency, currencyRateModel.getRate(), currencyRateModel.getDate()));
         });
   }
 
