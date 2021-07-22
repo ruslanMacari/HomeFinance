@@ -16,6 +16,8 @@ import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.CurrencyRepository;
 import homefinance.money.currency.entity.Currency;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,6 +107,8 @@ public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegratio
     currencyRateModel.setNumCode("test1");
     currencyRateModel.setCharCode("test");
     currencyRateModel.setCurrency("Test currency");
+    currencyRateModel.setRate(BigDecimal.valueOf(10.02));
+    currencyRateModel.setDate(LocalDate.now());
     when(this.currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(Arrays.asList(
         currencyRateModel));
     this.currencyService.fillDistinctCurrencies();
