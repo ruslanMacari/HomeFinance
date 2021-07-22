@@ -1,12 +1,14 @@
 package homefinance.money.currency.impl;
 
-import homefinance.money.currency.entity.Currency;
+import homefinance.common.exception.DuplicateFieldsException;
+import homefinance.common.util.ConstraintPersist;
 import homefinance.money.currency.CurrencyRateModel;
+import homefinance.money.currency.CurrencyRateRepository;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.CurrencyRepository;
 import homefinance.money.currency.CurrencyService;
-import homefinance.common.util.ConstraintPersist;
-import homefinance.common.exception.DuplicateFieldsException;
+import homefinance.money.currency.entity.Currency;
+import homefinance.money.currency.entity.CurrencyRate;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ public class CurrencyServiceImpl implements CurrencyService {
   private final CurrencyRepository currencyRepository;
   private CurrencyRatesService currencyRatesService;
   private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
+  private final CurrencyRateRepository currencyRateRepository;
 
   @Autowired
   public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
@@ -34,16 +37,18 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   public CurrencyServiceImpl(
       ConstraintPersist constraintPersist, CurrencyRepository currencyRepository,
-      CurrencyRatesService currencyRatesService) {
+      CurrencyRatesService currencyRatesService,
+      CurrencyRateRepository currencyRateRepository) {
     this.constraintPersist = constraintPersist;
     this.currencyRepository = currencyRepository;
     this.currencyRatesService = currencyRatesService;
+    this.currencyRateRepository = currencyRateRepository;
   }
 
   @Override
   public void update(Currency currency) throws DuplicateFieldsException {
     logger.debug("update({})", currency);
-      this.constraintPersist
+    this.constraintPersist
         .update(() -> this.currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
   }
 
@@ -63,15 +68,16 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
     currencyRatesByDate.stream()
         .filter(currencyRate -> this.getByCode(currencyRate.getNumCode()) == null)
-        .forEach(this::addCurrency);
-  }
-
-  private void addCurrency(CurrencyRateModel currencyRateModel) {
-    Currency currency = new Currency();
-    currency.setCode(currencyRateModel.getNumCode());
-    currency.setName(currencyRateModel.getCurrency());
-    currency.setCharCode(currencyRateModel.getCharCode());
-    this.add(currency);
+        .forEach(currencyRateModel -> {
+          Currency currency = new Currency();
+          currency.setCode(currencyRateModel.getNumCode());
+          currency.setName(currencyRateModel.getCurrency());
+          currency.setCharCode(currencyRateModel.getCharCode());
+          add(currency);
+          currencyRateRepository.saveAndFlush(
+              new CurrencyRate(currency, currencyRateModel.getRate().intValue(),
+                  currencyRateModel.getDate()));
+        });
   }
 
   @Override
@@ -92,7 +98,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public void delete(Integer id) {
-      this.currencyRepository.deleteById(id);
+    this.currencyRepository.deleteById(id);
   }
 
 }
