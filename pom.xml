@@ -52,7 +52,7 @@
     <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
     <spring-boot-maven-plugin.version>2.0.3.RELEASE</spring-boot-maven-plugin.version>
     <maven-help-pugin-version>3.1.0</maven-help-pugin-version>
-    <jsoup.version>1.11.3</jsoup.version>
+    <jsoup.version>1.14.2</jsoup.version>
     <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
     <embedded-database-spring-test-version>1.5.3</embedded-database-spring-test-version>
   </properties>
