@@ -49,7 +49,7 @@
     <spring-aspects.version>3.2.0.RELEASE</spring-aspects.version>
     <hibernate-ehcache.version>5.4.2.Final</hibernate-ehcache.version>
     <org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
-    <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
+    <spring-security-oauth2.version>2.3.6.RELEASE</spring-security-oauth2.version>
     <spring-boot-maven-plugin.version>2.0.3.RELEASE</spring-boot-maven-plugin.version>
     <maven-help-pugin-version>3.1.0</maven-help-pugin-version>
     <jsoup.version>1.14.2</jsoup.version>
