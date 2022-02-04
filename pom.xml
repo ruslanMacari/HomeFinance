@@ -39,7 +39,7 @@
     <mysql-connector-java>8.0.12</mysql-connector-java>
     <hamcrest-library>1.3</hamcrest-library>
     <json-path>2.2.0</json-path>
-    <mockito-all>1.9.5</mockito-all>
+    <mockito.version>3.5.13</mockito.version>
     <spring-securiry>3.2.5.RELEASE</spring-securiry>
     <jackson-core-version>2.11.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
@@ -227,6 +227,13 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>${h2.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>4.2.0</version>
       <scope>test</scope>
     </dependency>
 
