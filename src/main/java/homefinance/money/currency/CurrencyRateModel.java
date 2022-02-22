@@ -3,6 +3,7 @@ package homefinance.money.currency;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import lombok.Builder;
 
 public class CurrencyRateModel {
 
@@ -15,6 +16,7 @@ public class CurrencyRateModel {
   public CurrencyRateModel() {
   }
 
+  @Builder
   public CurrencyRateModel(String numCode, String charCode, double rate, LocalDate date) {
     this.numCode = numCode;
     this.charCode = charCode;

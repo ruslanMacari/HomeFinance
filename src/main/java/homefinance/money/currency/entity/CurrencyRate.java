@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 
 @Entity
 @Table(name = "currency_rate")
@@ -19,6 +20,10 @@ public class CurrencyRate {
   private LocalDate date;
   private BigDecimal rate;
   private int id;
+
+  @ManyToOne
+  @JoinColumn(name = "currency_id", nullable = false)
+  private Currency currency;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,12 +42,15 @@ public class CurrencyRate {
     this.date = date;
   }
 
-  public CurrencyRate() {
+  @Builder
+  public CurrencyRate(Currency currency, double rate, LocalDate date) {
+    this.currency = currency;
+    this.rate = BigDecimal.valueOf(rate);
+    this.date = date;
   }
 
-  @ManyToOne
-  @JoinColumn(name = "currency_id", nullable = false)
-  private Currency currency;
+  public CurrencyRate() {
+  }
 
   @Column(name = "rate", nullable = false)
   public BigDecimal getRate() {

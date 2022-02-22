@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Generated;
 
 @Entity
@@ -42,7 +43,7 @@ public class Currency extends ConstraintEntity implements Serializable {
     this.name = name;
     this.code = code;
   }
-
+  @Builder
   public Currency(String name, String code, String charCode) {
     this.name = name;
     this.code = code;

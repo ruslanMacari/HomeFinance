@@ -14,7 +14,6 @@ import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.CurrencyRepository;
 import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.entity.CurrencyRate;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -54,11 +53,16 @@ public class CurrencyServiceImplTest {
     //given:
     LocalDate date = LocalDate.now();
     given(localDateAdapterMock.now()).willReturn(date);
-    CurrencyRateModel model = new CurrencyRateModel("111", "USD", 100.1, date);
-    Currency usd = new Currency();
-    usd.setCode(model.getNumCode());
-    usd.setName(model.getCurrency());
-    usd.setCharCode(model.getCharCode());
+    CurrencyRateModel model = CurrencyRateModel.builder()
+        .numCode("111")
+        .charCode("USD")
+        .rate(100.1)
+        .date(date).build();
+    Currency usd = Currency.builder()
+        .code(model.getNumCode())
+        .name(model.getCurrency())
+        .charCode(model.getCharCode())
+        .build();
     given(ratesService.getCurrencyRatesByDate(date)).willReturn(Arrays.asList(model));
     //when:
     service.fillDistinctCurrencies();
@@ -70,7 +74,10 @@ public class CurrencyServiceImplTest {
     lambda.get();
     then(repository).should().saveAndFlush(eq(usd));
     //test add currency rate
-    then(currencyRateRepository).should().saveAndFlush(eq(new CurrencyRate(usd, new BigDecimal(
-        "100.1"), date)));
+    then(currencyRateRepository).should().saveAndFlush(eq(CurrencyRate.builder()
+        .rate(100.1)
+        .currency(usd)
+        .date(date)
+        .build()));
   }
 }
