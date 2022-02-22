@@ -15,14 +15,17 @@ public class JsoupAdapterTest {
 
   @Test
   public void parse_shouldReturn_JsoupParse() {
+    // given:
+    String html = "<html>hello</>";
+    Document actual;
+    Document expected;
     try (MockedStatic<Jsoup> jsoupMock = Mockito.mockStatic(Jsoup.class)) {
-      // given:
-      String html = "<html>hello</>";
       jsoupMock.when(() -> Jsoup.parse(html)).thenReturn(mock(Document.class));
       // when:
-      Document actual = adapter.parse(html);
-      // then:
-      then(actual).isEqualTo(Jsoup.parse(html));
+      actual = adapter.parse(html);
+      expected = Jsoup.parse(html);
     }
+    // then:
+    then(actual).isEqualTo(expected);
   }
 }
