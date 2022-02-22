@@ -69,16 +69,22 @@ public class CurrencyServiceImpl implements CurrencyService {
       return;
     }
     currencyRatesByDate.stream()
-        .filter(currencyRate -> getByCode(currencyRate.getNumCode()) == null)
-        .forEach(currencyRateModel -> {
-          Currency currency = new Currency();
-          currency.setCode(currencyRateModel.getNumCode());
-          currency.setName(currencyRateModel.getCurrency());
-          currency.setCharCode(currencyRateModel.getCharCode());
-          add(currency);
-          currencyRateRepository.saveAndFlush(
-              new CurrencyRate(currency, currencyRateModel.getRate(), currencyRateModel.getDate()));
-        });
+        .filter(currencyRateModel -> getByCode(currencyRateModel.getNumCode()) == null)
+        .forEach(this::addCurrencyAndRates);
+  }
+
+  private void addCurrencyAndRates(CurrencyRateModel currencyRateModel) {
+    Currency currency = Currency.builder()
+        .code(currencyRateModel.getNumCode())
+        .name(currencyRateModel.getCurrency())
+        .charCode(currencyRateModel.getCharCode()).build();
+    add(currency);
+    currencyRateRepository.saveAndFlush(
+        CurrencyRate.builder()
+            .currency(currency)
+            .rate(currencyRateModel.getRate())
+            .date(currencyRateModel.getDate())
+            .build());
   }
 
   @Override

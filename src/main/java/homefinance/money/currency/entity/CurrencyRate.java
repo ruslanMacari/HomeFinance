@@ -36,16 +36,10 @@ public class CurrencyRate {
     this.id = id;
   }
 
+  @Builder
   public CurrencyRate(Currency currency, BigDecimal rate, LocalDate date) {
     this.currency = currency;
     this.rate = rate;
-    this.date = date;
-  }
-
-  @Builder
-  public CurrencyRate(Currency currency, double rate, LocalDate date) {
-    this.currency = currency;
-    this.rate = BigDecimal.valueOf(rate);
     this.date = date;
   }
 
