@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
+import homefinance.common.beans.LocalDateAdapter;
 import homefinance.common.entity.ConstraintEntity;
 import homefinance.common.util.ConstraintPersist;
 import homefinance.money.currency.CurrencyRateModel;
@@ -39,17 +40,20 @@ public class CurrencyServiceImplTest {
   private ArgumentCaptor<Supplier<ConstraintEntity>> lambdaCaptor;
   @Mock
   private CurrencyRateRepository currencyRateRepository;
+  @Mock
+  private LocalDateAdapter localDateAdapterMock;
 
   @Before
   public void setUp() throws Exception {
     service = new CurrencyServiceImpl(constraintPersist, repository, ratesService,
-        currencyRateRepository);
+        currencyRateRepository, localDateAdapterMock);
   }
 
   @Test
   public void fillDistinctCurrencies_givenOneCurrencyRateModel_shouldAddCurrencyAndCurrencyRate() {
     //given:
     LocalDate date = LocalDate.now();
+    given(localDateAdapterMock.now()).willReturn(date);
     CurrencyRateModel model = new CurrencyRateModel("111", "USD", 100.1, date);
     Currency usd = new Currency();
     usd.setCode(model.getNumCode());

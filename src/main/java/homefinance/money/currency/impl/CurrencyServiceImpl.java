@@ -1,5 +1,6 @@
 package homefinance.money.currency.impl;
 
+import homefinance.common.beans.LocalDateAdapter;
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.util.ConstraintPersist;
 import homefinance.money.currency.CurrencyRateModel;
@@ -29,6 +30,7 @@ public class CurrencyServiceImpl implements CurrencyService {
   private CurrencyRatesService currencyRatesService;
   private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
   private final CurrencyRateRepository currencyRateRepository;
+  private final LocalDateAdapter localDateAdapter;
 
   @Autowired
   public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
@@ -38,36 +40,36 @@ public class CurrencyServiceImpl implements CurrencyService {
   public CurrencyServiceImpl(
       ConstraintPersist constraintPersist, CurrencyRepository currencyRepository,
       CurrencyRatesService currencyRatesService,
-      CurrencyRateRepository currencyRateRepository) {
+      CurrencyRateRepository currencyRateRepository, LocalDateAdapter localDateAdapter) {
     this.constraintPersist = constraintPersist;
     this.currencyRepository = currencyRepository;
     this.currencyRatesService = currencyRatesService;
     this.currencyRateRepository = currencyRateRepository;
+    this.localDateAdapter = localDateAdapter;
   }
 
   @Override
   public void update(Currency currency) throws DuplicateFieldsException {
     logger.debug("update({})", currency);
-    this.constraintPersist
-        .update(() -> this.currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
+    constraintPersist
+        .update(() -> currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
   }
 
   @Override
   public List<Currency> getAllCurrencies() {
-    return this.currencyRepository.findAll(Sort.by(Direction.ASC, "charCode"));
+    return currencyRepository.findAll(Sort.by(Direction.ASC, "charCode"));
   }
 
   @Override
   public void fillDistinctCurrencies() {
-    LocalDate now = LocalDate.now();
-    List<CurrencyRateModel> currencyRatesByDate = this.currencyRatesService
-        .getCurrencyRatesByDate(now);
+    LocalDate now = localDateAdapter.now();
+    List<CurrencyRateModel> currencyRatesByDate = currencyRatesService.getCurrencyRatesByDate(now);
     if (CollectionUtils.isEmpty(currencyRatesByDate)) {
       logger.info("No currency rates found by date: {}", now);
       return;
     }
     currencyRatesByDate.stream()
-        .filter(currencyRate -> this.getByCode(currencyRate.getNumCode()) == null)
+        .filter(currencyRate -> getByCode(currencyRate.getNumCode()) == null)
         .forEach(currencyRateModel -> {
           Currency currency = new Currency();
           currency.setCode(currencyRateModel.getNumCode());
@@ -81,23 +83,23 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public Currency add(Currency currency) throws DuplicateFieldsException {
-    return (Currency) this.constraintPersist
-        .add(() -> this.currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
+    return (Currency) constraintPersist
+        .add(() -> currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
   }
 
   @Override
   public Currency getByCode(String code) {
-    return this.currencyRepository.findByCode(code);
+    return currencyRepository.findByCode(code);
   }
 
   @Override
   public Currency getByID(Integer id) {
-    return this.currencyRepository.findById(id).orElse(null);
+    return currencyRepository.findById(id).orElse(null);
   }
 
   @Override
   public void delete(Integer id) {
-    this.currencyRepository.deleteById(id);
+    currencyRepository.deleteById(id);
   }
 
 }
