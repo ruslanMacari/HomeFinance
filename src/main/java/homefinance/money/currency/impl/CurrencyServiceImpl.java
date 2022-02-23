@@ -13,6 +13,7 @@ import homefinance.money.currency.entity.CurrencyRate;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -61,28 +62,35 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public void fillDistinctCurrencies() {
+    getCurrencyRatesByDate().stream()
+        .filter(currencyRateModel -> getByCode(currencyRateModel.getNumCode()) == null)
+        .map(currencyRateModel -> Pair.with(currencyRateModel, Currency.builder()
+            .code(currencyRateModel.getNumCode())
+            .name(currencyRateModel.getCurrency())
+            .charCode(currencyRateModel.getCharCode()).build()))
+        .peek(this::addCurrency)
+        .forEach(this::addCurrencyRate);
+  }
+
+  private List<CurrencyRateModel> getCurrencyRatesByDate() {
     LocalDate now = localDateAdapter.now();
     List<CurrencyRateModel> currencyRatesByDate = currencyRatesService.getCurrencyRatesByDate(now);
     if (CollectionUtils.isEmpty(currencyRatesByDate)) {
       log.info("No currency rates found by date: {}", now);
-      return;
     }
-    currencyRatesByDate.stream()
-        .filter(currencyRateModel -> getByCode(currencyRateModel.getNumCode()) == null)
-        .forEach(this::addCurrencyAndRates);
+    return currencyRatesByDate;
   }
 
-  private void addCurrencyAndRates(CurrencyRateModel currencyRateModel) {
-    Currency currency = Currency.builder()
-        .code(currencyRateModel.getNumCode())
-        .name(currencyRateModel.getCurrency())
-        .charCode(currencyRateModel.getCharCode()).build();
-    add(currency);
+  private void addCurrency(Pair<CurrencyRateModel, Currency> pair) {
+    add(pair.getValue1());
+  }
+
+  private void addCurrencyRate(Pair<CurrencyRateModel, Currency> pair) {
     currencyRateRepository.saveAndFlush(
         CurrencyRate.builder()
-            .currency(currency)
-            .rate(currencyRateModel.getRate())
-            .date(currencyRateModel.getDate())
+            .currency(pair.getValue1())
+            .rate(pair.getValue0().getRate())
+            .date(pair.getValue0().getDate())
             .build());
   }
 

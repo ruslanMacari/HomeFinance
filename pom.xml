@@ -39,12 +39,12 @@
     <mysql-connector-java>8.0.12</mysql-connector-java>
     <hamcrest-library>1.3</hamcrest-library>
     <json-path>2.2.0</json-path>
-    <mockito.version>3.5.13</mockito.version>
+    <mockito.version>4.3.1</mockito.version>
     <spring-securiry>3.2.5.RELEASE</spring-securiry>
     <jackson-core-version>2.11.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <modelmapper.version>2.3.2</modelmapper.version>
+    <modelmapper.version>2.4.5</modelmapper.version>
     <api-util.version>2.0.0.AM2</api-util.version>
     <spring-aspects.version>3.2.0.RELEASE</spring-aspects.version>
     <hibernate-ehcache.version>5.4.2.Final</hibernate-ehcache.version>
@@ -55,6 +55,8 @@
     <jsoup.version>1.14.2</jsoup.version>
     <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
     <embedded-database-spring-test-version>1.5.3</embedded-database-spring-test-version>
+    <mockito.version>4.2.0</mockito.version>
+    <javatuples.version>1.2</javatuples.version>
   </properties>
   <dependencies>
 
@@ -233,7 +235,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>4.2.0</version>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -242,6 +244,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.javatuples</groupId>
+      <artifactId>javatuples</artifactId>
+      <version>${javatuples.version}</version>
     </dependency>
 
   </dependencies>
