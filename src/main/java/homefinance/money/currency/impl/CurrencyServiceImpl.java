@@ -12,8 +12,7 @@ import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.entity.CurrencyRate;
 import java.time.LocalDate;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -23,12 +22,12 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional
+@Slf4j
 public class CurrencyServiceImpl implements CurrencyService {
 
   private final ConstraintPersist constraintPersist;
   private final CurrencyRepository currencyRepository;
   private CurrencyRatesService currencyRatesService;
-  private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
   private final CurrencyRateRepository currencyRateRepository;
   private final LocalDateAdapter localDateAdapter;
 
@@ -50,7 +49,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
   @Override
   public void update(Currency currency) throws DuplicateFieldsException {
-    logger.debug("update({})", currency);
+    log.debug("update({})", currency);
     constraintPersist
         .update(() -> currencyRepository.saveAndFlush(currency), currency.getConstraintsMap());
   }
@@ -65,7 +64,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     LocalDate now = localDateAdapter.now();
     List<CurrencyRateModel> currencyRatesByDate = currencyRatesService.getCurrencyRatesByDate(now);
     if (CollectionUtils.isEmpty(currencyRatesByDate)) {
-      logger.info("No currency rates found by date: {}", now);
+      log.info("No currency rates found by date: {}", now);
       return;
     }
     currencyRatesByDate.stream()
