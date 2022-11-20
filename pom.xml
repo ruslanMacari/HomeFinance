@@ -41,15 +41,15 @@
     <json-path>2.2.0</json-path>
     <mockito.version>4.3.1</mockito.version>
     <spring-securiry>3.2.5.RELEASE</spring-securiry>
-    <jackson-core-version>2.13.4.1</jackson-core-version>
+    <jackson-core-version>2.14.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <modelmapper.version>2.4.5</modelmapper.version>
-    <api-util.version>2.0.0.AM2</api-util.version>
-    <spring-aspects.version>3.2.0.RELEASE</spring-aspects.version>
+    <modelmapper.version>3.1.0</modelmapper.version>
+    <api-util.version>2.1.2</api-util.version>
+    <spring-aspects.version>5.3.23</spring-aspects.version>
     <hibernate-ehcache.version>5.4.2.Final</hibernate-ehcache.version>
-    <org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
-    <spring-security-oauth2.version>2.3.6.RELEASE</spring-security-oauth2.version>
+    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+    <spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
     <spring-boot-maven-plugin.version>2.0.3.RELEASE</spring-boot-maven-plugin.version>
     <maven-help-pugin-version>3.1.0</maven-help-pugin-version>
     <jsoup.version>1.15.3</jsoup.version>
@@ -63,7 +63,7 @@
     <dependency>
       <groupId>javax.el</groupId>
       <artifactId>javax.el-api</artifactId>
-      <version>2.2.4</version>
+      <version>3.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.web</groupId>
@@ -101,6 +101,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
+      <version>2.2.10.RELEASE</version>
     </dependency>
 
     <dependency>
@@ -166,6 +167,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
+      <version>4.5.13</version>
     </dependency>
 
     <dependency>
