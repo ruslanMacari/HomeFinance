@@ -1,17 +1,13 @@
 package homefinance;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres.Builder;
-import java.io.File;
-import java.util.function.Consumer;
 import javax.sql.DataSource;
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Ignore
+@Disabled
 public class TestConfiguration {
 
   @Bean
@@ -22,13 +18,6 @@ public class TestConfiguration {
         .username("sa")
         .password("")
         .build();
-  }
-
-  @Bean
-  public Consumer<Builder> embeddedPostgresCustomizer(
-      @Value("${embedded-pg.directory}") String directory) {
-    return builder -> builder.setConnectConfig("sslmode", "disable")
-        .setOverrideWorkingDirectory(new File(directory));
   }
 
 }

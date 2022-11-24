@@ -1,20 +1,23 @@
 package homefinance.user.service.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import homefinance.AbstractSpringIntegrationTest;
 import homefinance.user.entity.Role;
 import homefinance.user.entity.User;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+@Disabled
+// TODO: 021, 21-Nov-22 ruslan.macari: add test containers
 public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired
@@ -29,7 +32,7 @@ public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTes
     this.user.setOneRole(Role.USER);
   }
 
-  @Before
+  @BeforeEach
   public void before() {
     this.userService.list().forEach(u -> this.userService.delete(u.getId()));
   }

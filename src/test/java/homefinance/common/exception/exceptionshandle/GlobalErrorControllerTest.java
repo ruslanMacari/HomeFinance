@@ -5,15 +5,15 @@ import static org.mockito.BDDMockito.given;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GlobalErrorControllerTest {
 
   private GlobalErrorController globalErrorController;
@@ -22,7 +22,7 @@ public class GlobalErrorControllerTest {
   @Mock
   private Model modelMock;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     globalErrorController = new GlobalErrorController();
   }
@@ -31,6 +31,7 @@ public class GlobalErrorControllerTest {
   public void handleError_givenStatusIsNull_returnException() {
     // given:
     given(requestMock.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).willReturn(null);
+    given(requestMock.getAttribute(RequestDispatcher.ERROR_EXCEPTION)).willReturn(null);
     // when:
     String actual = globalErrorController.handleError(requestMock, modelMock);
     // then:
@@ -57,6 +58,7 @@ public class GlobalErrorControllerTest {
   public void handleError_givenStatusIs404_returnResourceNotFound() {
     // given:
     given(requestMock.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).willReturn(404);
+    given(requestMock.getAttribute(RequestDispatcher.ERROR_EXCEPTION)).willReturn("not found");
     // when:
     String actual = globalErrorController.handleError(requestMock, modelMock);
     // then:

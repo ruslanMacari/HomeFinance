@@ -25,7 +25,8 @@ public class GlobalErrorController implements ErrorController {
         && HttpStatus.NOT_FOUND.value() == statusCode;
   }
 
-  @Override
+  // TODO: 024, 24-Nov-22 ruslan.macari: rewrite
+//  @Override
   public String getErrorPath() {
     return "/error";
   }

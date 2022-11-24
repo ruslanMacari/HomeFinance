@@ -2,6 +2,7 @@ package homefinance.user;
 
 import static homefinance.common.CommonController.FLASH_MODEL_ATTRIBUTE_NAME;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
@@ -17,18 +18,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
   private final String rootname = "root";
@@ -41,7 +42,7 @@ public class UserControllerTest {
   @Mock private RedirectAttributes redirectAttributesMock;
   @Mock private RequestBuffer requestBufferMock;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     userController = new UserController(userFacadeMock, requestBufferMock);
     userController.setRootname(rootname);
@@ -59,13 +60,13 @@ public class UserControllerTest {
     BDDMockito.then(modelMock).should().addAttribute("users", usersDto);
   }
 
-  @Test(expected = PageNotFoundException.class)
+  @Test()
   public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
     // given:
     given(userFacadeMock.getUserById(150)).willReturn(userDtoMock);
     given(userDtoMock.getName()).willReturn(rootname);
     // when:
-    userController.openView(150, modelMock);
+    assertThrows(PageNotFoundException.class, () -> userController.openView(150, modelMock));
   }
 
   @Test
@@ -79,12 +80,12 @@ public class UserControllerTest {
     then(actual).isEqualTo("users/view");
   }
 
-  @Test(expected = PageNotFoundException.class)
+  @Test()
   public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
     // given:
     given(userFacadeMock.getUserById(100)).willReturn(null);
     // when:
-    userController.openView(100, modelMock);
+    assertThrows(PageNotFoundException.class, () -> userController.openView(100, modelMock));
   }
 
   @Test
@@ -198,7 +199,7 @@ public class UserControllerTest {
     BDDMockito.then(userFacadeMock).should().deleteUser(16);
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test()
   public void deleteUser_givenUserPrincipalIsUserToDelete_thenRefuseDeleteUser() {
     // given:
     Principal userPrincipal = mock(Principal.class);
@@ -206,7 +207,7 @@ public class UserControllerTest {
     given(userDtoMock.getName()).willReturn("root user");
 
     // when:
-    userController.deleteUser(userDtoMock, userPrincipal);
+    assertThrows(RuntimeException.class, () -> userController.deleteUser(userDtoMock, userPrincipal));
   }
 
 }

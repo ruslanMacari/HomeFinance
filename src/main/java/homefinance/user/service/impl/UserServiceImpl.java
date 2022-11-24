@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> listLimit(Integer limit) {
-    return userRepository.listLimit(new PageRequest(0, limit));
+    return userRepository.listLimit(PageRequest.of(0, limit));
   }
 
   @Override

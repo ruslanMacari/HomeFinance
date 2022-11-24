@@ -1,10 +1,10 @@
 package homefinance.money.currency.impl;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,17 +15,18 @@ import homefinance.money.currency.CurrencyRateModel;
 import homefinance.money.currency.CurrencyRatesService;
 import homefinance.money.currency.CurrencyRepository;
 import homefinance.money.currency.entity.Currency;
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@AutoConfigureEmbeddedDatabase
+@Disabled
+// TODO: 021, 21-Nov-22 ruslan.macari: replace with test containers
 public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired
@@ -38,7 +39,7 @@ public class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegratio
     this.currencyRatesService = mock(CurrencyRatesService.class);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {
     this.currencyRepository.deleteAll();
   }

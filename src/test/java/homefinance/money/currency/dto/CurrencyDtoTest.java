@@ -5,15 +5,15 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import org.assertj.core.api.BDDAssertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CurrencyDtoTest {
 
   private CurrencyDto currencyDto;
   private Validator validator;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     this.currencyDto = new CurrencyDto();
     this.validator = Validation.buildDefaultValidatorFactory().getValidator();

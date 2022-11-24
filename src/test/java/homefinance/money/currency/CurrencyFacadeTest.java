@@ -1,5 +1,6 @@
 package homefinance.money.currency;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 
@@ -9,15 +10,15 @@ import homefinance.money.currency.entity.Currency;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.BDDAssertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CurrencyFacadeTest {
 
   @Mock
@@ -27,7 +28,7 @@ public class CurrencyFacadeTest {
   private CurrencyFacade currencyFacade;
   private ModelMapper modelMapper;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     this.modelMapper = new ModelMapper();
     this.currencyFacade = new CurrencyFacade(this.currencyServiceMock, this.modelMapper);
@@ -77,12 +78,12 @@ public class CurrencyFacadeTest {
     BDDAssertions.then(actualList.isEmpty()).isTrue();
   }
 
-  @Test(expected = PageNotFoundException.class)
+  @Test()
   public void getCurrencyById_givenCurrencyNotFound_shouldThrowPageNotFoundException() {
     // given:
     given(this.currencyServiceMock.getByID(5)).willReturn(null);
     // when:
-    this.currencyFacade.getCurrencyDtoById(5);
+    assertThrows(PageNotFoundException.class, () -> this.currencyFacade.getCurrencyDtoById(5));
   }
 
   @Test
@@ -116,14 +117,14 @@ public class CurrencyFacadeTest {
     return currencyDto;
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void saveNew_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
-    this.currencyFacade.saveNew(null);
+    assertThrows(IllegalArgumentException.class, () -> this.currencyFacade.saveNew(null));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void update_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
-    this.currencyFacade.update(null);
+    assertThrows(IllegalArgumentException.class, () -> this.currencyFacade.update(null));
   }
 
   @Test

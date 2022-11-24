@@ -22,17 +22,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
   private final String rootname = "root";
@@ -44,7 +44,7 @@ public class UserServiceImplTest {
   @Mock private ConstraintPersist constraintPersistMock;
   @Captor private ArgumentCaptor<Supplier<? extends ConstraintEntity>> supplierArgumentCaptor;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     userService = new UserServiceImpl(userRepositoryMock, constraintPersistMock, encoderMock);
     userService.setRootName(rootname);

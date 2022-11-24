@@ -3,13 +3,13 @@ package homefinance.common.beans;
 import static org.assertj.core.api.BDDAssertions.then;
 
 import java.time.LocalDate;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LocalDateAdapterTest {
 
   LocalDateAdapter localDateAdapter = new LocalDateAdapter();

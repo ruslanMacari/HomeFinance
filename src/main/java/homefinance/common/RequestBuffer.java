@@ -1,10 +1,10 @@
 package homefinance.common;
 
-import javax.enterprise.context.RequestScoped;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Component
-@RequestScoped
+@RequestScope
 public class RequestBuffer {
 
   private String viewName;

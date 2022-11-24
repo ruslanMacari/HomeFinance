@@ -1,16 +1,19 @@
 package homefinance.money.currency;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 import homefinance.AbstractSpringIntegrationTest;
 import homefinance.money.currency.entity.Currency;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Disabled
+// TODO: 021, 21-Nov-22 ruslan.macari: add test containers
 public class ExchangeRatesApiIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired

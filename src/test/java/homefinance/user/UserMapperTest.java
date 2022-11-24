@@ -1,17 +1,18 @@
 package homefinance.user;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import homefinance.user.entity.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
 
   private UserMapper userMapper;
@@ -20,7 +21,7 @@ public class UserMapperTest {
   @Mock
   private PasswordEncoder encoderMock;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     userMapper = new UserMapper(encoderMock);
   }
@@ -52,10 +53,10 @@ public class UserMapperTest {
     then(actual.isAdmin()).isFalse();
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void dtoToUser_givenDtoIsNull_shouldThrowIllegalArgumentException() {
     //when:
-    userMapper.dtoToUser(null);
+    assertThrows(IllegalArgumentException.class, () -> userMapper.dtoToUser(null));
   }
 
   @Test

@@ -10,16 +10,16 @@ import homefinance.user.service.UserService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LoginFacadeTest {
 
   private LoginFacade loginFacade;
@@ -30,7 +30,7 @@ public class LoginFacadeTest {
   @Mock
   private AuthenticationService authenticationServiceMock;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     loginFacade = new LoginFacade(userServiceMock, authenticationServiceMock);
   }

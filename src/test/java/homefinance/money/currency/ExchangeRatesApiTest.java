@@ -1,6 +1,8 @@
 package homefinance.money.currency;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class ExchangeRatesApiTest {
 
@@ -10,9 +12,9 @@ public class ExchangeRatesApiTest {
     this.exchangeRatesApi = new ExchangeRatesApi();
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void when_getCurrencyRatesByDate_andDateIsNull_thenExpectIllegalArgumentException() {
-    this.exchangeRatesApi.getCurrencyRatesByDate(null);
+    assertThrows(IllegalArgumentException.class, () -> this.exchangeRatesApi.getCurrencyRatesByDate(null));
   }
 
 }

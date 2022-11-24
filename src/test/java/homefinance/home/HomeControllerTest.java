@@ -6,8 +6,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.security.Principal;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.ui.Model;
 
@@ -16,7 +16,7 @@ public class HomeControllerTest {
   public static final String USERNAME = "user";
   private HomeController controller;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     controller = new HomeController();
   }

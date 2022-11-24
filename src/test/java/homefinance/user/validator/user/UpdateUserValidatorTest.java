@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import homefinance.user.validator.UpdateUserValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.validation.Errors;
 
 public class UpdateUserValidatorTest {

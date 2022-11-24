@@ -1,6 +1,7 @@
 package homefinance.common.config.security;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -10,16 +11,16 @@ import homefinance.user.entity.UserRole;
 import homefinance.user.service.UserService;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceImplTest {
 
   private static final String USER_NAME = "user test";
@@ -28,7 +29,7 @@ public class UserDetailsServiceImplTest {
   @Mock
   private UserService userService;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     userDetailsService = new UserDetailsServiceImpl(userService);
   }
@@ -67,11 +68,11 @@ public class UserDetailsServiceImplTest {
     return set;
   }
 
-  @Test(expected = UsernameNotFoundException.class)
+  @Test()
   public void loadUserByUsername_givenUserIsNull_throwUsernameNotFoundException() {
     //given:
     given(userService.getByName(USER_NAME)).willReturn(null);
     //when:
-    userDetailsService.loadUserByUsername(USER_NAME);
+    assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(USER_NAME));
   }
 }
