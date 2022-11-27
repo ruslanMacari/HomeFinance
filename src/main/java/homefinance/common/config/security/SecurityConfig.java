@@ -2,6 +2,7 @@ package homefinance.common.config.security;
 
 import homefinance.user.entity.Role;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -57,12 +58,7 @@ public class SecurityConfig {
       @Override
       public boolean matches(HttpServletRequest request) {
         // If the request match one url the CSFR protection will be disabled
-        for (AntPathRequestMatcher rm : requestMatchers) {
-          if (rm.matches(request)) {
-            return true;
-          }
-        }
-        return false;
+        return Arrays.stream(requestMatchers).anyMatch(rm -> rm.matches(request));
       }
     };
   }
