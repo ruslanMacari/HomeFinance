@@ -5,8 +5,7 @@ import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 import homefinance.common.CommonController;
 import homefinance.common.PossibleDuplicationException;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +18,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(LoginController.URL)
+@Slf4j
 public class LoginController {
 
   public static final String URL = "/login";
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
   private final LoginFacade loginFacade;
 
@@ -34,8 +33,7 @@ public class LoginController {
   @GetMapping()
   public String login(Model model) {
     if (loginFacade.isAuthenticated()) {
-      // TODO: 22.05.2020 RMACARI: move logging to aspect
-      logger.debug("User is authenticated redirect to home");
+      log.debug("User is authenticated redirect to home");
       return CommonController.getRedirectURL("/");
     }
     model.addAttribute("userNames", loginFacade.getSimpleUsersNames());
@@ -53,8 +51,10 @@ public class LoginController {
 
   @PossibleDuplicationException(viewName = URL + "/registration")
   @PostMapping("/registration")
-  public String registerUser(@Valid @ModelAttribute("user") UserLoginDto user, BindingResult errors,
-      RedirectAttributes redirectAttributes, Model model) {
+  public String registerUser(@Valid @ModelAttribute("user") UserLoginDto user,
+      BindingResult errors,
+      RedirectAttributes redirectAttributes,
+      Model model) {
     if (errors.hasErrors()) {
       CommonController.addModelToRedirectAttributes(model, redirectAttributes);
       return CommonController.getRedirectURL(URL + "/registration");
