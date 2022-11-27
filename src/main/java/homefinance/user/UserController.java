@@ -10,7 +10,7 @@ import homefinance.common.RequestBuffer;
 import homefinance.common.exception.PageNotFoundException;
 import java.security.Principal;
 import java.util.Objects;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

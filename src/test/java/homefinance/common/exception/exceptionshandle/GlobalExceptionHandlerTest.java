@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import homefinance.common.beans.JsoupAdapter;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,6 @@ import org.springframework.ui.Model;
 public class GlobalExceptionHandlerTest {
 
   private GlobalExceptionHandler advice;
-  @Mock
-  private Exception exceptionMock;
   @Mock
   private JsoupAdapter jsoupMock;
   @Mock
@@ -57,7 +55,7 @@ public class GlobalExceptionHandlerTest {
     // given:
     String message = "exception message";
     given(jsoupMock.parse(message)).willReturn(documentMock);
-    given(requestMock.getAttribute("javax.servlet.error.status_code")).willReturn(403);
+    given(requestMock.getAttribute("jakarta.servlet.error.status_code")).willReturn(403);
     // when:
     String actual = advice.exception(requestMock, new RuntimeException(message), modelMock);
     // then:

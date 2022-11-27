@@ -4,7 +4,7 @@ import static homefinance.common.CommonController.isRedirectAndFlashModelMerged;
 
 import homefinance.common.CommonController;
 import homefinance.common.PossibleDuplicationException;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

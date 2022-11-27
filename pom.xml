@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.5</version>
+    <version>3.0.0</version>
     <relativePath/>
   </parent>
   <groupId>ruslan.macari</groupId>
@@ -30,37 +30,18 @@
     <mockito.version>4.8.0</mockito.version>
     <jackson-core-version>2.14.0</jackson-core-version>
     <postgre-version>42.2.5</postgre-version>
-    <validation-api.version>2.0.1.Final</validation-api.version>
     <modelmapper.version>3.1.0</modelmapper.version>
     <api-util.version>2.1.2</api-util.version>
-    <spring-aspects.version>5.3.23</spring-aspects.version>
+    <spring-aspects.version>6.0.0</spring-aspects.version>
     <hibernate-ehcache.version>5.4.2.Final</hibernate-ehcache.version>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
     <spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
     <spring-boot-maven-plugin.version>2.0.3.RELEASE</spring-boot-maven-plugin.version>
     <maven-help-pugin-version>3.1.0</maven-help-pugin-version>
     <jsoup.version>1.15.3</jsoup.version>
-    <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
-    <embedded-database-spring-test-version>1.5.3</embedded-database-spring-test-version>
     <javatuples.version>1.2</javatuples.version>
   </properties>
   <dependencies>
-
-    <dependency>
-      <groupId>javax.el</groupId>
-      <artifactId>javax.el-api</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.web</groupId>
-      <artifactId>javax.el</artifactId>
-      <version>2.2.4</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -86,8 +67,12 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
-      <version>2.2.10.RELEASE</version>
     </dependency>
 
     <dependency>
@@ -95,12 +80,6 @@
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
       <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>${validation-api.version}</version>
     </dependency>
 
     <dependency>
@@ -176,7 +155,6 @@
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${org.aspectj-version}</version>
     </dependency>
 
     <dependency>
@@ -189,14 +167,13 @@
     <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path</artifactId>
-      <version>${json-path}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.thymeleaf.extras</groupId>
-      <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-      <version>${thymeleaf-extras-springsecurity5.version}</version>
+      <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+      <version>3.1.0.RELEASE</version>
     </dependency>
 
     <dependency>
