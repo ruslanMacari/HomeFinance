@@ -1,17 +1,17 @@
 package homefinance.common.config;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.Ordered;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -20,6 +20,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 public class WebConfig implements WebMvcConfigurer {
 
   @Bean
+  @Override
   public LocalValidatorFactoryBean getValidator() {
     LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
     bean.setValidationMessageSource(messageSource());
@@ -57,15 +58,11 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public FilterRegistrationBean hiddenHttpMethodFilter() {
-    FilterRegistrationBean filterBean = new FilterRegistrationBean(new HiddenHttpMethodFilter());
-    filterBean.setUrlPatterns(Arrays.asList("/*"));
+  public FilterRegistrationBean<HiddenHttpMethodFilter> hiddenHttpMethodFilter() {
+    FilterRegistrationBean<HiddenHttpMethodFilter> filterBean = new FilterRegistrationBean<>(new HiddenHttpMethodFilter());
+    filterBean.setUrlPatterns(List.of("/*"));
+    filterBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
     return filterBean;
-  }
-
-  @Override
-  public void configurePathMatch(PathMatchConfigurer configurer) {
-    configurer.setUseTrailingSlashMatch(true);
   }
 
 }

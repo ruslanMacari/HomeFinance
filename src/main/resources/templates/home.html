@@ -7,9 +7,9 @@
 <div class="box-header__title">
     <h1 th:inline="text">[[#{hello}]], <span sec:authentication="name"/></h1>
     <th:block sec:authorize="isAuthenticated() and hasAuthority('ADMIN')">
-        <a class="button" th:href="@{/users/}" th:text="#{users}"/>
+        <a class="button" th:href="@{/users}" th:text="#{users}"/>
     </th:block>
-    <a class="button" th:href="@{/currencies/}" th:text="#{currencies}"/>
+    <a class="button" th:href="@{/currencies}" th:text="#{currencies}"/>
     <div class="s_30"></div>
     <a class="button" th:href="@{/logout}" th:text="#{logout}"/>
 </div>
