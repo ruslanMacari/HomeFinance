@@ -29,3 +29,25 @@ logs/
 /nbdist/
 /.nb-gradle/
 /build/
+# Gradle specific
+.gradle/
+**/build/
+
+# Gradle cache files
+.gradle/buildOutputCleanup/
+.gradle/**/checksums/
+.gradle/**/executionHistory/
+.gradle/**/fileHashes/
+.gradle/**/fileChanges/
+.gradle/**/dependencies-accessors/
+
+# System files
+.gradle/file-system.probe
+
+# Garbage collection properties
+**/*.gc.properties
+
+# Cache and lock files
+**/*.lock
+**/*.bin
+**/*.cache
