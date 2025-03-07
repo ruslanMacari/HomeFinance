@@ -1,0 +1,105 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
+}
+
+group = 'ruslan.macari'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    mapstructVersion = '1.5.3.Final'
+    jacksonVersion = '2.14.0'
+    modelMapperVersion = '3.1.0'
+    apiUtilVersion = '2.1.2'
+    jsoupVersion = '1.15.3'
+    javaTuplesVersion = '1.2'
+    mockitoVersion = '4.8.0'
+    hamcrestVersion = '2.2'
+}
+
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.postgresql:postgresql'
+
+    // Runtime and development
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Additional dependencies
+    implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
+    implementation 'org.apache.commons:commons-lang3'
+    implementation "org.apache.directory.api:api-util:${apiUtilVersion}"
+    implementation 'org.springframework:spring-aspects'
+    implementation 'org.hibernate.validator:hibernate-validator'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation 'org.aspectj:aspectjrt'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    implementation "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "org.javatuples:javatuples:${javaTuplesVersion}"
+    implementation 'org.liquibase:liquibase-core'
+
+    // Provided dependencies
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    // Test dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+    testImplementation 'com.jayway.jsonpath:json-path'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
+    testRuntimeOnly 'com.h2database:h2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+
+    exclude '**/ExchangeRatesApiIntegrationTest.class'
+    exclude '**/CurrenciesRestControllerIntegrationTest.class'
+}
+
+bootRun {
+    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006']
+}
+
+jacoco {
+    toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/ruslan/macari/web/exceptions/PageNotFoundException.class',
+                    '**/ruslan/macari/config/**'
+            ])
+        }))
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+}
