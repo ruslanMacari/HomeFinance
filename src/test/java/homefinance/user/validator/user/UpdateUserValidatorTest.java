@@ -23,7 +23,7 @@ public class UpdateUserValidatorTest {
     when(user.getName()).thenReturn("na");
     when(user.getPassword()).thenReturn("pa");
     User userFound = mock(User.class);
-    when(userFound.getId()).thenReturn(555);
+    when(userFound.getId()).thenReturn(555L);
     when(userService.getByName(user.getName())).thenReturn(userFound);
     validator.validate(user, errors);
     verify(errors, times(1)).rejectValue("name", "Duplicated.user.name");

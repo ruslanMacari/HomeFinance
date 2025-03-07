@@ -43,12 +43,12 @@ public class UserFacade {
     return authenticationService.getPrincipalName().map(name -> name.equals(user.getName())).orElse(false);
   }
 
-  public UserDto getUserById(int id) {
+  public UserDto getUserById(Long id) {
     User user = userService.getById(id);
     return Objects.isNull(user) ? null : userToUserDto(user);
   }
 
-  public void deleteUser(int id) {
+  public void deleteUser(Long id) {
     userService.delete(id);
   }
 

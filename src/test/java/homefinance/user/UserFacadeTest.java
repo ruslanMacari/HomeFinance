@@ -38,8 +38,8 @@ public class UserFacadeTest {
   @Test
   public void getUsersWithoutRoot_givenUserList_returnUsersDto() {
     // given:
-    setUserMock("B1646sgb", 116, "3SY", true);
-    List<User> users = Arrays.asList(userMock);
+    setUserMock("B1646sgb", 116L, "3SY", true);
+    List<User> users = List.of(userMock);
     given(userServiceMock.usersExceptRoot()).willReturn(users);
     // when:
     List<UserDto> actual = userFacade.getUsersWithoutRoot();
@@ -52,7 +52,7 @@ public class UserFacadeTest {
     then(userDto.isAdmin()).isTrue();
   }
 
-  private void setUserMock(String name, int id, String pass, boolean isAdmin) {
+  private void setUserMock(String name, Long id, String pass, boolean isAdmin) {
     given(userMock.getName()).willReturn(name);
     given(userMock.getId()).willReturn(id);
     given(userMock.getPassword()).willReturn(pass);
@@ -62,10 +62,10 @@ public class UserFacadeTest {
   @Test
   public void getUserById_givenUserServiceGetByIdReturnsUser_returnUserDto() {
     //given:
-    setUserMock("name", 56, "pass", false);
-    given(userServiceMock.getById(55)).willReturn(userMock);
+    setUserMock("name", 56L, "pass", false);
+    given(userServiceMock.getById(55L)).willReturn(userMock);
     //when:
-    UserDto actual = userFacade.getUserById(55);
+    UserDto actual = userFacade.getUserById(55L);
     //then:
     then(actual.getId()).isEqualTo(56);
     then(actual.getName()).isEqualTo("name");
@@ -76,9 +76,9 @@ public class UserFacadeTest {
   @Test
   public void getUserById_givenUserServiceGetByIdReturnsNull_returnNull() {
     //given:
-    given(userServiceMock.getById(55)).willReturn(null);
+    given(userServiceMock.getById(55L)).willReturn(null);
     //when:
-    UserDto actual = userFacade.getUserById(55);
+    UserDto actual = userFacade.getUserById(55L);
     //then:
     then(actual).isNull();
   }
@@ -86,9 +86,9 @@ public class UserFacadeTest {
   @Test
   public void deleteUser() {
     //when:
-    userFacade.deleteUser(15);
+    userFacade.deleteUser(15L);
     //then:
-    BDDMockito.then(userServiceMock).should().delete(15);
+    BDDMockito.then(userServiceMock).should().delete(15L);
   }
 
   @Test

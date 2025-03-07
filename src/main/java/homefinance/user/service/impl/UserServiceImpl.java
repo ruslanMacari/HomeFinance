@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void update(UserFields userFields) {
     Optional<User> user = userRepository.findById(userFields.getId());
-    if (!user.isPresent()) {
+    if (user.isEmpty()) {
       return;
     }
     setUserNameAndRole(user.get(), userFields);
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updateWithoutPassword(UserFields userFields) {
     Optional<User> user = userRepository.findById(userFields.getId());
-    if (!user.isPresent()) {
+    if (user.isEmpty()) {
       return;
     }
     setUserNameAndRole(user.get(), userFields);
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void delete(Integer id) {
+  public void delete(Long id) {
     userRepository.deleteById(id);
   }
 
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getById(int id) {
+  public User getById(Long id) {
     return userRepository.findById(id).orElse(null);
   }
 

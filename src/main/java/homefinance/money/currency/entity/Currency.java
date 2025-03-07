@@ -23,8 +23,8 @@ import lombok.Generated;
     @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
 public class Currency extends ConstraintEntity implements Serializable {
 
-  public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_description";
-  public static final String UNIQUE_CONSTRAINT_CODE = "duplicated_code";
+  public static final String UNIQUE_CONSTRAINT_NAME = "unique_currencies_by_name";
+  public static final String UNIQUE_CONSTRAINT_CODE = "unique_currencies_by_code";
   private int id;
   private String name;
   private String code;
@@ -55,9 +55,9 @@ public class Currency extends ConstraintEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "currency_id")
+  @Column(name = "id")
   public int getId() {
-    return this.id;
+    return id;
   }
 
   public void setId(int id) {

@@ -30,7 +30,6 @@ public class WebConfig implements WebMvcConfigurer {
   public MessageSource messageSource() {
     ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
     source.setBasenames("classpath:locales/messages", "classpath:locales/errors");
-    //source.setUseCodeAsDefaultMessage(true);
     source.setDefaultEncoding("UTF-8");
     return source;
   }

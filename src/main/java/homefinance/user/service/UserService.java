@@ -23,9 +23,9 @@ public interface UserService {
 
   User getByName(String name);
 
-  User getById(int id);
+  User getById(Long id);
 
-  void delete(Integer id);
+  void delete(Long id);
 
   User getByNameAndPassword(String name, String password);
 

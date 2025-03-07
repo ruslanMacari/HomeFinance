@@ -77,11 +77,11 @@ public class UserServiceImplTest {
   public void update_givenUserFields_updateUser() {
     //given:
     UserFields userFieldsMock = mock(UserFields.class);
-    given(userFieldsMock.getId()).willReturn(50);
+    given(userFieldsMock.getId()).willReturn(50L);
     given(userFieldsMock.getName()).willReturn("name");
     given(userFieldsMock.getPassword()).willReturn("pass");
     given(userFieldsMock.isAdmin()).willReturn(true);
-    given(userRepositoryMock.findById(50)).willReturn(Optional.of(userMock));
+    given(userRepositoryMock.findById(50L)).willReturn(Optional.of(userMock));
     Map<String, String> constraintsMap = new HashMap<>();
     given(userMock.getConstraintsMap()).willReturn(constraintsMap);
     given(encoderMock.encode("pass")).willReturn("pass encoded");
@@ -101,10 +101,10 @@ public class UserServiceImplTest {
   public void updateWithoutPassword_givenUserFields_updateWithoutPassword() {
     //given:
     UserFields userFieldsMock = mock(UserFields.class);
-    given(userFieldsMock.getId()).willReturn(60);
+    given(userFieldsMock.getId()).willReturn(60L);
     given(userFieldsMock.getName()).willReturn("name1");
     given(userFieldsMock.isAdmin()).willReturn(false);
-    given(userRepositoryMock.findById(60)).willReturn(Optional.of(userMock));
+    given(userRepositoryMock.findById(60L)).willReturn(Optional.of(userMock));
     Map<String, String> constraintsMap = new HashMap<>();
     given(userMock.getConstraintsMap()).willReturn(constraintsMap);
     //when:

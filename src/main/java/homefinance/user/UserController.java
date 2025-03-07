@@ -52,14 +52,14 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public String openView(@PathVariable("id") int id, Model model) {
+  public String openView(@PathVariable("id") Long id, Model model) {
     if (!isRedirectAndFlashModelMerged(model)) {
       model.addAttribute("user", getUserBy(id));
     }
     return "users/view";
   }
 
-  private UserDto getUserBy(int id) {
+  private UserDto getUserBy(Long id) {
     UserDto user = userFacade.getUserById(id);
     checkUser(user);
     return user;

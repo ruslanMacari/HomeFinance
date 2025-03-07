@@ -2,7 +2,7 @@ package homefinance.user;
 
 public interface UserFields {
 
-  default Integer getId() {
+  default Long getId() {
     return null;
   }
 

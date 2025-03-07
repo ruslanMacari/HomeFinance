@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 
 @Entity
-@Table(name = "currency_rate")
+@Table(name = "currency_rates")
 public class CurrencyRate {
 
   private LocalDate date;

@@ -18,7 +18,7 @@ import lombok.Generated;
 
 @Entity
 @Table(name = "user_roles", uniqueConstraints = @UniqueConstraint(columnNames = {"role",
-    "user_id"}, name = "duplicated_user_role"))
+    "user_id"}, name = "unique_user_role_by_role_and_user_id"))
 public class UserRole {
 
   private Integer id;

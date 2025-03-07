@@ -4,17 +4,17 @@ import homefinance.user.login.UserLoginDto;
 
 public class UserDto extends UserLoginDto {
 
-  private Integer id;
+  private Long id;
   private boolean admin;
   private boolean passwordChanged;
   private boolean loggedIn;
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

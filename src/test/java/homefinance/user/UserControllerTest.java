@@ -63,19 +63,19 @@ public class UserControllerTest {
   @Test()
   public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
     // given:
-    given(userFacadeMock.getUserById(150)).willReturn(userDtoMock);
+    given(userFacadeMock.getUserById(150L)).willReturn(userDtoMock);
     given(userDtoMock.getName()).willReturn(rootname);
     // when:
-    assertThrows(PageNotFoundException.class, () -> userController.openView(150, modelMock));
+    assertThrows(PageNotFoundException.class, () -> userController.openView(150L, modelMock));
   }
 
   @Test
   public void openView_givenUserIsNotRoot_thenOpenView() {
     // given:
     given(userDtoMock.getName()).willReturn("test");
-    given(userFacadeMock.getUserById(100)).willReturn(userDtoMock);
+    given(userFacadeMock.getUserById(100L)).willReturn(userDtoMock);
     // when:
-    String actual = userController.openView(100, modelMock);
+    String actual = userController.openView(100L, modelMock);
     // then:
     then(actual).isEqualTo("users/view");
   }
@@ -83,9 +83,9 @@ public class UserControllerTest {
   @Test()
   public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
     // given:
-    given(userFacadeMock.getUserById(100)).willReturn(null);
+    given(userFacadeMock.getUserById(100L)).willReturn(null);
     // when:
-    assertThrows(PageNotFoundException.class, () -> userController.openView(100, modelMock));
+    assertThrows(PageNotFoundException.class, () -> userController.openView(100L, modelMock));
   }
 
   @Test
@@ -96,7 +96,7 @@ public class UserControllerTest {
     map.put(FLASH_MODEL_ATTRIBUTE_NAME, flashModel);
     given(modelMock.asMap()).willReturn(map);
     // when:
-    String actual = userController.openView(10, modelMock);
+    String actual = userController.openView(10L, modelMock);
     // then:
     then(actual).isEqualTo("users/view");
     BDDMockito.then(modelMock).should().mergeAttributes(flashModel.asMap());
@@ -107,7 +107,7 @@ public class UserControllerTest {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     UserDto userDto = new UserDto();
-    userDto.setId(1);
+    userDto.setId(1L);
     // when:
     String actual = userController.update(userDto, resultMock, redirectAttributesMock, modelMock);
     // then:
@@ -123,7 +123,7 @@ public class UserControllerTest {
   @Test
   public void update_givenResultHasErrors_thenRedirectToView() {
     // given:
-    for (int id : new int[] {100, 50}) {
+    for (long id : new long[] {100, 50}) {
       given(resultMock.hasErrors()).willReturn(true);
       given(userDtoMock.getId()).willReturn(id);
       RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
@@ -190,13 +190,13 @@ public class UserControllerTest {
     // given:
     given(principalMock.getName()).willReturn("root user");
     given(userDtoMock.getName()).willReturn("test user");
-    given(userDtoMock.getId()).willReturn(16);
+    given(userDtoMock.getId()).willReturn(16L);
 
     // when:
     String actual = userController.deleteUser(userDtoMock, principalMock);
     // then:
     then(actual).isEqualTo("redirect:/users");
-    BDDMockito.then(userFacadeMock).should().deleteUser(16);
+    BDDMockito.then(userFacadeMock).should().deleteUser(16L);
   }
 
   @Test()

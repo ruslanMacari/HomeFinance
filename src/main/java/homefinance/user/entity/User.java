@@ -25,8 +25,8 @@ import lombok.Generated;
     @UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})
 public class User extends ConstraintEntity implements UserFields {
 
-  public static final String UNIQUE_CONSTRAINT_NAME = "duplicated_user_name";
-  private Integer id;
+  public static final String UNIQUE_CONSTRAINT_NAME = "unique_users_by_name";
+  private Long id;
   private String name;
   private String password;
   private boolean enabled = true;
@@ -52,12 +52,12 @@ public class User extends ConstraintEntity implements UserFields {
   @Override
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  public Integer getId() {
+  @Column(name = "id")
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

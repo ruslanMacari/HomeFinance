@@ -29,7 +29,7 @@ public class UserMapperTest {
   @Test
   public void dtoToUser_givenDtoAdmin_returnUserAdmin() {
     //given:
-    given(userDtoMock.getId()).willReturn(10);
+    given(userDtoMock.getId()).willReturn(10L);
     given(userDtoMock.getName()).willReturn("user");
     given(userDtoMock.isAdmin()).willReturn(true);
     //when:
