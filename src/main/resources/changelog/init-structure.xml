@@ -9,7 +9,7 @@
     <comment>Create initial DB structure</comment>
     <sqlFile dbms="postgresql"
       endDelimiter="\nGO"
-      path="changelog\init-structure.sql"
+      path="changelog/init-structure.sql"
       relativeToChangelogFile="false"
       splitStatements="false"
       stripComments="false"/>
