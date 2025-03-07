@@ -1,5 +1,7 @@
 package homefinance.common.config.security;
 
+import static java.lang.String.format;
+
 import homefinance.user.entity.UserRole;
 import homefinance.user.service.UserService;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   private homefinance.user.entity.User getUserBy(String username) {
     homefinance.user.entity.User user = userService.getByName(username);
     if (Objects.isNull(user)) {
-      throw new UsernameNotFoundException("user by username: " + username + " not found");
+      throw new UsernameNotFoundException(format("user by username: %s not found", username));
     }
     return user;
   }
