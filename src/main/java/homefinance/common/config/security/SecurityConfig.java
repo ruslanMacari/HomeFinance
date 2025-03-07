@@ -34,16 +34,17 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-        .requireCsrfProtectionMatcher(getCsrfRequestMatcher()).disable()
+    http.csrf(csrf -> csrf
+            .requireCsrfProtectionMatcher(getCsrfRequestMatcher())
+            .disable())
         .authorizeHttpRequests(
             auth -> auth.requestMatchers("/assets/**", "/login*", "/login/**", "/rest/**").permitAll()
                 .requestMatchers("/users/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
         )
         .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/"))
-        .rememberMe()
-        .and().exceptionHandling().accessDeniedPage("/access-denied");
+        .rememberMe(rememberMe -> {})
+        .exceptionHandling(exception -> exception.accessDeniedPage("/access-denied"));
     return http.build();
   }
 
