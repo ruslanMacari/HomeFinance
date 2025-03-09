@@ -12,13 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
+import lombok.Setter;
 
 @Entity
 @Table(name = "currency_rates")
 public class CurrencyRate {
 
+  @Setter
   private LocalDate date;
+  @Setter
   private BigDecimal rate;
+  @Setter
   private int id;
 
   @ManyToOne
@@ -30,10 +34,6 @@ public class CurrencyRate {
   @Column(name = "id")
   public int getId() {
     return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 
   @Builder
@@ -51,17 +51,9 @@ public class CurrencyRate {
     return rate;
   }
 
-  public void setRate(BigDecimal rate) {
-    this.rate = rate;
-  }
-
   @Column(name = "date", nullable = false)
   public LocalDate getDate() {
     return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
   }
 
   @Override

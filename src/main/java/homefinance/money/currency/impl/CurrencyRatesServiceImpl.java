@@ -20,11 +20,11 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
 
   @Override
   public List<CurrencyRateModel> getCurrencyRatesByDate(LocalDate date) {
-    return this.exchangeRatesApi.getCurrencyRatesByDate(date);
+    return exchangeRatesApi.getCurrencyRatesByDate(date);
   }
 
   @Override
   public BigDecimal getRateByDateAndCurrency(LocalDate date, Currency currency) {
-    return this.exchangeRatesApi.getRateByDateAndCurrency(date, currency);
+    return exchangeRatesApi.getRateByDateAndCurrency(date, currency);
   }
 }

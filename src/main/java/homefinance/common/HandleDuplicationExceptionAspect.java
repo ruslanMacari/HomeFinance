@@ -1,6 +1,7 @@
 package homefinance.common;
 
 import homefinance.common.exception.DuplicateFieldsException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -48,7 +49,8 @@ public class HandleDuplicationExceptionAspect {
   private List<Object> getArgs(ProceedingJoinPoint joinPoint) {
     Object[] args = joinPoint.getArgs();
     Assert.notNull(args, "method must have arguments");
-    return Arrays.stream(args).toList();
+    return new ArrayList<>(Arrays.asList(args));
+
   }
 
   private void registerError(DuplicateFieldsException e, List<Object> args) {
