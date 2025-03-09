@@ -16,27 +16,31 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Generated;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "currencies", uniqueConstraints = {
     @UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
     @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
+@NoArgsConstructor
 public class Currency extends ConstraintEntity implements Serializable {
 
   public static final String UNIQUE_CONSTRAINT_NAME = "unique_currencies_by_name";
   public static final String UNIQUE_CONSTRAINT_CODE = "unique_currencies_by_code";
+  @Setter
   private int id;
+  @Setter
   private String name;
+  @Setter
   private String code;
+  @Setter
   private String charCode;
 
   {
-    this.constraintsMap = new HashMap<>();
-    this.constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
-    this.constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
-  }
-
-  public Currency() {
+    constraintsMap = new HashMap<>();
+    constraintsMap.put("name", UNIQUE_CONSTRAINT_NAME);
+    constraintsMap.put("code", UNIQUE_CONSTRAINT_CODE);
   }
 
   public Currency(String name, String code) {
@@ -60,47 +64,31 @@ public class Currency extends ConstraintEntity implements Serializable {
     return id;
   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
   @Column(name = "name", nullable = false, length = 45)
   @Size(min = 3, max = 45, message = "{size.error}")
   public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+    return name;
   }
 
   @Column(name = "code", nullable = false, length = 5)
   @Size(min = 3, max = 5, message = "{size.error}")
   public String getCode() {
-    return this.code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
+    return code;
   }
 
   @Column(name = "char_code", nullable = false, length = 5)
   @Size(min = 3, max = 5, message = "{size.error}")
   public String getCharCode() {
-    return this.charCode;
-  }
-
-  public void setCharCode(String charCode) {
-    this.charCode = charCode;
+    return charCode;
   }
 
   @Override
   @Generated
   public int hashCode() {
     int hash = 7;
-    hash = 17 * hash + this.id;
-    hash = 17 * hash + Objects.hashCode(this.name);
-    hash = 17 * hash + Objects.hashCode(this.code);
+    hash = 17 * hash + id;
+    hash = 17 * hash + Objects.hashCode(name);
+    hash = 17 * hash + Objects.hashCode(code);
     return hash;
   }
 
@@ -113,26 +101,26 @@ public class Currency extends ConstraintEntity implements Serializable {
     if (obj == null) {
       return false;
     }
-    if (this.getClass() != obj.getClass()) {
+    if (getClass() != obj.getClass()) {
       return false;
     }
     final Currency other = (Currency) obj;
-    if (this.id != other.id) {
+    if (id != other.id) {
       return false;
     }
-    if (!Objects.equals(this.name, other.name)) {
+    if (!Objects.equals(name, other.name)) {
       return false;
     }
-    return Objects.equals(this.code, other.code);
+    return Objects.equals(code, other.code);
   }
 
   @Override
   public String toString() {
     return "Currency{" +
-        "id=" + this.id +
-        ", name='" + this.name + '\'' +
-        ", code='" + this.code + '\'' +
-        ", charCode='" + this.charCode + '\'' +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", code='" + code + '\'' +
+        ", charCode='" + charCode + '\'' +
         '}';
   }
 }

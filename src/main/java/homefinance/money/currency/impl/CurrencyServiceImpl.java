@@ -12,6 +12,7 @@ import homefinance.money.currency.entity.Currency;
 import homefinance.money.currency.entity.CurrencyRate;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,29 +25,14 @@ import org.springframework.util.CollectionUtils;
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class CurrencyServiceImpl implements CurrencyService {
 
   private final ConstraintPersist constraintPersist;
   private final CurrencyRepository currencyRepository;
-  private CurrencyRatesService currencyRatesService;
+  private final CurrencyRatesService currencyRatesService;
   private final CurrencyRateRepository currencyRateRepository;
   private final LocalDateAdapter localDateAdapter;
-
-  @Autowired
-  public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
-    this.currencyRatesService = currencyRatesService;
-  }
-
-  public CurrencyServiceImpl(
-      ConstraintPersist constraintPersist, CurrencyRepository currencyRepository,
-      CurrencyRatesService currencyRatesService,
-      CurrencyRateRepository currencyRateRepository, LocalDateAdapter localDateAdapter) {
-    this.constraintPersist = constraintPersist;
-    this.currencyRepository = currencyRepository;
-    this.currencyRatesService = currencyRatesService;
-    this.currencyRateRepository = currencyRateRepository;
-    this.localDateAdapter = localDateAdapter;
-  }
 
   @Override
   public void update(Currency currency) throws DuplicateFieldsException {
@@ -68,8 +54,10 @@ public class CurrencyServiceImpl implements CurrencyService {
             .code(currencyRateModel.getNumCode())
             .name(currencyRateModel.getCurrency())
             .charCode(currencyRateModel.getCharCode()).build()))
-        .peek(this::addCurrency)
-        .forEach(this::addCurrencyRate);
+        .forEach(pair -> {
+            addCurrency(pair);
+            addCurrencyRate(pair);
+        });
   }
 
   private List<CurrencyRateModel> getCurrencyRatesByDate() {

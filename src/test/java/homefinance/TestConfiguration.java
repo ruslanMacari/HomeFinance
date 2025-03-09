@@ -14,7 +14,7 @@ public class TestConfiguration {
   public DataSource dataSource() {
     return DataSourceBuilder.create()
         .driverClassName("org.h2.Driver")
-        .url("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1")
+        .url("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH")
         .username("sa")
         .password("")
         .build();
