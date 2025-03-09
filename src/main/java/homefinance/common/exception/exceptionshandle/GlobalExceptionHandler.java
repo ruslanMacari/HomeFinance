@@ -5,8 +5,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import homefinance.common.beans.JsoupAdapter;
 import homefinance.common.exception.PageNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,9 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class.getName());
   private final JsoupAdapter jsoup;
 
   public GlobalExceptionHandler(JsoupAdapter jsoup) {
@@ -26,7 +25,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Throwable.class)
   public String exception(HttpServletRequest request, Exception ex, Model model) {
     String error = jsoup.parse(ex.getMessage()).text();
-    logger.error(error, ex);
+    log.error(error, ex);
     model.addAttribute("errorMessage", error);
     model.addAttribute("statusCode", getStatus(request));
     return "exception";
@@ -39,7 +38,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler({NoHandlerFoundException.class, PageNotFoundException.class})
   public String noHandlerFound(Exception e) {
-    logger.error(e.getMessage(), e);
+    log.error(e.getMessage(), e);
     return "resource-not-found";
   }
 

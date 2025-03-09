@@ -7,7 +7,8 @@ import java.util.function.Supplier;
 
 public interface ConstraintPersist {
 
-  ConstraintEntity add(Supplier<? extends ConstraintEntity> supplier, Map<String, String> constraintsMap) throws DuplicateFieldsException;
+  ConstraintEntity add(Supplier<? extends ConstraintEntity> supplier, Map<String, String> constraintsMap)
+      throws DuplicateFieldsException;
 
   void update(Supplier<? extends ConstraintEntity> supplier, Map<String, String> constraintsMap)
       throws DuplicateFieldsException;
