@@ -3,10 +3,12 @@ package homefinance.common.exception;
 import java.text.MessageFormat;
 import java.util.Map;
 import lombok.Generated;
+import lombok.Getter;
 
 public class DuplicateFieldsException extends RuntimeException {
 
   private final String field;
+  @Getter
   private final String errorCode;
 
   public DuplicateFieldsException(Map.Entry<String, String> entry) {
@@ -26,7 +28,4 @@ public class DuplicateFieldsException extends RuntimeException {
     return field;
   }
 
-  public String getErrorCode() {
-    return errorCode;
-  }
 }

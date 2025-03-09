@@ -6,20 +6,18 @@ import homefinance.common.exception.DuplicateFieldsException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ConstraintPersistImpl implements ConstraintPersist {
-
-  private static final Logger logger = LoggerFactory.getLogger(ConstraintPersistImpl.class);
 
   @Override
   public void update(Supplier<? extends ConstraintEntity> supplier, Map<String, String> constraintsMap)
       throws DuplicateFieldsException {
-    this.add(supplier, constraintsMap);
+    add(supplier, constraintsMap);
   }
 
   @Override
@@ -28,8 +26,8 @@ public class ConstraintPersistImpl implements ConstraintPersist {
     try {
       return supplier.get();
     } catch (DataIntegrityViolationException exception) {
-      logger.error(exception.getMessage(), exception);
-      String rootMsg = this.getRootCause(exception).getMessage();
+      log.error(exception.getMessage(), exception);
+      String rootMsg = getRootCause(exception).getMessage();
       if (rootMsg != null) {
         String lowerCaseMsg = rootMsg.toLowerCase();
         Optional<Map.Entry<String, String>> entry = constraintsMap.entrySet().stream()

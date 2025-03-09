@@ -4,13 +4,11 @@ import homefinance.common.exception.DuplicateFieldsException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -20,9 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Aspect
 @Component
+@Slf4j
 public class HandleDuplicationExceptionAspect {
-
-  private static final Logger logger = LoggerFactory.getLogger(HandleDuplicationExceptionAspect.class);
 
   private final RequestBuffer requestBuffer;
 
@@ -33,7 +30,7 @@ public class HandleDuplicationExceptionAspect {
 
   @Around("@annotation(homefinance.common.PossibleDuplicationException)")
   public Object handleDuplication(ProceedingJoinPoint joinPoint) throws Throwable {
-    logger.debug("handleDuplication()");
+    log.debug("handleDuplication()");
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {
@@ -51,12 +48,11 @@ public class HandleDuplicationExceptionAspect {
   private List<Object> getArgs(ProceedingJoinPoint joinPoint) {
     Object[] args = joinPoint.getArgs();
     Assert.notNull(args, "method must have arguments");
-    return Arrays.stream(args)
-        .collect(Collectors.toList());
+    return Arrays.stream(args).toList();
   }
 
   private void registerError(DuplicateFieldsException e, List<Object> args) {
-    BindingResult errors = getArgument(args, arg -> arg instanceof BindingResult, BindingResult.class);
+    BindingResult errors = getArgument(args, BindingResult.class::isInstance, BindingResult.class);
     errors.rejectValue(e.getField(), e.getErrorCode());
   }
 
@@ -74,8 +70,8 @@ public class HandleDuplicationExceptionAspect {
   }
 
   private void addModelToRedirectAttributes(List<Object> args) {
-    RedirectAttributes redirectAttributes = getArgument(args, arg -> arg instanceof RedirectAttributes, RedirectAttributes.class);
-    Model model = getArgument(args, arg -> arg instanceof Model, Model.class);
+    RedirectAttributes redirectAttributes = getArgument(args, RedirectAttributes.class::isInstance, RedirectAttributes.class);
+    Model model = getArgument(args, Model.class::isInstance, Model.class);
     CommonController.addModelToRedirectAttributes(model, redirectAttributes);
   }
 
@@ -86,7 +82,7 @@ public class HandleDuplicationExceptionAspect {
 
   @Around("@annotation(homefinance.common.PossibleDuplicationExceptionViewNameInRequestBuffer)")
   public Object handleDuplicationViewNameRequestBuffer(ProceedingJoinPoint joinPoint) throws Throwable {
-    logger.debug("handleDuplicationViewNameRequestBuffer()");
+    log.debug("handleDuplicationViewNameRequestBuffer()");
     try {
       return joinPoint.proceed();
     } catch (DuplicateFieldsException e) {

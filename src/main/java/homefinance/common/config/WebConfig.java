@@ -59,7 +59,7 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public FilterRegistrationBean<HiddenHttpMethodFilter> hiddenHttpMethodFilter() {
-    FilterRegistrationBean<HiddenHttpMethodFilter> filterBean = new FilterRegistrationBean<>(new HiddenHttpMethodFilter());
+    var filterBean = new FilterRegistrationBean<>(new HiddenHttpMethodFilter());
     filterBean.setUrlPatterns(List.of("/*"));
     filterBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
     return filterBean;
