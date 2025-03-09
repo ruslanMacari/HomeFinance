@@ -14,7 +14,6 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @NoArgsConstructor
-
 public class CurrencyRateModel {
 
   @EqualsAndHashCode.Include
