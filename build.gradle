@@ -29,6 +29,7 @@ ext {
     javaTuplesVersion = '1.2'
     mockitoVersion = '4.8.0'
     hamcrestVersion = '2.2'
+    testcontainersVersion = '1.19.7'
 }
 
 dependencies {
@@ -71,7 +72,9 @@ dependencies {
     testImplementation 'com.jayway.jsonpath:json-path'
     testImplementation 'org.assertj:assertj-core'
     testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
-    testRuntimeOnly 'com.h2database:h2'
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testCompileOnly 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

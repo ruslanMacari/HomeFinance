@@ -20,13 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@Disabled
-// TODO: 021, 21-Nov-22 ruslan.macari: replace with test containers
 class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Autowired
@@ -89,7 +86,7 @@ class CurrencyServiceImplIntegrationTest extends AbstractSpringIntegrationTest {
 
   @Test
   void when_fillDistinctCurrencies_and_currencyRatesIsEmpty_thenDoNothing() {
-    when(currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(null);
+    when(currencyRatesService.getCurrencyRatesByDate(any())).thenReturn(List.of());
     currencyService.fillDistinctCurrencies();
     assertTrue(currencyService.getAllCurrencies().isEmpty());
 
