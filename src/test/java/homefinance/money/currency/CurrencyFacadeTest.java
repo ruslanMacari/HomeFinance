@@ -19,138 +19,121 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
-public class CurrencyFacadeTest {
+class CurrencyFacadeTest {
 
+  private static final CurrencyDto CURRENCY_DTO = new CurrencyDto()
+      .setName("name")
+      .setCharCode("char-code")
+      .setCode("code")
+      .setId(1);
   @Mock
   private CurrencyService currencyServiceMock;
-  private Currency currency1;
-  private Currency currency2;
+  private static final Currency CURRENCY_1 = new Currency()
+      .setId(1)
+      .setCharCode("char1")
+      .setCode("code1")
+      .setName("name1");
+  private static final Currency CURRENCY_2 = new Currency()
+      .setId(1)
+      .setCharCode("char2")
+      .setCode("code2")
+      .setName("name2");
   private CurrencyFacade currencyFacade;
   private ModelMapper modelMapper;
 
   @BeforeEach
-  public void setUp() {
-    this.modelMapper = new ModelMapper();
-    this.currencyFacade = new CurrencyFacade(this.currencyServiceMock, this.modelMapper);
+  void setUp() {
+    modelMapper = new ModelMapper();
+    currencyFacade = new CurrencyFacade(currencyServiceMock, modelMapper);
   }
 
   @Test
-  public void getAllCurrencies_givenCurrencyServiceWillReturnTwoCurrencies_shouldReturnListWith2CurrencyDto() {
+  void getAllCurrencies_givenCurrencyServiceWillReturnTwoCurrencies_shouldReturnListWith2CurrencyDto() {
     //given
-    this.initCurrency1And2();
-    given(this.currencyServiceMock.getAllCurrencies())
-        .willReturn(Arrays.asList(this.currency1, this.currency2));
+    given(currencyServiceMock.getAllCurrencies())
+        .willReturn(Arrays.asList(CURRENCY_1, CURRENCY_2));
     //when
-    List<CurrencyDto> actualCurrenciesDto = this.currencyFacade.getAllCurrenciesDto();
+    List<CurrencyDto> actualCurrenciesDto = currencyFacade.getAllCurrenciesDto();
     //then
-    BDDMockito.then(this.currencyServiceMock).should().getAllCurrencies();
+    BDDMockito.then(currencyServiceMock).should().getAllCurrencies();
     BDDAssertions.then(actualCurrenciesDto.size()).isEqualTo(2);
-    this.testCurrency(this.currency1, actualCurrenciesDto.get(0));
-    this.testCurrency(this.currency2, actualCurrenciesDto.get(1));
-  }
-
-  private void initCurrency1And2() {
-    this.initCurrency1();
-    this.currency2 = new Currency();
-    this.currency2.setId(1);
-    this.currency2.setCharCode("char2");
-    this.currency2.setCode("code2");
-    this.currency2.setName("name2");
-  }
-
-  private void initCurrency1() {
-    this.currency1 = new Currency();
-    this.currency1.setId(1);
-    this.currency1.setCharCode("char1");
-    this.currency1.setCode("code1");
-    this.currency1.setName("name1");
+    testCurrency(CURRENCY_1, actualCurrenciesDto.get(0));
+    testCurrency(CURRENCY_2, actualCurrenciesDto.get(1));
   }
 
   private void testCurrency(Currency currency1, CurrencyDto currencyDto1) {
-    BDDAssertions.then(currencyDto1)
-        .isEqualToComparingOnlyGivenFields(currency1, "id", "name", "code", "charCode");
+    BDDAssertions.then(currencyDto1).usingRecursiveComparison().isEqualTo(currency1);
   }
 
   @Test
-  public void getAllCurrenciesDto_givenCurrencyServiceWillReturnNull_shouldReturnEmptyList() {
-    given(this.currencyServiceMock.getAllCurrencies()).willReturn(null);
-    List<CurrencyDto> actualList = this.currencyFacade.getAllCurrenciesDto();
+  void getAllCurrenciesDto_givenCurrencyServiceWillReturnNull_shouldReturnEmptyList() {
+    given(currencyServiceMock.getAllCurrencies()).willReturn(null);
+    List<CurrencyDto> actualList = currencyFacade.getAllCurrenciesDto();
     BDDAssertions.then(actualList.isEmpty()).isTrue();
   }
 
   @Test()
-  public void getCurrencyById_givenCurrencyNotFound_shouldThrowPageNotFoundException() {
+  void getCurrencyById_givenCurrencyNotFound_shouldThrowPageNotFoundException() {
     // given:
-    given(this.currencyServiceMock.getByID(5)).willReturn(null);
+    given(currencyServiceMock.getByID(5)).willReturn(null);
     // when:
-    assertThrows(PageNotFoundException.class, () -> this.currencyFacade.getCurrencyDtoById(5));
+    assertThrows(PageNotFoundException.class, () -> currencyFacade.getCurrencyDtoById(5));
   }
 
   @Test
-  public void getCurrencyById_givenCurrencyFound_shouldReturnCurrencyDto() {
+  void getCurrencyById_givenCurrencyFound_shouldReturnCurrencyDto() {
     // given:
-    this.initCurrency1();
-    given(this.currencyServiceMock.getByID(5)).willReturn(this.currency1);
+    given(currencyServiceMock.getByID(5)).willReturn(CURRENCY_1);
     // when:
-    CurrencyDto actualValue = this.currencyFacade.getCurrencyDtoById(5);
+    CurrencyDto actualValue = currencyFacade.getCurrencyDtoById(5);
     // then:
-    this.testCurrency(this.currency1, actualValue);
+    testCurrency(CURRENCY_1, actualValue);
   }
 
   @Test
-  public void saveNew_givenCurrencyDtoIsFilled_shouldAddCurrency() {
+  void saveNew_givenCurrencyDtoIsFilled_shouldAddCurrency() {
     // given:
-    CurrencyDto currencyDto = this.getCurrencyDto();
-    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
+    Currency currency = modelMapper.map(CURRENCY_DTO, Currency.class);
     // when:
-    this.currencyFacade.saveNew(currencyDto);
+    currencyFacade.saveNew(CURRENCY_DTO);
     // then:
-    BDDMockito.then(this.currencyServiceMock).should().add(refEq(currency));
-  }
-
-  private CurrencyDto getCurrencyDto() {
-    CurrencyDto currencyDto = new CurrencyDto();
-    currencyDto.setName("name");
-    currencyDto.setCharCode("char-code");
-    currencyDto.setCode("code");
-    currencyDto.setId(1);
-    return currencyDto;
+    BDDMockito.then(currencyServiceMock).should().add(refEq(currency));
   }
 
   @Test()
-  public void saveNew_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> this.currencyFacade.saveNew(null));
+  void saveNew_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> currencyFacade.saveNew(null));
   }
 
   @Test()
-  public void update_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
-    assertThrows(IllegalArgumentException.class, () -> this.currencyFacade.update(null));
+  void update_givenCurrencyDtoIsNull_expectIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> currencyFacade.update(null));
   }
 
   @Test
-  public void update_givenCurrencyDto_shouldUpdateCurrency() {
+  void update_givenCurrencyDto_shouldUpdateCurrency() {
     // given:
-    CurrencyDto currencyDto = this.getCurrencyDto();
-    Currency currency = this.modelMapper.map(currencyDto, Currency.class);
+    CurrencyDto currencyDto = CURRENCY_DTO;
+    Currency currency = modelMapper.map(currencyDto, Currency.class);
     // when:
-    this.currencyFacade.update(currencyDto);
+    currencyFacade.update(currencyDto);
     // then:
-    BDDMockito.then(this.currencyServiceMock).should().update(currency);
+    BDDMockito.then(currencyServiceMock).should().update(currency);
   }
 
   @Test
-  public void delete_givenId_thenShouldDeleteById() {
+  void delete_givenId_thenShouldDeleteById() {
     // when:
-    this.currencyFacade.delete(5);
+    currencyFacade.delete(5);
     // then:
-    BDDMockito.then(this.currencyServiceMock).should().delete(5);
+    BDDMockito.then(currencyServiceMock).should().delete(5);
   }
 
   @Test
-  public void fillDistinctCurrencies_shouldInvokeFillDistinctCurrencies() {
+  void fillDistinctCurrencies_shouldInvokeFillDistinctCurrencies() {
     // when:
-    this.currencyFacade.fillDistinctCurrencies();
+    currencyFacade.fillDistinctCurrencies();
     // then:
-    BDDMockito.then(this.currencyServiceMock).should().fillDistinctCurrencies();
+    BDDMockito.then(currencyServiceMock).should().fillDistinctCurrencies();
   }
 }
