@@ -18,12 +18,14 @@ import lombok.Builder;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "currencies", uniqueConstraints = {
     @UniqueConstraint(columnNames = "name", name = Currency.UNIQUE_CONSTRAINT_NAME),
     @UniqueConstraint(columnNames = "code", name = Currency.UNIQUE_CONSTRAINT_CODE)})
 @NoArgsConstructor
+@Accessors(chain = true)
 public class Currency extends ConstraintEntity implements Serializable {
 
   public static final String UNIQUE_CONSTRAINT_NAME = "unique_currencies_by_name";
