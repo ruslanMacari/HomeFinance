@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  <changeSet id="22-04-2025-0" author="ruslan.macari">
+    <comment>Insert admin user</comment>
+    <insert tableName="users">
+      <column name="name" value="admin"/>
+      <column name="password" value="$2a$10$hhA55xr.bS/CkPefXRHDru4bz7qGMCizAer7k/OkN31nI0R7sXkaG"/>
+      <column name="enabled" value="true"/>
+    </insert>
+    <insert tableName="user_roles">
+      <column name="user_id" valueComputed="(select id from users where name = 'admin')"/>
+      <column name="role" value="ADMIN"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>
