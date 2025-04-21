@@ -43,7 +43,7 @@
 <div/>
 <div class="s_30"></div>
 <form class="form" th:action="@{../currencies/fill}" th:method="get">
-    <input class="button" type="submit" value="Fill Currencies"/>
+    <input class="button" type="submit" th:value="#{fill-currencies}"/>
 </form>
 <a class="button button_back" href="/" th:text="#{back}"/>
 <th:block th:insert="fragments/footer"/>

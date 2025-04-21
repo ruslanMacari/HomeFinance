@@ -1,6 +1,7 @@
 package homefinance.user;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -23,11 +24,17 @@ import org.mockito.quality.Strictness;
 public class UserFacadeTest {
 
   private UserFacade userFacade;
-  @Mock private UserService userServiceMock;
-  @Mock private User userMock;
-  @Mock private AuthenticationService authenticationServiceMock;
-  @Mock private UserMapper userMapperMock;
-  @Mock private UserDto userDtoMock;
+  @Mock
+  private UserService userServiceMock;
+  @Mock
+  private User userMock;
+  @Mock
+  private AuthenticationService authenticationServiceMock;
+  @Mock
+  private UserMapper userMapperMock;
+  @Mock
+  private UserDto userDtoMock; //TODO: remove mock
+  UserDto userDto = new UserDto();
 
   @BeforeEach
   public void setUp() {
@@ -136,4 +143,38 @@ public class UserFacadeTest {
     //then:
     BDDMockito.then(userServiceMock).should().updateWithoutPassword(userDtoMock);
   }
+
+  @Test
+  void isRoot_givenUsernameIsRoot_shouldReturnTrue() {
+    //given:
+    userDto.setName("root");
+    //when:
+    boolean actual = userFacade.isRoot(userDto);
+    //then:
+    then(actual).isTrue();
+  }
+
+  @Test
+  void isRoot_givenUsernameIsNotRoot_shouldReturnFalse() {
+    //given:
+    userDto.setName("user abc");
+    //when:
+    boolean actual = userFacade.isRoot(userDto);
+    //then:
+    then(actual).isFalse();
+  }
+
+  @Test
+  void isRoot_givenUsernameIsNull_shouldReturnFalse() {
+    //given:
+    userDto.setName(null);
+    //when:
+    boolean actual = userFacade.isRoot(userDto);
+    //then:
+    then(actual).isFalse();
+  }
+
+  @Test
+  void isRoot_givenUserIsNull_shouldReturnFalse() {
+    assertThrows(IllegalArgumentException.class, () -> userFacade.isRoot(null));  }
 }

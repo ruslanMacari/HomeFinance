@@ -1,5 +1,7 @@
 package homefinance.user.service.impl;
 
+import static homefinance.user.entity.User.ROOT_NAME;
+
 import homefinance.common.exception.DuplicateFieldsException;
 import homefinance.common.util.ConstraintPersist;
 import homefinance.user.UserFields;
@@ -11,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,46 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final ConstraintPersist constraintPersist;
   private final PasswordEncoder encoder;
-  private String rootName;
-  private String rootPassword;
-
-  public UserServiceImpl(UserRepository userRepository, ConstraintPersist constraintPersist,
-      PasswordEncoder encoder) {
-    this.userRepository = userRepository;
-    this.constraintPersist = constraintPersist;
-    this.encoder = encoder;
-  }
-
-  @Value("${db.password}")
-  public void setRootPassword(String rootPassword) {
-    this.rootPassword = rootPassword;
-  }
-
-  @Value("${db.username}")
-  public void setRootName(String rootName) {
-    this.rootName = rootName;
-  }
-
-  @PostConstruct
-  public void init() {
-    createRootUserIfNotExist();
-  }
-
-  private void createRootUserIfNotExist() {
-    if (getByName(rootName) != null) {
-      return;
-    }
-    User root = new User();
-    root.setName(rootName);
-    root.setPassword(encoder.encode(rootPassword));
-    root.setOneRole(Role.ADMIN);
-    add(root);
-  }
 
   @Override
   public User getByName(String name) {
@@ -143,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> usersExceptRoot() {
-    List<User> users = userRepository.usersExceptRoot(rootName);
+    List<User> users = userRepository.usersExceptRoot(ROOT_NAME);
     return Objects.nonNull(users) ? users : new ArrayList<>();
   }
 
