@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 @Disabled
 // TODO: 021, 21-Nov-22 ruslan.macari: add test containers
@@ -24,42 +23,39 @@ public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTes
   private UserServiceImpl userService;
   private User user;
 
-  @Value("${db.username}")
-  private String rootname;
-
   public UserServiceImplIntegrationTest() {
-    this.user = new User("test", "pass");
-    this.user.setOneRole(Role.USER);
+    user = new User("test", "pass");
+    user.setOneRole(Role.USER);
   }
 
   @BeforeEach
   public void before() {
-    this.userService.list().forEach(u -> this.userService.delete(u.getId()));
+    userService.list().forEach(u -> userService.delete(u.getId()));
   }
 
   @Test
   public void testAdd() {
-    this.userService.add(this.user);
-    List<User> list = this.userService.list();
+    userService.add(user);
+    List<User> list = userService.list();
     assertEquals(1, list.size());
-    assertEquals(this.user, list.get(0));
+    assertEquals(user, list.get(0));
 
   }
 
   @Test
   public void testUpdate() {
-    this.userService.add(this.user);
+    userService.add(user);
     String newName = "user new";
-    this.user.setName(newName);
-    this.userService.update(this.user);
-    String dbUserName = this.userService.getById(this.user.getId()).getName();
+    user.setName(newName);
+    userService.update(user);
+    String dbUserName = userService.getById(user.getId()).getName();
     assertEquals(dbUserName, newName);
   }
 
   @Test
   public void testList() {
-    this.addThreeUsers();
-    assertEquals(3, this.userService.list().size());
+    addThreeUsers();
+    assertEquals(3, userService.list().size());
   }
 
   private void addThreeUsers() {
@@ -67,34 +63,34 @@ public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTes
     list.add(new User("test1", "pass"));
     list.add(new User("test2", "pass"));
     list.add(new User("test3", "pass"));
-    list.forEach(user -> this.userService.add(user));
+    list.forEach(user -> userService.add(user));
   }
 
   @Test
   public void testListLimit() {
-    this.addThreeUsers();
-    assertEquals(2, this.userService.listLimit(2).size());
+    addThreeUsers();
+    assertEquals(2, userService.listLimit(2).size());
   }
 
   @Test
   public void testGetById() {
-    this.userService.add(this.user);
-    User foundUser = this.userService.getById(this.user.getId());
-    assertEquals(foundUser, this.user);
+    userService.add(user);
+    User foundUser = userService.getById(user.getId());
+    assertEquals(foundUser, user);
   }
 
   @Test
   public void testGetByName() {
-    this.userService.add(this.user);
-    User foundUser = this.userService.getByName(this.user.getName());
-    assertEquals(foundUser, this.user);
+    userService.add(user);
+    User foundUser = userService.getByName(user.getName());
+    assertEquals(foundUser, user);
   }
 
   @Test
   public void testDelete() {
-    this.userService.add(this.user);
-    this.userService.delete(this.user.getId());
-    assertTrue(this.userService.list().isEmpty());
+    userService.add(user);
+    userService.delete(user.getId());
+    assertTrue(userService.list().isEmpty());
   }
 
   @Test
@@ -102,8 +98,8 @@ public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTes
     String name = "test GetByNameAndPassword";
     String password = "password";
     User userNamePass = new User(name, password);
-    this.userService.add(userNamePass);
-    User foundUser = this.userService.getByNameAndPassword(name, password);
+    userService.add(userNamePass);
+    User foundUser = userService.getByNameAndPassword(name, password);
     assertEquals(foundUser, userNamePass);
   }
 
@@ -111,19 +107,19 @@ public class UserServiceImplIntegrationTest extends AbstractSpringIntegrationTes
   public void testGetSimpleUsers() {
     User admin = new User("admin", "pass");
     admin.setOneRole(Role.ADMIN);
-    this.userService.add(admin);
-    this.userService.add(this.user);
-    List<User> simpleUsers = this.userService.getSimpleUsers();
+    userService.add(admin);
+    userService.add(user);
+    List<User> simpleUsers = userService.getSimpleUsers();
     assertEquals(1, simpleUsers.size());
-    assertThat(simpleUsers.stream().findFirst().get(), is(this.user));
+    assertThat(simpleUsers.stream().findFirst().get(), is(user));
   }
 
 
   @Test
   public void testUsersExceptRoot() {
-    User root = new User(this.rootname, "pass");
-    this.userService.add(root);
-    List<User> result = this.userService.usersExceptRoot();
+    User root = new User("root", "pass");
+    userService.add(root);
+    List<User> result = userService.usersExceptRoot();
     assertTrue(result.isEmpty());
   }
 

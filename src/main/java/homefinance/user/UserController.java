@@ -11,8 +11,8 @@ import homefinance.common.exception.PageNotFoundException;
 import java.security.Principal;
 import java.util.Objects;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,24 +26,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(UserController.URL)
+@RequiredArgsConstructor
 public class UserController {
 
   public static final String URL = "/users";
 
   private final UserFacade userFacade;
   private final RequestBuffer requestBuffer;
-  private String rootname;
-
-  @Autowired
-  public UserController(UserFacade userFacade, RequestBuffer requestBuffer) {
-    this.userFacade = userFacade;
-    this.requestBuffer = requestBuffer;
-  }
-
-  @Value("${db.username}")
-  public void setRootname(String rootname) {
-    this.rootname = rootname;
-  }
 
   @GetMapping()
   public String openList(Model model) {
@@ -61,13 +50,13 @@ public class UserController {
 
   private UserDto getUserBy(Long id) {
     UserDto user = userFacade.getUserById(id);
-    checkUser(user);
+    validateUser(user);
     return user;
   }
 
-  private void checkUser(UserDto user) {
+  private void validateUser(UserDto user) {
     if (Objects.isNull(user)
-        || user.getName().equals(rootname)) {
+        || userFacade.isRoot(user)) {
       throw new PageNotFoundException();
     }
   }

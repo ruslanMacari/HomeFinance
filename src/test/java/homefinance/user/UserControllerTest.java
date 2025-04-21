@@ -32,24 +32,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
-  private final String rootname = "root";
   private UserController userController;
   @Mock private Model modelMock;
   @Mock private BindingResult resultMock;
-  @Mock private UserDto userDtoMock;
+  @Mock private UserDto userDtoMock;//TODO: remove mock
   @Mock private UserFacade userFacadeMock;
   @Mock private Principal principalMock;
   @Mock private RedirectAttributes redirectAttributesMock;
   @Mock private RequestBuffer requestBufferMock;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     userController = new UserController(userFacadeMock, requestBufferMock);
-    userController.setRootname(rootname);
   }
 
   @Test
-  public void openList_givenUsersWithoutRoot_shouldReturnUserListTemplateAndAddUsersWithoutRoot() {
+  void openList_givenUsersWithoutRoot_shouldReturnUserListTemplateAndAddUsersWithoutRoot() {
     // given:
     List<UserDto> usersDto = Collections.singletonList(mock(UserDto.class));
     given(userFacadeMock.getUsersWithoutRoot()).willReturn(usersDto);
@@ -61,19 +59,19 @@ public class UserControllerTest {
   }
 
   @Test()
-  public void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
+  void openView_givenUserIsRoot_thenExpectPageNotFoundException() {
     // given:
     given(userFacadeMock.getUserById(150L)).willReturn(userDtoMock);
-    given(userDtoMock.getName()).willReturn(rootname);
+    given(userFacadeMock.isRoot(userDtoMock)).willReturn(true);
     // when:
     assertThrows(PageNotFoundException.class, () -> userController.openView(150L, modelMock));
   }
 
   @Test
-  public void openView_givenUserIsNotRoot_thenOpenView() {
+  void openView_givenUserIsNotRoot_thenOpenView() {
     // given:
-    given(userDtoMock.getName()).willReturn("test");
     given(userFacadeMock.getUserById(100L)).willReturn(userDtoMock);
+    given(userFacadeMock.isRoot(userDtoMock)).willReturn(false);
     // when:
     String actual = userController.openView(100L, modelMock);
     // then:
@@ -81,7 +79,7 @@ public class UserControllerTest {
   }
 
   @Test()
-  public void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
+  void openView_givenUserIsNotNull_thenExpectPageNotFoundException() {
     // given:
     given(userFacadeMock.getUserById(100L)).willReturn(null);
     // when:
@@ -89,7 +87,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void openView_givenIsRedirect_thenMergeAttributesFromFlashModel() {
+  void openView_givenIsRedirect_thenMergeAttributesFromFlashModel() {
     // given:
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
@@ -103,7 +101,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() throws NoSuchMethodException {
+  void update_givenResultHasNoErrorsAndUpdateIsOk_thenRedirectToUsersUrl() throws NoSuchMethodException {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     UserDto userDto = new UserDto();
@@ -121,7 +119,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void update_givenResultHasErrors_thenRedirectToView() {
+  void update_givenResultHasErrors_thenRedirectToView() {
     // given:
     for (long id : new long[] {100, 50}) {
       given(resultMock.hasErrors()).willReturn(true);
@@ -136,7 +134,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void newUser_givenIsRedirect_thenMergeAttributesFromFlashModel() {
+  void newUser_givenIsRedirect_thenMergeAttributesFromFlashModel() {
     // given:
     Map<String, Object> map = new HashMap<>();
     Model flashModel = mock(Model.class);
@@ -150,7 +148,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void newUser_givenIsNotRedirect_thenAddUserToModel() {
+  void newUser_givenIsNotRedirect_thenAddUserToModel() {
     // when:
     String actual = userController.newUser(modelMock);
     // then:
@@ -159,7 +157,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void save_givenResultHasNoErrors_thenRedirectToUsers() throws NoSuchMethodException {
+  void save_givenResultHasNoErrors_thenRedirectToUsers() throws NoSuchMethodException {
     // given:
     given(resultMock.hasErrors()).willReturn(false);
     // when:
@@ -174,7 +172,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void save_givenResultHasErrors_thenRedirectToNew() {
+  void save_givenResultHasErrors_thenRedirectToNew() {
     // given:
     given(resultMock.hasErrors()).willReturn(true);
     RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
@@ -186,7 +184,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void deleteUser_givenUserPrincipalIsNotUserToDelete_deleteUser() {
+  void deleteUser_givenUserPrincipalIsNotUserToDelete_deleteUser() {
     // given:
     given(principalMock.getName()).willReturn("root user");
     given(userDtoMock.getName()).willReturn("test user");
@@ -200,7 +198,7 @@ public class UserControllerTest {
   }
 
   @Test()
-  public void deleteUser_givenUserPrincipalIsUserToDelete_thenRefuseDeleteUser() {
+  void deleteUser_givenUserPrincipalIsUserToDelete_thenRefuseDeleteUser() {
     // given:
     Principal userPrincipal = mock(Principal.class);
     given(userPrincipal.getName()).willReturn("root user");

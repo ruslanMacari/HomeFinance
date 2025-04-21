@@ -1,27 +1,24 @@
 package homefinance.user;
 
+import static homefinance.user.entity.User.ROOT_NAME;
+
 import homefinance.user.entity.User;
 import homefinance.user.service.UserService;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserFacade {
 
   private final UserService userService;
   private final AuthenticationService authenticationService;
   private final UserMapper userMapper;
-
-  @Autowired
-  public UserFacade(UserService userService, AuthenticationService authenticationService,
-      UserMapper userMapper) {
-    this.userService = userService;
-    this.authenticationService = authenticationService;
-    this.userMapper = userMapper;
-  }
 
   public List<UserDto> getUsersWithoutRoot() {
     return userService.usersExceptRoot().stream()
@@ -62,5 +59,10 @@ public class UserFacade {
     } else {
       userService.updateWithoutPassword(userDto);
     }
+  }
+
+  public boolean isRoot(UserDto userDto) {
+    Assert.notNull(userDto, "userDto");
+    return ROOT_NAME.equals(userDto.getName());
   }
 }

@@ -25,6 +25,7 @@ import lombok.Generated;
     @UniqueConstraint(columnNames = "name", name = User.UNIQUE_CONSTRAINT_NAME)})
 public class User extends ConstraintEntity implements UserFields {
 
+  public static final String ROOT_NAME = "root";
   public static final String UNIQUE_CONSTRAINT_NAME = "unique_users_by_name";
   private Long id;
   private String name;
