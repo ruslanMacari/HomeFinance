@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 @Service
+@Slf4j
 public class CurrencyFacade {
 
-  private static final Logger logger = LoggerFactory.getLogger(CurrencyFacade.class);
   private final CurrencyService currencyService;
   private final ModelMapper modelMapper;
 
@@ -27,57 +26,57 @@ public class CurrencyFacade {
   }
 
   public List<CurrencyDto> getAllCurrenciesDto() {
-    logger.debug("getAllCurrenciesDto()");
-    List<Currency> currencyList = this.currencyService.getAllCurrencies();
-    if (CollectionUtils.isEmpty(currencyList)) {
-      logger.debug("this.currencyService.getAllCurrencies() is empty");
+    log.debug("getAllCurrenciesDto()");
+    List<Currency> allCurrencies = currencyService.getAllCurrencies();
+    if (CollectionUtils.isEmpty(allCurrencies)) {
+      log.debug("No currencies found");
       return new ArrayList<>();
     }
-    return currencyList.stream()
+    return allCurrencies.stream()
         .map(this::currencyToDto)
         .collect(Collectors.toList());
   }
 
   private CurrencyDto currencyToDto(Currency currency) {
-    return this.modelMapper.map(currency, CurrencyDto.class);
+    return modelMapper.map(currency, CurrencyDto.class);
   }
 
   public CurrencyDto getCurrencyDtoById(int id) {
-    return this.currencyToDto(this.getCurrencyById(id));
+    return currencyToDto(getCurrencyById(id));
   }
 
   private Currency getCurrencyById(int id) {
-    Currency currency = this.currencyService.getByID(id);
+    Currency currency = currencyService.getByID(id);
     if (Objects.isNull(currency)) {
-      logger.error("Currency by id={} not found", id);
+      log.error("Currency by id={} not found", id);
       throw new PageNotFoundException();
     }
     return currency;
   }
 
   public void saveNew(CurrencyDto currencyDto) {
-    this.checkCurrencyDto(currencyDto);
-    this.currencyService.add(this.mapToCurrency(currencyDto));
+    validateCurrencyDto(currencyDto);
+    currencyService.add(mapToCurrency(currencyDto));
   }
 
   private Currency mapToCurrency(CurrencyDto currencyDto) {
-    return this.modelMapper.map(currencyDto, Currency.class);
+    return modelMapper.map(currencyDto, Currency.class);
   }
 
-  private void checkCurrencyDto(CurrencyDto currencyDto) {
+  private void validateCurrencyDto(CurrencyDto currencyDto) {
     Assert.notNull(currencyDto, "currencyDto must be filled");
   }
 
   public void update(CurrencyDto currencyDto) {
-    this.checkCurrencyDto(currencyDto);
-    this.currencyService.update(this.mapToCurrency(currencyDto));
+    validateCurrencyDto(currencyDto);
+    currencyService.update(mapToCurrency(currencyDto));
   }
 
   public void delete(int id) {
-    this.currencyService.delete(id);
+    currencyService.delete(id);
   }
 
   public void fillDistinctCurrencies() {
-    this.currencyService.fillDistinctCurrencies();
+    currencyService.fillDistinctCurrencies();
   }
 }
