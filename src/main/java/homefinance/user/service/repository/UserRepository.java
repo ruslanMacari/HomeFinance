@@ -16,9 +16,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u")
   List<User> listLimit(Pageable pageable);
 
-  @Query("select user \n"
-      + "from User user \n"
-      + "where user not in (select uRole.user from UserRole uRole where uRole.role = 'ADMIN')")
+  @Query("""
+      select user
+      from User user
+      where user not in (select uRole.user from UserRole uRole where uRole.role = 'ADMIN')
+      """)
   List<User> getSimpleUsers();
 
   @Query("select u from User u where u.name <> :rootName")

@@ -6,4 +6,5 @@
 
     <include file="init-structure.xml" relativeToChangelogFile="true"/>
     <include file="insert-root.xml" relativeToChangelogFile="true"/>
+    <include file="add-expenses-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
