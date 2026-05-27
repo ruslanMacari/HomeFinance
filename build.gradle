@@ -1,18 +1,17 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.3'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '4.0.6'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'jacoco'
 }
 
 
 group = 'ruslan.macari'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_17
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -21,15 +20,12 @@ repositories {
 }
 
 ext {
-    mapstructVersion = '1.5.3.Final'
-    jacksonVersion = '2.14.0'
-    modelMapperVersion = '3.1.0'
+    mapstructVersion = '1.6.3'
+    modelMapperVersion = '3.2.4'
     apiUtilVersion = '2.1.2'
-    jsoupVersion = '1.15.3'
+    jsoupVersion = '1.21.1'
     javaTuplesVersion = '1.2'
-    mockitoVersion = '4.8.0'
-    hamcrestVersion = '2.2'
-    testcontainersVersion = '1.19.7'
+    testcontainersVersion = '2.0.5'
 }
 
 dependencies {
@@ -40,6 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
     implementation 'org.postgresql:postgresql'
 
     // Runtime and development
@@ -53,13 +50,12 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.aspectj:aspectjrt'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation "org.jsoup:jsoup:${jsoupVersion}"
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
-    implementation 'org.liquibase:liquibase-core'
 
     // Provided dependencies
     compileOnly 'org.projectlombok:lombok'
@@ -68,12 +64,12 @@ dependencies {
 
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+    testImplementation 'org.hamcrest:hamcrest-library'
     testImplementation 'com.jayway.jsonpath:json-path'
     testImplementation 'org.assertj:assertj-core'
-    testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
-    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
-    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-postgresql:${testcontainersVersion}"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testCompileOnly 'org.projectlombok:lombok'
 }
 
@@ -89,7 +85,7 @@ bootRun {
 }
 
 jacoco {
-    toolVersion = '0.8.8'
+    toolVersion = '0.8.14'
 }
 
 jacocoTestReport {
